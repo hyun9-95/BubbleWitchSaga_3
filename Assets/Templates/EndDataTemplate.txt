@@ -1,0 +1,4 @@
+	
+	public int Id => id;
+    public bool IsEmpty => id == 0;
+}

@@ -1,0 +1,13 @@
+public class #name##suffix#Controller : BaseController<#name##suffix#Model>
+{
+    public override UIType UIType => UIType.#name##suffix#;
+
+    public override UICanvasType UICanvasType => UICanvasType.#uiCanvasType#;
+
+	public #name##suffix# View => GetView<#name##suffix#>();
+
+    public override void Enter()
+    {
+        
+    }
+}

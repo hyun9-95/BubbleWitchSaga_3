@@ -1,0 +1,4 @@
+﻿아이디,이름,,
+int,string,float[],int
+Id,NameId,Values,ValueCount
+10000,BALANCE_TEST,1,1

@@ -1,0 +1,3 @@
+public class #name##suffix#Model : IBaseViewModel
+{
+}

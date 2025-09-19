@@ -1,0 +1,16 @@
+using Cysharp.Threading.Tasks;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class #name#Unit : BaseUnit<#name#UnitModel>
+{
+    private void Awake()
+    {
+        
+    }
+
+    public async override UniTask ShowAsync()
+    {
+        
+    }
+}
