@@ -6,6 +6,9 @@ public struct FlowFactory
         {
             case FlowType.IntroFlow:
                 return new IntroFlow();
+
+            case FlowType.BattleFlow:
+                return new BattleFlow();
         }
 
         return null;

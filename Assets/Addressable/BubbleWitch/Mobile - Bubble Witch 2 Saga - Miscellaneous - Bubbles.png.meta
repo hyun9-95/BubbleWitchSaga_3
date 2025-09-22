@@ -1,0 +1,546 @@
+fileFormatVersion: 2
+guid: 0cb223905cb832e48989229884356b7c
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -3361721969555405798
+    second: Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_0
+  - first:
+      213: -4839600017314448037
+    second: Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_1
+  - first:
+      213: -2743429741719384765
+    second: Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_2
+  - first:
+      213: -8970091649827425080
+    second: Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_3
+  - first:
+      213: -6869086789598543808
+    second: Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_4
+  - first:
+      213: 3297762567828556749
+    second: Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_5
+  - first:
+      213: -6381812453451905918
+    second: Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_6
+  - first:
+      213: -2322661467047870226
+    second: Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_7
+  - first:
+      213: -1928257025727199930
+    second: Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_8
+  - first:
+      213: 5210375395722365136
+    second: Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_9
+  - first:
+      213: -518012073735494734
+    second: Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_10
+  - first:
+      213: 611142284292619965
+    second: Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_11
+  - first:
+      213: -5545713743270075276
+    second: Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_12
+  - first:
+      213: 1277050784036574011
+    second: Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_13
+  - first:
+      213: 7403881058536043929
+    second: Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_14
+  - first:
+      213: -2224740623390595309
+    second: Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_15
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_0
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 396
+        width: 108
+        height: 108
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 447fd27b81b7dbb47a84bd58a607e52a
+      internalID: -563216907
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_1
+      rect:
+        serializedVersion: 2
+        x: 126
+        y: 396
+        width: 108
+        height: 108
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7287c659a85543541830df6227569728
+      internalID: 840470398
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_2
+      rect:
+        serializedVersion: 2
+        x: 246
+        y: 398
+        width: 104
+        height: 104
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6eb5809c7918d1e4da37eeef8e3d484d
+      internalID: -630583104
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_3
+      rect:
+        serializedVersion: 2
+        x: 362
+        y: 396
+        width: 108
+        height: 108
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2fe36e3168d250d458fbca27337f131c
+      internalID: 730640566
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_4
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 278
+        width: 108
+        height: 108
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ced0f304810b9dc43be5a867f2c0b1ac
+      internalID: -1534421676
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_5
+      rect:
+        serializedVersion: 2
+        x: 126
+        y: 278
+        width: 108
+        height: 108
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f33ac2f9ca202b145bf8ee766605649a
+      internalID: -1992562168
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_6
+      rect:
+        serializedVersion: 2
+        x: 244
+        y: 278
+        width: 108
+        height: 108
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b70dcd904841271459f3fd95aeb1731a
+      internalID: -1387196664
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_7
+      rect:
+        serializedVersion: 2
+        x: 362
+        y: 278
+        width: 108
+        height: 108
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b16403a4520b7044a8b08e4a0879b038
+      internalID: 945860696
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_8
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 160
+        width: 108
+        height: 108
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 25eccace0055aac40a079e761274c58b
+      internalID: -633642565
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_9
+      rect:
+        serializedVersion: 2
+        x: 124
+        y: 158
+        width: 112
+        height: 112
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6bfe3accbe45e1b43a4f7ff7174c7794
+      internalID: -1003773381
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_10
+      rect:
+        serializedVersion: 2
+        x: 242
+        y: 158
+        width: 112
+        height: 112
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 538e62933a4e730418b2a342bc7087ae
+      internalID: -1254984540
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_11
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 158
+        width: 112
+        height: 112
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 405b142f940fbe748b9dd3dedd163c3d
+      internalID: -301058384
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_12
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 40
+        width: 112
+        height: 112
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5540cafa44194e540a75084cab80a528
+      internalID: -477780793
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_13
+      rect:
+        serializedVersion: 2
+        x: 124
+        y: 40
+        width: 112
+        height: 112
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b3e8fd7d593b7f54ba7cf74e573b3eb5
+      internalID: 446614336
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_14
+      rect:
+        serializedVersion: 2
+        x: 242
+        y: 40
+        width: 112
+        height: 112
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3b8984ff36e447d49ac82d46cb552051
+      internalID: -47230123
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_15
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 40
+        width: 112
+        height: 112
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: edcbb272b6a09974eb55788d207b9170
+      internalID: -484189815
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: e8934bf63f9280d4baff7ed421b82041
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_0: -563216907
+      Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_1: 840470398
+      Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_10: -1254984540
+      Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_11: -301058384
+      Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_12: -477780793
+      Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_13: 446614336
+      Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_14: -47230123
+      Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_15: -484189815
+      Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_2: -630583104
+      Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_3: 730640566
+      Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_4: -1534421676
+      Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_5: -1992562168
+      Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_6: -1387196664
+      Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_7: 945860696
+      Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_8: -633642565
+      Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_9: -1003773381
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

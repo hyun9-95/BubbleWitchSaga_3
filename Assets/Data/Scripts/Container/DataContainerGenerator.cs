@@ -63,6 +63,8 @@ public class DataContainerGenerator
 		containerTypeMap = new Dictionary<Type, Func<string, bool>>
 		{
 			{ typeof(DataBalance), json => AddDataContainer<DataBalance>(json) },
+			{ typeof(DataBattleBoss), json => AddDataContainer<DataBattleBoss>(json) },
+			{ typeof(DataBattleStage), json => AddDataContainer<DataBattleStage>(json) },
 		};
 	}
 

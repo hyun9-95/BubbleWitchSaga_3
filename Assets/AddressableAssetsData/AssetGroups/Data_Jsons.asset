@@ -21,6 +21,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Main
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0300751753b409341b43c9fdc3cf389e
+    m_Address: Data/Jsons/BattleStage
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Main
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 0b8584322d613c246b3f81830f26286b
     m_Address: Data/Jsons/Version
     m_ReadOnly: 0
@@ -29,6 +35,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6417effd5cad19649a00fa241d7215f0
     m_Address: Data/Jsons/JsonList
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Main
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fb4b1c438940617458cb91c62064c6ac
+    m_Address: Data/Jsons/BattleBoss
     m_ReadOnly: 0
     m_SerializedLabels:
     - Main

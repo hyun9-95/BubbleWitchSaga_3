@@ -32,7 +32,13 @@ public class IntroFlow : BaseFlow<IntroFlowModel>
 
     private void OnEnterGame()
     {
-        Logger.Log("Loading Done.");
+        var stageData = DataManager.Instance.GetDataById<DataBattleStage>((int)BattleStageDefine.STAGE_WILBUR);
+
+        BattleFlowModel battleFlowModel = new BattleFlowModel();
+        battleFlowModel.SetSceneDefine(SceneDefine.BattleScene);
+        battleFlowModel.SetStageData(stageData);
+
+        FlowManager.Instance.ChangeFlow(FlowType.BattleFlow, battleFlowModel).Forget();
     }
 
 

@@ -1,0 +1,4 @@
+﻿아이디,이름,,
+int,string,string,int
+Id,NameId,StagePath,SpawnCount
+20000,STAGE_WILBUR,BattleStage/Stage_Wilbur,32

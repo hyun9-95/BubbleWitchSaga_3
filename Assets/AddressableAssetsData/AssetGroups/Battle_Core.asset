@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Battle_Core
+  m_EditorClassIdentifier: 
+  m_GroupName: Battle_Core
+  m_GUID: 359ad4bf458b66043ae7d99d1e44fb95
+  m_SerializeEntries:
+  - m_GUID: 8f51d30a22d0a7a469ead13209eca057
+    m_Address: Battle_Core/BubbleNode
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Main
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bc86581beae45ee4ab50fc965f915f08
+    m_Address: Battle_Core/F_UI_Gems Tile Map 22x22
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Main
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: bc1783b9fa7e2624399a7228fc80ec31, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: bf8933ca44c22114399d2d603226b095, type: 2}
+    - {fileID: 11400000, guid: 061246314a44fa04c9c2517fa5a98ac2, type: 2}

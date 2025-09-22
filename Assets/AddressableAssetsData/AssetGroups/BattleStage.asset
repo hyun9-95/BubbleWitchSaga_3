@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: BattleStage
+  m_EditorClassIdentifier: 
+  m_GroupName: BattleStage
+  m_GUID: d949e9e26cf688249a4894f652b344b1
+  m_SerializeEntries:
+  - m_GUID: 40208d9fd04d126408e85485ae2c5c11
+    m_Address: BattleStage/Stage_Wilbur
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Main
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: bc1783b9fa7e2624399a7228fc80ec31, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 4a461f191de4cc04f9165d668c0f1046, type: 2}
+    - {fileID: 11400000, guid: 8389f41591187e6489e4c318a710bdb4, type: 2}

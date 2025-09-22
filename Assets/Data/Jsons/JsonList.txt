@@ -1,1 +1,1 @@
-Balance.json
+Balance.json,BattleBoss.json,BattleStage.json

@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: BubbleWitch
+  m_EditorClassIdentifier: 
+  m_GroupName: BubbleWitch
+  m_GUID: 3d70ecd960db18343a4e498e89448841
+  m_SerializeEntries:
+  - m_GUID: 08b89d601af1beb48b3d89ce5c9c8dca
+    m_Address: BubbleWitch/Mobile - Bubble Witch 2 Saga - Miscellaneous - Events
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Main
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0cb223905cb832e48989229884356b7c
+    m_Address: BubbleWitch/Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Main
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1c8222f097e06e246b7e34dd58bf1f30
+    m_Address: BubbleWitch/Mobile - Bubble Witch 2 Saga - Miscellaneous - Main Menu
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Main
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 24eedd2890fd88444b02728e3789faec
+    m_Address: BubbleWitch/BattleBackground
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Main
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3c7b63b8f7dc10f4f8926e32c1160f71
+    m_Address: BubbleWitch/Mobile - Bubble Witch 2 Saga - Miscellaneous - In-Game
+      Text
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Main
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bfe1325b6bce2bc42860e3fffa0c9bba
+    m_Address: BubbleWitch/kazuend-2KXEb_8G5vo-unsplash
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Main
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: bc1783b9fa7e2624399a7228fc80ec31, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 8b57e7c5181dde4498d783ed7dce3c73, type: 2}
+    - {fileID: 11400000, guid: ae26c6e0d33d5354bb9d206295ba56b8, type: 2}
