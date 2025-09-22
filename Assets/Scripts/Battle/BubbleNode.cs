@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BubbleNode : PoolableBaseUnit<BubbleNodeModel>
@@ -13,17 +14,29 @@ public class BubbleNode : PoolableBaseUnit<BubbleNodeModel>
 
     public async UniTask SmoothMove(Vector3 pos)
     {
+        Vector3 startPos = transform.position;
+        float distance = Vector3.Distance(startPos, pos);
+        float duration = distance / Model.MoveSpeed;
         float elapsedTime = 0;
 
-        while (elapsedTime < moveTime)
+        while (elapsedTime < duration)
         {
             elapsedTime += Time.deltaTime;
-            float progress = elapsedTime / moveTime;
+            float progress = elapsedTime / duration;
 
-            transform.position = Vector3.Lerp(transform.position, pos, progress);
+            transform.position = Vector3.Lerp(startPos, pos, progress);
             await UniTaskUtils.NextFrame();
         }
 
         transform.position = pos;
+    }
+
+    public async UniTask MoveAlongPath(List<Vector3> posList)
+    {
+        if (posList == null || posList.Count == 0)
+            return;
+
+        for (int i = 0; i < posList.Count; i++)
+            await SmoothMove(posList[i]);
     }
 }

@@ -10,25 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: Battle_Core
+  m_Name: BattlePlayer
   m_EditorClassIdentifier: 
-  m_GroupName: Battle_Core
-  m_GUID: 359ad4bf458b66043ae7d99d1e44fb95
+  m_GroupName: BattlePlayer
+  m_GUID: 9d2f81e046db6b942a85fae491a6888d
   m_SerializeEntries:
-  - m_GUID: 8f51d30a22d0a7a469ead13209eca057
-    m_Address: Battle_Core/BubbleNode
+  - m_GUID: 0b6107fc578b02a4e91ccf101bed4dd9
+    m_Address: BattlePlayer/BattleRingSlot
     m_ReadOnly: 0
     m_SerializedLabels:
     - Main
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b36ee8603ebd34941b81a14d109c2d64
-    m_Address: Battle_Core/UIBubbleNode
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Main
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: bc86581beae45ee4ab50fc965f915f08
-    m_Address: Battle_Core/F_UI_Gems Tile Map 22x22
+  - m_GUID: cc24b33e25003b144b49b2e60cc49a7a
+    m_Address: BattlePlayer/BattlePlayer
     m_ReadOnly: 0
     m_SerializedLabels:
     - Main
@@ -37,5 +31,5 @@ MonoBehaviour:
   m_Settings: {fileID: 11400000, guid: bc1783b9fa7e2624399a7228fc80ec31, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: bf8933ca44c22114399d2d603226b095, type: 2}
-    - {fileID: 11400000, guid: 061246314a44fa04c9c2517fa5a98ac2, type: 2}
+    - {fileID: 11400000, guid: 4f249465cb9ee424fabaf5d4c235f92c, type: 2}
+    - {fileID: 11400000, guid: 6ca43005160c6b44bac144fceae03cb4, type: 2}

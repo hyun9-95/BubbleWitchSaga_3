@@ -18,8 +18,7 @@ public class BattleFlow : BaseFlow<BattleFlowModel>
         
         // Phase ¡ÿ∫Ò
         await LoadBattleStage(Model.StageData, battleScene.transform);
-
-        await ShowBattleView();
+        await LoadBattleView();
     }
 
     private async UniTask LoadBattleStage(DataBattleStage dataStage, Transform transform)
@@ -41,11 +40,18 @@ public class BattleFlow : BaseFlow<BattleFlowModel>
         battleScene.StartBattle().Forget();
     }
 
-    private async UniTask ShowBattleView()
+    private async UniTask LoadBattleView()
     {
         BattleViewController battleController = new BattleViewController();
         BattleViewModel viewModel = new BattleViewModel();
+        BattleRingSlotModel battleRingSlotModel = new BattleRingSlotModel();
+        battleRingSlotModel.SetSlotCount(IntDefine.MAX_RINGSLOT_COUNT);
+        battleRingSlotModel.SetRemainBubbleCount(Model.StageData.UserBubbleCount);
+        viewModel.SetBattleRingSlotModel(battleRingSlotModel);
+
         battleController.SetModel(viewModel);
+
+        battleScene.AddPhaseProcessor(BattlePhase.Player, battleController);
 
         await UIManager.Instance.ChangeView(battleController);
     }

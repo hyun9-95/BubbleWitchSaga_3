@@ -1,0 +1,23 @@
+using UnityEngine;
+
+public class BattleRingSlotModel : IBaseUnitModel
+{
+    public int SlotCount { get; private set; }
+
+    public int RemainBubbleCount { get; private set; }
+
+    public void SetSlotCount(int slotCount)
+    {
+        SlotCount = slotCount;
+    }
+
+    public void SetRemainBubbleCount(int remainBubbleCount)
+    {
+        RemainBubbleCount = remainBubbleCount;
+    }
+
+    public void ReduceSpawnCount()
+    {
+        RemainBubbleCount = 0;
+    }
+}

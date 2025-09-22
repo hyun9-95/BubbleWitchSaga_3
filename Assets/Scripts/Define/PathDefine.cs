@@ -29,6 +29,7 @@ public class PathDefine
 
     #region Resources
     public const string UI_VIEW_FORMAT = "UI/{0}/{0}";
+    public const string BUBBLE_NODE_PATH = "Battle_Core/BubbleNode";
     #endregion
 }
 

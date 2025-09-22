@@ -19,10 +19,6 @@ public class BubbleSnakeSpawner : BubbleSpawner
     [SerializeField]
     private int maxColumnSpawn = 4;
 
-    [SerializeField]
-    private AddressableLoader bubbleNodeLoader;
-
-
     private List<BattleCell> spawnPath = new List<BattleCell>();
     private HashSet<BubbleNode> bubbleList = new HashSet<BubbleNode>();
 
@@ -101,8 +97,10 @@ public class BubbleSnakeSpawner : BubbleSpawner
         {
             List<UniTask> tasks = new List<UniTask>(bubbleList.Count + 1);
 
-            var newBubble = await bubbleNodeLoader.InstantiateAsyc<BubbleNode>();
+            var newBubble = await ObjectPoolManager.Instance.SpawnPoolableMono<BubbleNode>(PathDefine.BUBBLE_NODE_PATH);
             var model = new BubbleNodeModel();
+            model.SetMoveSpeed(FloatDefine.BATTLE_SNAKE_BUBBLE_MOVE_SPEED);
+
             newBubble.SetModel(model);
             newBubble.SetPosition(startPos);
 

@@ -2,6 +2,7 @@
   {
     "id": 20000,
     "StagePath": "BattleStage/Stage_Wilbur",
-    "SpawnCount": 32
+    "SpawnCount": 32,
+    "UserBubbleCount": 22
   }
 ]

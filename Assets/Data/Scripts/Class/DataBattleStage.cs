@@ -11,6 +11,8 @@ public class DataBattleStage : IBaseData
     public readonly string StagePath;
     [JsonProperty(PropertyName = "SpawnCount")]
     public readonly int SpawnCount;
+    [JsonProperty(PropertyName = "UserBubbleCount")]
+    public readonly int UserBubbleCount;
 	
 	public int Id => id;
     public bool IsEmpty => id == 0;

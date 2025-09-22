@@ -78,7 +78,7 @@ public class AddressableManager : BaseManager<AddressableManager>
     {
         string address = define.ToString();
 
-        if (!loadedScenes.Contains(address))
+        if (!loadedScenes.Contains(address) || define == SceneDefine.None)
         {
             Logger.Warning($"Scene not loaded: {address}");
             return false;

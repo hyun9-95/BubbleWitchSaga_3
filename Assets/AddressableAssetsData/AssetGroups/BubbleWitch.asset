@@ -33,12 +33,6 @@ MonoBehaviour:
     m_SerializedLabels:
     - Main
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 24eedd2890fd88444b02728e3789faec
-    m_Address: BubbleWitch/BattleBackground
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Main
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3c7b63b8f7dc10f4f8926e32c1160f71
     m_Address: BubbleWitch/Mobile - Bubble Witch 2 Saga - Miscellaneous - In-Game
       Text
@@ -47,7 +41,7 @@ MonoBehaviour:
     - Main
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: bfe1325b6bce2bc42860e3fffa0c9bba
-    m_Address: BubbleWitch/kazuend-2KXEb_8G5vo-unsplash
+    m_Address: BubbleWitch/BattleBackground
     m_ReadOnly: 0
     m_SerializedLabels:
     - Main

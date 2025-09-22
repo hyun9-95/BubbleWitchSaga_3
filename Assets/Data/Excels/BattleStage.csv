@@ -1,4 +1,4 @@
-﻿아이디,이름,,
-int,string,string,int
-Id,NameId,StagePath,SpawnCount
-20000,STAGE_WILBUR,BattleStage/Stage_Wilbur,32
+﻿아이디,이름,,,
+int,string,string,int,int
+Id,NameId,StagePath,SpawnCount,UserBubbleCount
+20000,STAGE_WILBUR,BattleStage/Stage_Wilbur,32,22

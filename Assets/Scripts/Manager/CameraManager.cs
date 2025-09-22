@@ -82,6 +82,16 @@ public class CameraManager : BaseMonoManager<CameraManager>
         return uiCameras[index];
     }
 
+    public Vector3 GetUIWorldPos(Vector3 pos)
+    {
+        var uiCamera = GetUICamera(UICanvasType.View);
+        Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(uiCamera, pos);
+        Vector2 viewPortPoint = uiCamera.ScreenToViewportPoint(screenPoint);
+        Vector3 worldPoint = worldCamera.ViewportToWorldPoint(new Vector3(viewPortPoint.x, viewPortPoint.y, worldCamera.nearClipPlane + 1f));
+
+        return worldPoint;
+    }
+
     public async UniTask BlendingAsync(CinemachineCamera targetCamera, float time)
     {
         float originTime = cinemachineBrain.DefaultBlend.Time;
