@@ -1,7 +1,9 @@
 #pragma warning disable CS1998
 using Cysharp.Threading.Tasks;
+using System.Collections.Generic;
+using UnityEngine;
 
-public class BattleViewController : BaseController<BattleViewModel>, IBattlePhaseProcessor
+public class BattleViewController : BaseController<BattleViewModel>
 {
     public override UIType UIType => UIType.BattleView;
 
@@ -9,25 +11,17 @@ public class BattleViewController : BaseController<BattleViewModel>, IBattlePhas
 
 	public BattleView View => GetView<BattleView>();
 
-    public BattlePhase Phase => BattlePhase.Player;
-
     public override void Enter()
     {
     }
 
-    public async UniTask OnStartPhase(BattleGrid grid)
+    public override async UniTask Process()
     {
-        if (grid == null)
-            return;
-
         await View.ShowAsync();
     }
 
-    public async UniTask OnEndPhase(BattleGrid grid)
+    public async UniTask LaunchCurrentBubble(List<Vector3> path)
     {
-    }
-
-    public async void OnProcessPhase(BattleGrid grid)
-    {
+        await View.LaunchCurrentRingSlot(path);
     }
 }

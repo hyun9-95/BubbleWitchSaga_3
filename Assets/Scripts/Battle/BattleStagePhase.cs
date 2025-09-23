@@ -10,6 +10,13 @@ public class BattleStagePhase : BaseUnit<BattleStageModel>, IBattlePhaseProcesso
     [SerializeField]
     private List<BubbleSpawner> spawners;
 
+    private BattleGrid grid;
+
+    public async UniTask Initialize(BattleGrid grid)
+    {
+        this.grid = grid;
+    }
+
     private async UniTask SpawnBubbles(BattleGrid grid)
     {
         List<UniTask> task = new List<UniTask>(spawners.Count);
@@ -20,17 +27,17 @@ public class BattleStagePhase : BaseUnit<BattleStageModel>, IBattlePhaseProcesso
         await UniTask.WhenAll(task);
     }
 
-    public async UniTask OnStartPhase(BattleGrid grid)
+    public async UniTask OnStartPhase()
     {
         await SpawnBubbles(grid);
     }
 
-    public void OnProcessPhase(BattleGrid grid)
+    public void OnProcessPhase()
     {
 
     }
 
-    public async UniTask OnEndPhase(BattleGrid grid)
+    public async UniTask OnEndPhase()
     {
 
     }

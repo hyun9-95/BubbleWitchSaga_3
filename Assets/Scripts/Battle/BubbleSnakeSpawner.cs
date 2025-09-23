@@ -19,6 +19,9 @@ public class BubbleSnakeSpawner : BubbleSpawner
     [SerializeField]
     private int maxColumnSpawn = 4;
 
+    [SerializeField]
+    private float snakeMoveSpeed = 7f;
+
     private List<BattleCell> spawnPath = new List<BattleCell>();
     private HashSet<BubbleNode> bubbleList = new HashSet<BubbleNode>();
 
@@ -91,7 +94,12 @@ public class BubbleSnakeSpawner : BubbleSpawner
     private async UniTask SpawnSnakeBubbleAsync(BattleGrid grid)
     {
         int spawnCount = spawnPath.Count - bubbleList.Count;
-        var startPos = grid.GetCell(cellPos).Position;
+        var spawnCell = grid.GetCell(cellPos);
+        var startPos = spawnCell.Position;
+
+        var spawnBubble = await BubbleFactory.Instance.CreateNewBubble(BubbleType.Spawn);
+        spawnBubble.SetPosition(startPos);
+        spawnCell.SetBubble(spawnBubble);
 
         for (int i = 0; i < spawnCount; i++)
         {
@@ -99,7 +107,7 @@ public class BubbleSnakeSpawner : BubbleSpawner
 
             var newBubble = await BubbleFactory.Instance.CreateNewBubble(true, true);
             var model = newBubble.Model;
-            model.SetMoveSpeed(FloatDefine.BATTLE_SNAKE_BUBBLE_MOVE_SPEED);
+            model.SetMoveSpeed(snakeMoveSpeed);
 
             newBubble.SetModel(model);
             newBubble.SetPosition(startPos);

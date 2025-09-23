@@ -10,31 +10,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: Battle_Core
+  m_Name: UI_LobbyView
   m_EditorClassIdentifier: 
-  m_GroupName: Battle_Core
-  m_GUID: 359ad4bf458b66043ae7d99d1e44fb95
+  m_GroupName: UI_LobbyView
+  m_GUID: 123aa0f821a56894d94031385b5ff459
   m_SerializeEntries:
-  - m_GUID: 0b6107fc578b02a4e91ccf101bed4dd9
-    m_Address: Battle_Core/BattleRingSlot
+  - m_GUID: 4b78d4f19b229e947acfabfff6986a99
+    m_Address: UI/LobbyView/Witch
     m_ReadOnly: 0
     m_SerializedLabels:
     - Main
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: aa51f05a38f45e2488d8a1077b221348
-    m_Address: Battle_Core/BattleBubbleLine
+  - m_GUID: 65eb21b86b598294a92aaf11f2b4adfe
+    m_Address: UI/LobbyView/LobbyView
     m_ReadOnly: 0
     m_SerializedLabels:
     - Main
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: bfe1325b6bce2bc42860e3fffa0c9bba
-    m_Address: Battle_Core/BattleBackground
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Main
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: c8aa658a3b9d2824da4fa449fd535bf9
-    m_Address: Battle_Core/BattleBubbleLauncher
+  - m_GUID: 7a1489279d75a7f49b319e909935b1a0
+    m_Address: UI/LobbyView/Background
     m_ReadOnly: 0
     m_SerializedLabels:
     - Main
@@ -43,5 +37,5 @@ MonoBehaviour:
   m_Settings: {fileID: 11400000, guid: bc1783b9fa7e2624399a7228fc80ec31, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: bf8933ca44c22114399d2d603226b095, type: 2}
-    - {fileID: 11400000, guid: 061246314a44fa04c9c2517fa5a98ac2, type: 2}
+    - {fileID: 11400000, guid: af86bb9641bf4b8418c5a4c82df6d113, type: 2}
+    - {fileID: 11400000, guid: a28bc94cca5a33646ac1f9adbb72676c, type: 2}

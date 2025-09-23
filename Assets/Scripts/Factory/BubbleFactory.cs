@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BubbleFactory : BaseManager<BubbleFactory>
@@ -8,6 +9,19 @@ public class BubbleFactory : BaseManager<BubbleFactory>
     private bool isInitiailizeProb = false;
 
     private float[] bubbleTypeProbs;
+
+    public async UniTask PrewarmBubbles(int count)
+    {
+        var tasks = new UniTask<BubbleNode>[count];
+
+        for (int i = 0; i < count; i++)
+            tasks[i] = CreateNewBubble(true, true);
+
+        BubbleNode[] bubbles = await UniTask.WhenAll(tasks);
+
+        for (int i = 0; i < bubbles.Length; i++)
+            bubbles[i].gameObject.SafeSetActive(false);
+    }
 
     public async UniTask<BubbleNode> CreateNewBubble(bool randomType = false, bool randomColor = false)
     {
@@ -38,17 +52,20 @@ public class BubbleFactory : BaseManager<BubbleFactory>
         return newBubble;
     }
 
-    public async UniTask<BubbleNode> CreateNewNormalBubble()
+    public async UniTask<BubbleNode> CreateNewBubble(BubbleType type)
     {
         var model = new BubbleNodeModel();
 
         var newBubble = await ObjectPoolManager.Instance.
             SpawnPoolableMono<BubbleNode>(PathDefine.BUBBLE_NODE);
 
-        model.SetBubbleType(BubbleType.Normal);
+        model.SetBubbleType(type);
 
-        var color = GetRandomColor();
-        model.SetBubbleColor(color);
+        if (type == BubbleType.Normal)
+        {
+            var color = GetRandomColor();
+            model.SetBubbleColor(color);
+        }
 
         newBubble.SetModel(model);
 
@@ -60,7 +77,7 @@ public class BubbleFactory : BaseManager<BubbleFactory>
     private void InitializeProbs()
     {
         int typeCount = System.Enum.GetValues(typeof(BubbleType)).Length;
-        typeCount--; // Guide 타입 제외함
+        typeCount -= 2; // Guide, Spawn 타입 제외함
 
         bubbleTypeProbs = new float[typeCount];
 

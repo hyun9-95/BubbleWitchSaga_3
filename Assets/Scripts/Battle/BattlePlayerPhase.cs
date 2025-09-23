@@ -1,33 +1,82 @@
 #pragma warning disable CS1998
 using Cysharp.Threading.Tasks;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class BattlePlayerPhase : BaseUnit<BattlePlayerPhaseModel>, IBattlePhaseProcessor
+public class BattlePlayerPhase : IBattlePhaseProcessor
 {
-    public BattlePhase Phase => throw new System.NotImplementedException();
+    public BattlePlayerPhaseModel Model { get; private set; }
 
-    private bool isInitialized = false;
-
-    [SerializeField]
-    private BattleRingSlot ringSlot;
-
-    public async UniTask OnStartPhase(BattleGrid grid)
+    public void SetModel(BattlePlayerPhaseModel model)
     {
-        if (!isInitialized)
+        Model = model;
+    }
+
+    public BattlePhase Phase => BattlePhase.Player;
+
+    private BattleGrid grid;
+    private BattleViewController battleViewController;
+
+    public async UniTask Initialize(BattleGrid grid)
+    {
+        this.grid = grid;
+
+        await ShowBattleView();
+    }
+
+    public async UniTask OnStartPhase()
+    {
+        if (battleViewController == null)
         {
-            await ringSlot.InitializeSlot();
-            isInitialized = true;
+            await ShowBattleView();
+            return;
         }
 
-        await ringSlot.RefillBubble();
+        await battleViewController.Process();
     }
 
-    public async UniTask OnEndPhase(BattleGrid grid)
+    public async UniTask OnEndPhase()
     {
     }
 
-    public void OnProcessPhase(BattleGrid grid)
+    public void OnProcessPhase()
     {
 
+    }
+
+    private async UniTask ShowBattleView()
+    {
+        battleViewController = new BattleViewController();
+        BattleViewModel viewModel = new BattleViewModel();
+
+        BattleRingSlotModel battleRingSlotModel = new BattleRingSlotModel();
+        battleRingSlotModel.SetSlotCount(IntDefine.MAX_RINGSLOT_COUNT);
+        battleRingSlotModel.SetRemainBubbleCount(Model.UserBubbleCount);
+        viewModel.SetBattleRingSlotModel(battleRingSlotModel);
+
+        BattleBubbleLauncherModel battleLauncherModel = new BattleBubbleLauncherModel();
+        battleLauncherModel.SetOnFindClosestEmptyCell(OnFindClosestEmptyCell);
+        battleLauncherModel.SetOnLaunch(OnLaunch);
+
+        viewModel.SetBattleBubbleLauncherModel(battleLauncherModel);
+
+        battleViewController.SetModel(viewModel);
+
+        await UIManager.Instance.ChangeView(battleViewController);
+    }
+
+    private BattleCell OnFindClosestEmptyCell(CellPosition cellPos, Vector2 hitPos)
+    {
+        return grid.GetClosestEmptyCell(cellPos, hitPos);
+    }
+
+    private void OnLaunch(List<Vector3> movePath)
+    {
+        OnLaunchAsync(movePath).Forget();
+    }
+
+    private async UniTask OnLaunchAsync(List<Vector3> movePath)
+    {
+        await battleViewController.LaunchCurrentBubble(movePath);
     }
 }

@@ -58,7 +58,7 @@ public class BattleGrid : MonoBehaviour
 
     private Dictionary<CellPosition, BattleCell> cells = new();
 
-    public void BuildGrid()
+    private void Awake()
     {
         GenerateCells();
     }
@@ -67,7 +67,7 @@ public class BattleGrid : MonoBehaviour
     {
         cells.Clear();
         float width = bubbleRadius * 2f;
-        float height = bubbleRadius * 2f;
+        float height = bubbleRadius * Mathf.Sqrt(3f);
 
         CalculateGridDimensions(width, height);
 
@@ -113,14 +113,14 @@ public class BattleGrid : MonoBehaviour
 
         leftWall.points = new Vector2[]
         {
-            new(left + bubbleRadius, bottom),
-            new(left + bubbleRadius, top)
+            new(left, bottom),
+            new(left, top)
         };
 
         rightWall.points = new Vector2[]
         {
-            new(right - bubbleRadius, bottom),
-            new(right - bubbleRadius, top),
+            new(right, bottom),
+            new(right, top),
         };
     }
 

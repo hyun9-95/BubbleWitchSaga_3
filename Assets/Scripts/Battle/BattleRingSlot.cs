@@ -23,6 +23,9 @@ public class BattleRingSlot : BaseUnit<BattleRingSlotModel>, IPointerDownHandler
     [SerializeField]
     private float rotateTime = 0.5f;
 
+    [SerializeField]
+    private float launchSpeed = 10f;
+
     private float radius;
     private float angleStep;
     private bool isRotating = false;
@@ -40,7 +43,7 @@ public class BattleRingSlot : BaseUnit<BattleRingSlotModel>, IPointerDownHandler
         {
             float angle = i * angleStep;
 
-            BubbleNode newBubble = await GetNewBubble();
+            BubbleNode newBubble = await SpawnNewBubble();
             newBubble.SetPosition(GetPositionFromAngle(angle));
             bubbleNodes.Add(newBubble);
         }
@@ -119,15 +122,11 @@ public class BattleRingSlot : BaseUnit<BattleRingSlotModel>, IPointerDownHandler
         isRotating = false;
     }
 
-    public BubbleNode GetCurrentBubble()
+    private async UniTask<BubbleNode> SpawnNewBubble()
     {
-        return CurrentBubble;
-    }
-
-    private async UniTask<BubbleNode> GetNewBubble()
-    {
-        var newBubble = await BubbleFactory.Instance.CreateNewNormalBubble();
+        var newBubble = await BubbleFactory.Instance.CreateNewBubble();
         newBubble.SetColliderEnable(false);
+        newBubble.Model.SetMoveSpeed(launchSpeed);
 
         return newBubble;
     }
@@ -140,7 +139,7 @@ public class BattleRingSlot : BaseUnit<BattleRingSlotModel>, IPointerDownHandler
         await RotateSlot();
 
         float angle = (Model.SlotCount - 1) * angleStep;
-        BubbleNode newBubble = await GetNewBubble();
+        BubbleNode newBubble = await SpawnNewBubble();
         newBubble.SetPosition(GetPositionFromAngle(angle));
         bubbleNodes[Model.SlotCount - 1] = newBubble;
 

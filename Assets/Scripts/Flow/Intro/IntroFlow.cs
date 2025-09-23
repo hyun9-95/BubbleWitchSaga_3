@@ -7,8 +7,6 @@ public class IntroFlow : BaseFlow<IntroFlowModel>
 
     public override FlowType FlowType => FlowType.IntroFlow;
 
-    private bool entering = false;
-
     public override async UniTask LoadingProcess()
     {
         await AddressableManager.Instance.InitializeAsync();
@@ -19,7 +17,6 @@ public class IntroFlow : BaseFlow<IntroFlowModel>
         IntroController IntroController = new IntroController();
         IntroViewModel viewModel = new IntroViewModel();
         viewModel.SetLoadDataType(loadDataType);
-        viewModel.SetOnEnterGame(OnEnterGame);
 
         IntroController.SetModel(viewModel);
 
@@ -31,22 +28,6 @@ public class IntroFlow : BaseFlow<IntroFlowModel>
     {
         ShowIntroView(Model.LoadDataType).Forget();
     }
-
-    private void OnEnterGame()
-    {
-        if (entering)
-            return;
-
-        entering = true;
-        var stageData = DataManager.Instance.GetDataById<DataBattleStage>((int)BattleStageDefine.STAGE_WILBUR);
-
-        BattleFlowModel battleFlowModel = new BattleFlowModel();
-        battleFlowModel.SetSceneDefine(SceneDefine.BattleScene);
-        battleFlowModel.SetStageData(stageData);
-
-        FlowManager.Instance.ChangeFlow(FlowType.BattleFlow, battleFlowModel).Forget();
-    }
-
 
     public override async UniTask Exit()
     {

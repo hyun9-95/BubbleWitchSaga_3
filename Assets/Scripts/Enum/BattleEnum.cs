@@ -4,6 +4,7 @@ public enum BubbleType
     Fairy,
     Magic,
     Guide,
+    Spawn,
 }
 
 public enum  BubbleColor

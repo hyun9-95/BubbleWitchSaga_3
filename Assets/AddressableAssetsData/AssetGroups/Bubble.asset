@@ -15,6 +15,12 @@ MonoBehaviour:
   m_GroupName: Bubble
   m_GUID: a220d7acb7e37ae4b9185b6d94388f97
   m_SerializeEntries:
+  - m_GUID: 016e80ca114cad647848b0b9a33fd1cf
+    m_Address: Bubble/Bubble_Spawn
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Main
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 083b31c346260d64e8220d013a08742a
     m_Address: Bubble/Bubble_Magic
     m_ReadOnly: 0
@@ -57,8 +63,8 @@ MonoBehaviour:
     m_SerializedLabels:
     - Main
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: e8177a1a1c5013848b270640797d372f
-    m_Address: Bubble/Bubble_Fairy
+  - m_GUID: ded888b0925ea4f45bb85a29c5203165
+    m_Address: Bubble/Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_9
     m_ReadOnly: 0
     m_SerializedLabels:
     - Main

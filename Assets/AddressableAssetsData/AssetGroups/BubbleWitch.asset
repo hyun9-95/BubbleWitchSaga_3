@@ -15,12 +15,6 @@ MonoBehaviour:
   m_GroupName: BubbleWitch
   m_GUID: 3d70ecd960db18343a4e498e89448841
   m_SerializeEntries:
-  - m_GUID: 016e80ca114cad647848b0b9a33fd1cf
-    m_Address: BubbleWitch/Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_12
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Main
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 08b89d601af1beb48b3d89ce5c9c8dca
     m_Address: BubbleWitch/Mobile - Bubble Witch 2 Saga - Miscellaneous - Events
     m_ReadOnly: 0
@@ -82,8 +76,8 @@ MonoBehaviour:
     m_SerializedLabels:
     - Main
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ded888b0925ea4f45bb85a29c5203165
-    m_Address: BubbleWitch/Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_9
+  - m_GUID: e8177a1a1c5013848b270640797d372f
+    m_Address: BubbleWitch/Bubble_Fairy
     m_ReadOnly: 0
     m_SerializedLabels:
     - Main

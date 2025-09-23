@@ -4,9 +4,11 @@ public interface IBattlePhaseProcessor
 {
     public BattlePhase Phase { get; }
 
-    public UniTask OnStartPhase(BattleGrid grid);
+    public UniTask Initialize(BattleGrid grid);
 
-    public void OnProcessPhase(BattleGrid grid);
+    public UniTask OnStartPhase();
 
-    public UniTask OnEndPhase(BattleGrid grid);
+    public void OnProcessPhase();
+
+    public UniTask OnEndPhase();
 }

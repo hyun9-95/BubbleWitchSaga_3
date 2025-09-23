@@ -14,14 +14,13 @@ public class IntroController : BaseController<IntroViewModel>
     public override void Enter()
     {
         InitializeDataLoader();
+        Model.SetOnEnterGame(OnEnterGame);
     }
 
     public override async UniTask Process()
     {
         await LoadResources();
         await LoadDatas();
-
-        View.ShowComplete(true);
     }
 
     private void InitializeDataLoader()
@@ -56,8 +55,6 @@ public class IntroController : BaseController<IntroViewModel>
     {
         Model.SetLoadingState(IntroViewModel.LoadingState.ResourceLoading);
         
-        // 추후 어드레서블 리모트 사용 시 이 부분에 다운로드 / 무결성 체크 구현
-
         View.UpdateLoadingUI();
     }
 
@@ -71,5 +68,17 @@ public class IntroController : BaseController<IntroViewModel>
         await UniTask.WaitUntil(() => { return !Model.DataLoader.IsLoading; });
 
         DataManager.Instance.GenerateDataContainerByDataDic(Model.DataLoader.DicJsonByFileName);
+    }
+
+    private void OnEnterGame()
+    {
+        OnEnterGameAsync().Forget();
+    }
+
+    private async UniTask OnEnterGameAsync()
+    {
+        LobbyFlowModel lobbyFlowModel = new LobbyFlowModel();
+
+        await FlowManager.Instance.ChangeFlow(FlowType.LobbyFlow, lobbyFlowModel);
     }
 }

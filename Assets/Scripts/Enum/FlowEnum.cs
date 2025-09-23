@@ -1,6 +1,7 @@
 public enum FlowType
 {
     IntroFlow,
+    LobbyFlow,
     BattleFlow, 
 }
 

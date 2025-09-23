@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BattleView : BaseView
@@ -24,10 +25,22 @@ public class BattleView : BaseView
             bubbleLauncher.SetModel(Model.BattleBubbleLauncherModel);
             await bubbleLauncher.Initialize();
         }
+
+        await RefillRingSlot();
     }
 
-    public async UniTask RefillRingSlot()
+    private async UniTask RefillRingSlot()
     {
         await ringSlot.RefillBubble();
+    }
+
+    public async UniTask LaunchCurrentRingSlot(List<Vector3> path)
+    {
+        var currentBubble = ringSlot.CurrentBubble;
+
+        if (currentBubble == null)
+            return;
+
+        await currentBubble.MoveAlongPath(path);
     }
 }

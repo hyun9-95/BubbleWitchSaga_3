@@ -33,8 +33,6 @@ public class BattleScene : MonoBehaviour
 
     private void PrepareGrid()
     {
-        grid.BuildGrid();
-
         var centerWorld = grid.CenterWorld;
         background.transform.position = centerWorld;
         battleCamera.transform.position = new Vector3(centerWorld.x, centerWorld.y + cameraYOffset, -1);
@@ -56,15 +54,15 @@ public class BattleScene : MonoBehaviour
         while (currentPhase != BattlePhase.End)
         {
             var battlePhaseProcessor = processorDic[currentPhase];
-            await battlePhaseProcessor.OnStartPhase(grid);
+            await battlePhaseProcessor.OnStartPhase();
 
             while (currentPhase == battlePhaseProcessor.Phase)
             {
-                battlePhaseProcessor.OnProcessPhase(grid);
+                battlePhaseProcessor.OnProcessPhase();
                 await UniTaskUtils.NextFrame();
             }
 
-            await battlePhaseProcessor.OnEndPhase(grid);
+            await battlePhaseProcessor.OnEndPhase();
         }
     }
 }

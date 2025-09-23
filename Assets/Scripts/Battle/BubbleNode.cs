@@ -1,15 +1,24 @@
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 public class BubbleNode : PoolableBaseUnit<BubbleNodeModel>
 {
+    public float Radius => bubbleCol != null ?
+        bubbleCol.radius : 0;
+
     [SerializeField]
-    private Collider2D bubbleCol;
+    private CircleCollider2D bubbleCol;
 
     [SerializeField]
     private SpriteRenderer bubbleSprite;
+
+    [SerializeField]
+    private SpriteRenderer fairyCover;
+
+    private string bubblePath = string.Empty;
 
     public override async UniTask ShowAsync()
     {
@@ -47,6 +56,12 @@ public class BubbleNode : PoolableBaseUnit<BubbleNodeModel>
 
     public async UniTask MoveAlongPath(List<Vector3> posList)
     {
+        if (Model.MoveSpeed == 0)
+        {
+            Logger.Error("MoveSpeed == 0");
+            return;
+        }
+
         if (posList == null || posList.Count == 0)
             return;
 
@@ -58,15 +73,25 @@ public class BubbleNode : PoolableBaseUnit<BubbleNodeModel>
     {
         string path = string.Empty;
 
-        if (Model.BubbleType == BubbleType.Normal)
+        if (Model.BubbleType is BubbleType.Normal or BubbleType.Fairy)
         {
-            path = string.Format(PathDefine.BUBBLE_ICON_NORMAL_FORMAT, BubbleType.Normal, Model.BubbleColor);
+            path = string.Format(PathDefine.BUBBLE_ICON_NORMAL_FORMAT, BubbleType.Normal, Model.BubbleColor);  
         }
         else
         {
             path = string.Format(PathDefine.BUBBLE_ICON_FORMAT, Model.BubbleType);
         }
 
+        fairyCover.gameObject.SafeSetActive(Model.BubbleType == BubbleType.Fairy);
+
+        if (path.Equals(bubblePath))
+            return;
+
         await bubbleSprite.SafeLoadAsync(path);
+        bubblePath = path;
+
+        bubbleSprite.sortingOrder = Model.BubbleType == BubbleType.Spawn ?
+                IntDefine.BUBBLE_SORTING_ORDER_SPAWN :
+                IntDefine.BUBBLE_SORTING_ORDER_NORMAL;
     }
 }

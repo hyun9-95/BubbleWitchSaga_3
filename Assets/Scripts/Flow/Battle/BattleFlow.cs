@@ -15,12 +15,14 @@ public class BattleFlow : BaseFlow<BattleFlowModel>
         battleScene = loadedScene.GetRootComponent<BattleScene>();
         
         await battleScene.Prepare();
-        
-        await LoadBattleStage(Model.StageData, battleScene.transform);
-        await LoadBattleView();
+
+        await BubbleFactory.Instance.PrewarmBubbles(Model.StageData.SpawnCount * 2);
+
+        await PrepareBattleStage(Model.StageData, battleScene.transform, battleScene.Grid);
+        await PreparBattlePlayer(Model.StageData, battleScene.Grid);
     }
 
-    private async UniTask LoadBattleStage(DataBattleStage dataStage, Transform transform)
+    private async UniTask PrepareBattleStage(DataBattleStage dataStage, Transform transform, BattleGrid grid)
     {
         var stagePath = dataStage.StagePath;
 
@@ -31,6 +33,8 @@ public class BattleFlow : BaseFlow<BattleFlowModel>
         stageModel.SetSpawnCount(dataStage.SpawnCount);
         stage.SetModel(stageModel);
 
+        await stage.Initialize(grid);
+
         battleScene.AddPhaseProcessor(BattlePhase.Stage, stage);
     }
 
@@ -39,25 +43,15 @@ public class BattleFlow : BaseFlow<BattleFlowModel>
         battleScene.StartBattle().Forget();
     }
 
-    private async UniTask LoadBattleView()
+    private async UniTask PreparBattlePlayer(DataBattleStage dataStage, BattleGrid grid)
     {
-        BattleViewController battleController = new BattleViewController();
-        BattleViewModel viewModel = new BattleViewModel();
+        var battlePlayerPhase = new BattlePlayerPhase();
+        var battlePlayerPhaseModel = new BattlePlayerPhaseModel();
+        battlePlayerPhaseModel.SetUserBubbleCount(Model.StageData.UserBubbleCount);
 
-        BattleRingSlotModel battleRingSlotModel = new BattleRingSlotModel();
-        battleRingSlotModel.SetSlotCount(IntDefine.MAX_RINGSLOT_COUNT);
-        battleRingSlotModel.SetRemainBubbleCount(Model.StageData.UserBubbleCount);
-        viewModel.SetBattleRingSlotModel(battleRingSlotModel);
+        battlePlayerPhase.SetModel(battlePlayerPhaseModel);
+        await battlePlayerPhase.Initialize(battleScene.Grid);
 
-        BattleBubbleLauncherModel battleLauncherModel = new BattleBubbleLauncherModel();
-        battleLauncherModel.SetWallBounds(battleScene.Grid.GridBounds);
-
-        viewModel.SetBattleBubbleLauncherModel(battleLauncherModel);
-
-        battleController.SetModel(viewModel);
-
-        battleScene.AddPhaseProcessor(BattlePhase.Player, battleController);
-
-        await UIManager.Instance.ChangeView(battleController);
+        battleScene.AddPhaseProcessor(BattlePhase.Player, battlePlayerPhase);
     }
 }

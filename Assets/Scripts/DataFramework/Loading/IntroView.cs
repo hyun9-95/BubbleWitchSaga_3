@@ -18,6 +18,9 @@ public class IntroView : BaseView
             UpdateLoadingUI();
             await UniTaskUtils.NextFrame(TokenPool.Get(GetHashCode()));
         }
+
+        loadingBar.SetLoadingProgress(1);
+        Model.OnEnterGame?.Invoke();
     }
 
     public void UpdateLoadingUI()
@@ -27,16 +30,5 @@ public class IntroView : BaseView
 
         loadingBar.SetLoadingProgressText(Model.GetLoadingProgressText());
         loadingBar.SetLoadingProgress(Model.DataLoader.CurrentProgressValue);
-    }
-
-    public void ShowComplete(bool value)
-    {
-        loadingBar.gameObject.SafeSetActive(!value);
-        buttonStart.SafeSetActive(value);
-    }
-
-    public void OnEnterGame()
-    {
-        Model.OnEnterGame?.Invoke();
     }
 }

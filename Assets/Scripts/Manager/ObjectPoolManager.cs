@@ -80,6 +80,19 @@ public class ObjectPoolManager : BaseMonoManager<ObjectPoolManager>
         return null;
     }
 
+    public async UniTask Prewarm(string address, int spawnCount)
+    {
+        for (int i = 0; i < spawnCount; i++)
+        {
+            var go = await Spawn(address);
+            if (go != null)
+            {
+                go.SetActive(false);
+                ReturnToPool(go, address);
+            }
+        }
+    }
+
     public void Clear()
     {
         poolDictionary.Clear();
