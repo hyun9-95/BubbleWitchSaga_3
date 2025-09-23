@@ -11,11 +11,12 @@ public class BattlePlayerPhase : IBattlePhaseProcessor
     {
         Model = model;
     }
-
+    
     public BattlePhase Phase => BattlePhase.Player;
 
     private BattleGrid grid;
     private BattleViewController battleViewController;
+    private BubbleNode launchedBubbleNode;
 
     public async UniTask Initialize(BattleGrid grid)
     {
@@ -24,7 +25,7 @@ public class BattlePlayerPhase : IBattlePhaseProcessor
         await ShowBattleView();
     }
 
-    public async UniTask OnStartPhase()
+    public async UniTask OnStartPhase(IBattlePhaseParam param)
     {
         if (battleViewController == null)
         {
@@ -35,13 +36,26 @@ public class BattlePlayerPhase : IBattlePhaseProcessor
         await battleViewController.Process();
     }
 
+    public async UniTask OnProcess()
+    {
+        while (launchedBubbleNode != null)
+            await UniTask.NextFrame(TokenPool.Get(GetHashCode()));
+    }
+
     public async UniTask OnEndPhase()
     {
         battleViewController.EnableClickBlocker(true);
     }
 
-    public void OnProcessPhase()
+    public BattleNextPhaseInfo OnNextPhase()
     {
+        BattleInteractionPhaseParam interactionPhaseParam = new();
+        interactionPhaseParam.SetLaunchedBubbleNode(launchedBubbleNode);
+
+        BattleNextPhaseInfo nextPhaseInfo = new(BattlePhase.Interaction, interactionPhaseParam);
+        launchedBubbleNode = null;
+
+        return nextPhaseInfo;
     }
 
     private async UniTask ShowBattleView()
@@ -77,10 +91,6 @@ public class BattlePlayerPhase : IBattlePhaseProcessor
 
     private async UniTask OnLaunchAsync(List<Vector3> movePath)
     {
-        var launchedBubble = await battleViewController.LaunchCurrentBubble(movePath);
-    }
-
-    private async UniTask InteractionBubble(BubbleNode launchedBubble)
-    {
+        launchedBubbleNode = await battleViewController.LaunchCurrentBubble(movePath);
     }
 }

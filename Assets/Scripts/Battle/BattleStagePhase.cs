@@ -27,12 +27,12 @@ public class BattleStagePhase : BaseUnit<BattleStageModel>, IBattlePhaseProcesso
         await UniTask.WhenAll(task);
     }
 
-    public async UniTask OnStartPhase()
+    public async UniTask OnStartPhase(IBattlePhaseParam param)
     {
         await SpawnBubbles(grid);
     }
 
-    public void OnProcessPhase()
+    public async UniTask OnProcess()
     {
 
     }
@@ -40,5 +40,11 @@ public class BattleStagePhase : BaseUnit<BattleStageModel>, IBattlePhaseProcesso
     public async UniTask OnEndPhase()
     {
 
+    }
+
+    public BattleNextPhaseInfo OnNextPhase()
+    {
+        // 추후 여기서 End 페이즈 처리
+        return new BattleNextPhaseInfo(BattlePhase.Player);
     }
 }

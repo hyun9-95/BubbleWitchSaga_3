@@ -6,9 +6,11 @@ public interface IBattlePhaseProcessor
 
     public UniTask Initialize(BattleGrid grid);
 
-    public UniTask OnStartPhase();
+    public UniTask OnStartPhase(IBattlePhaseParam param);
 
-    public void OnProcessPhase();
+    public UniTask OnProcess();
 
     public UniTask OnEndPhase();
+
+    public BattleNextPhaseInfo OnNextPhase();
 }

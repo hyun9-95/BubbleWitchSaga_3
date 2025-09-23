@@ -23,9 +23,6 @@ public class BattleScene : MonoBehaviour
     [SerializeField]
     private Transform objectContainer;
 
-    private BattlePhase currentPhase;
-    private Dictionary<BattlePhase, IBattlePhaseProcessor> processorDic = new();
-
     public async UniTask Prepare()
     {
         PrepareGrid();
@@ -38,31 +35,4 @@ public class BattleScene : MonoBehaviour
         battleCamera.transform.position = new Vector3(centerWorld.x, centerWorld.y + cameraYOffset, -1);
     }
 
-    public void AddPhaseProcessor(BattlePhase phase, IBattlePhaseProcessor processor)
-    {
-        processorDic.Add(phase, processor);
-    }
-
-    public async UniTask StartBattle()
-    {
-        currentPhase = BattlePhase.Stage;
-        OnBattle().Forget();
-    }
-
-    public async UniTask OnBattle()
-    {
-        while (currentPhase != BattlePhase.End)
-        {
-            var battlePhaseProcessor = processorDic[currentPhase];
-            await battlePhaseProcessor.OnStartPhase();
-
-            while (currentPhase == battlePhaseProcessor.Phase)
-            {
-                battlePhaseProcessor.OnProcessPhase();
-                await UniTaskUtils.NextFrame();
-            }
-
-            await battlePhaseProcessor.OnEndPhase();
-        }
-    }
 }
