@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7790762558075110819}
   - component: {fileID: 3986017473056318547}
   - component: {fileID: 5375651855457031842}
+  - component: {fileID: 544887963907308985}
   m_Layer: 7
   m_Name: BubbleNode
   m_TagString: BUBBLE
@@ -50,6 +51,8 @@ MonoBehaviour:
   bubbleCol: {fileID: 5375651855457031842}
   bubbleSprite: {fileID: 3986017473056318547}
   fairyCover: {fileID: 4558062307810384382}
+  canvasGroup: {fileID: 544887963907308985}
+  fadeTime: 0.2
 --- !u!212 &3986017473056318547
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -141,6 +144,18 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.57
+--- !u!225 &544887963907308985
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7633439409958638320}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &8074593767272459996
 GameObject:
   m_ObjectHideFlags: 0

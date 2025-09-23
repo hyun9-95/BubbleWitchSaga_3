@@ -83,9 +83,7 @@ public class BattleRingSlot : BaseUnit<BattleRingSlotModel>, IPointerDownHandler
         float[] startAngles = new float[bubbleNodes.Count];
 
         for (int i = 0; i < bubbleNodes.Count; i++)
-        {
             startAngles[i] = i * angleStep;
-        }
 
         while (elapsedTime < duration)
         {
@@ -124,7 +122,7 @@ public class BattleRingSlot : BaseUnit<BattleRingSlotModel>, IPointerDownHandler
 
     private async UniTask<BubbleNode> SpawnNewBubble()
     {
-        var newBubble = await BubbleFactory.Instance.CreateNewBubble();
+        var newBubble = await BubbleFactory.Instance.CreateNewBubble(randomColor:true);
         newBubble.SetColliderEnable(false);
         newBubble.Model.SetMoveSpeed(launchSpeed);
 

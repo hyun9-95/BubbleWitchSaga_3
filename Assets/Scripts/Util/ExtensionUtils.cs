@@ -73,6 +73,30 @@ public static class ExtensionUtils
         gameObject.SetActive(active);
     }
 
+    public static void SafeSetActive(this Behaviour behaviour, bool active)
+    {
+        if (behaviour.CheckSafeNull())
+            return;
+
+        behaviour.gameObject.SafeSetActive(active);
+    }
+
+    public static void SafeSetActive(this MonoBehaviour mono, bool active)
+    {
+        if (mono.CheckSafeNull())
+            return;
+
+        mono.gameObject.SafeSetActive(active);
+    }
+
+    public static void SafeSetActive(this Transform target, bool active)
+    {
+        if (target.CheckSafeNull())
+            return;
+
+        target.gameObject.SafeSetActive(active);
+    }
+
     public static bool SafeActiveSelf(this UnityEngine.GameObject gameObject)
     {
         if (gameObject.CheckSafeNull())

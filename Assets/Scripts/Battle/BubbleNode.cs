@@ -1,8 +1,6 @@
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine.UI;
 
 public class BubbleNode : PoolableBaseUnit<BubbleNodeModel>
 {
@@ -18,11 +16,18 @@ public class BubbleNode : PoolableBaseUnit<BubbleNodeModel>
     [SerializeField]
     private SpriteRenderer fairyCover;
 
+    [SerializeField]
+    private CanvasGroup canvasGroup;
+
+    [SerializeField]
+    private float fadeTime = 0.2f;
+
     private string bubblePath = string.Empty;
 
     public override async UniTask ShowAsync()
     {
         await ResolveBubbleImage();
+        canvasGroup.alpha = 1;
     }
 
     public void SetColliderEnable(bool enable)
@@ -67,6 +72,24 @@ public class BubbleNode : PoolableBaseUnit<BubbleNodeModel>
 
         for (int i = 0; i < posList.Count; i++)
             await SmoothMove(posList[i]);
+    }
+
+    public async UniTask FadeAsync(float targetAlpha)
+    {
+        float elapsedTime = 0;
+        canvasGroup.alpha = 1;
+
+        while (elapsedTime < fadeTime)
+        {
+            elapsedTime += Time.unscaledDeltaTime;
+            float progress = elapsedTime / fadeTime;
+            float alpha = Mathf.Lerp(1, targetAlpha, progress);
+            canvasGroup.alpha = alpha;
+
+            await UniTaskUtils.NextFrame();
+        }
+
+        canvasGroup.alpha = targetAlpha;
     }
 
     private async UniTask ResolveBubbleImage()

@@ -99,6 +99,7 @@ public class BubbleSnakeSpawner : BubbleSpawner
 
         var spawnBubble = await BubbleFactory.Instance.CreateNewBubble(BubbleType.Spawn);
         spawnBubble.SetPosition(startPos);
+        spawnBubble.SetColliderEnable(true);
         spawnCell.SetBubble(spawnBubble);
 
         for (int i = 0; i < spawnCount; i++)

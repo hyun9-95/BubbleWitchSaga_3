@@ -20,8 +20,13 @@ public class BattleViewController : BaseController<BattleViewModel>
         await View.ShowAsync();
     }
 
-    public async UniTask LaunchCurrentBubble(List<Vector3> path)
+    public async UniTask<BubbleNode> LaunchCurrentBubble(List<Vector3> path)
     {
-        await View.LaunchCurrentRingSlot(path);
+        return await View.LaunchCurrentRingSlot(path);
+    }
+
+    public void EnableClickBlocker(bool value)
+    {
+        View.EnableClickBlocker(value);
     }
 }

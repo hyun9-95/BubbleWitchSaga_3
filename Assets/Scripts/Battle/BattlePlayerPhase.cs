@@ -37,11 +37,11 @@ public class BattlePlayerPhase : IBattlePhaseProcessor
 
     public async UniTask OnEndPhase()
     {
+        battleViewController.EnableClickBlocker(true);
     }
 
     public void OnProcessPhase()
     {
-
     }
 
     private async UniTask ShowBattleView()
@@ -77,6 +77,10 @@ public class BattlePlayerPhase : IBattlePhaseProcessor
 
     private async UniTask OnLaunchAsync(List<Vector3> movePath)
     {
-        await battleViewController.LaunchCurrentBubble(movePath);
+        var launchedBubble = await battleViewController.LaunchCurrentBubble(movePath);
+    }
+
+    private async UniTask InteractionBubble(BubbleNode launchedBubble)
+    {
     }
 }

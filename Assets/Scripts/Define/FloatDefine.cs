@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class FloatDefine
 {
     public const float SOUND_FADE_TIME = 0.8f;

@@ -8,6 +8,15 @@ public class BattleBubbleLauncher : BaseUnit<BattleBubbleLauncherModel>, IPointe
     [SerializeField]
     private RectTransform launchTr;
 
+    [SerializeField]
+    private int maxHit = 2;
+
+    [SerializeField]
+    private float reflectOffset = 0.01f;
+
+    [SerializeField]
+    private float launchAngle = 0.2f;
+
     private LineRenderer lineRenderer;
     private Vector2 startPos;
     private Vector3 endPos;
@@ -19,9 +28,14 @@ public class BattleBubbleLauncher : BaseUnit<BattleBubbleLauncherModel>, IPointe
     private BattleCell selectedCell;
     private float bubbleRadius;
 
+    private bool aiming = false;
+
     public async UniTask Initialize()
     {
         worldCamera = CameraManager.Instance.GetWorldCamera();
+
+        aimPoints = new List<Vector3>(maxHit * 2);
+        movePath = new List<Vector3>(maxHit * 2);
 
         if (lineRenderer == null)
             await InstantiateLineRenderer();
@@ -59,6 +73,9 @@ public class BattleBubbleLauncher : BaseUnit<BattleBubbleLauncherModel>, IPointe
 
     public void OnPointerUp(PointerEventData eventData)
     {
+        if (!aiming)
+            return;
+
         lineRenderer.positionCount = 0;
         guideBubbleNode.gameObject.SafeSetActive(false);
 
@@ -72,10 +89,10 @@ public class BattleBubbleLauncher : BaseUnit<BattleBubbleLauncherModel>, IPointe
         Model.OnLaunch(movePath);
     }
 
-    public void OnUpdate()
+    private void Cancel()
     {
-        
-
+        lineRenderer.positionCount = 0;
+        guideBubbleNode.gameObject.SafeSetActive(false);
     }
 
     private void UpdateAimDirection(Vector2 screenPosition)
@@ -83,9 +100,18 @@ public class BattleBubbleLauncher : BaseUnit<BattleBubbleLauncherModel>, IPointe
         Vector2 worldPosition = worldCamera.ScreenToWorldPoint(screenPosition);
         Vector2 dir = (worldPosition - startPos).normalized;
 
-        float maxRange = 999f;     
-        float offset = 0.01f;        
-        int maxHit = 2;                   
+        var dotValue = Vector2.Dot(dir, Vector2.up);
+
+        if (dotValue < launchAngle)
+        {
+            aiming = false;
+            Cancel();
+            return;
+        }
+
+        aiming = true;
+
+        float maxRange = 100f;                         
         float remainDistance = maxRange;
         int mask = (int)LayerFlag.World;
         bool foundCell = false;
@@ -133,7 +159,7 @@ public class BattleBubbleLauncher : BaseUnit<BattleBubbleLauncherModel>, IPointe
                 Vector2 reflectDir = Vector2.Reflect(dir, hit.normal).normalized;
 
                 // 재충돌 방지를 위해 조금 띄움
-                origin = centerHitPoint + reflectDir * offset;
+                origin = centerHitPoint + reflectDir * reflectOffset;
 
                 dir = reflectDir;
                 continue;

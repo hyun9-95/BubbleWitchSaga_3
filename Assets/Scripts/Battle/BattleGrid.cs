@@ -145,21 +145,25 @@ public class BattleGrid : MonoBehaviour
 
     public BattleCell GetClosestEmptyCell(CellPosition hitCellPos, Vector2 hitPoint)
     {
-        var neighborPosList = GetNeighborPositions(hitCellPos);
         BattleCell closestCell = null;
         float closestDistance = float.MaxValue;
 
-        foreach (var adjPos in neighborPosList)
+        foreach (var direction in battleCellDirection)
         {
-            var adjCell = GetCell(adjPos);
-            if (adjCell != null && adjCell.IsEmpty && !adjCell.Closed)
+            var neighborCellPos = hitCellPos;
+            neighborCellPos.Move(direction);
+
+            var neighborCell = GetCell(neighborCellPos);
+
+            if (neighborCell == null || !neighborCell.IsEmpty || neighborCell.Closed)
+                continue;
+
+            float distance = Vector2.Distance(hitPoint, neighborCell.Position);
+
+            if (distance < closestDistance)
             {
-                float distance = Vector2.Distance(hitPoint, adjCell.Position);
-                if (distance < closestDistance)
-                {
-                    closestDistance = distance;
-                    closestCell = adjCell;
-                }
+                closestDistance = distance;
+                closestCell = neighborCell;
             }
         }
 
@@ -171,18 +175,23 @@ public class BattleGrid : MonoBehaviour
         closedCells.Add(cellPos);
     }
 
-    private List<CellPosition> GetNeighborPositions(CellPosition cellPos)
+    public List<CellPosition> GetNeighborPositions(CellPosition cellPos)
     {
-        var adjacentPositions = new List<CellPosition>();
+        var neighborPositions = new List<CellPosition>();
 
         foreach (var direction in battleCellDirection)
         {
-            var adjPos = cellPos;
-            adjPos.Move(direction);
-            adjacentPositions.Add(adjPos);
+            var cell = GetCell(cellPos);
+
+            if (cell.IsEmpty)
+                continue;
+
+            var neighborCellPos = cellPos;
+            neighborCellPos.Move(direction);
+            neighborPositions.Add(neighborCellPos);
         }
 
-        return adjacentPositions;
+        return neighborPositions;
     }
 
 #if UNITY_EDITOR

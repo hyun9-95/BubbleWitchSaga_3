@@ -34,7 +34,7 @@ MonoBehaviour:
     - Main
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 24ccb267b5813ec4abd6c1ce556a9a7b
-    m_Address: Bubble/Bubble_Empty
+    m_Address: Bubble/Bubble_Guide
     m_ReadOnly: 0
     m_SerializedLabels:
     - Main

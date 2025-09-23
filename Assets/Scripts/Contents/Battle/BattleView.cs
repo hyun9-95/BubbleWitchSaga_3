@@ -12,8 +12,13 @@ public class BattleView : BaseView
     [SerializeField]
     private BattleBubbleLauncher bubbleLauncher;
 
+    [SerializeField]
+    private ClickBlocker clickBlocker;
+
     public override async UniTask ShowAsync()
     {
+        EnableClickBlocker(true);
+
         if (ringSlot.Model == null)
         {
             ringSlot.SetModel(Model.BattleRingSlotModel);
@@ -27,6 +32,7 @@ public class BattleView : BaseView
         }
 
         await RefillRingSlot();
+        EnableClickBlocker(false);
     }
 
     private async UniTask RefillRingSlot()
@@ -34,13 +40,20 @@ public class BattleView : BaseView
         await ringSlot.RefillBubble();
     }
 
-    public async UniTask LaunchCurrentRingSlot(List<Vector3> path)
+    public void EnableClickBlocker(bool enable)
+    {
+        clickBlocker.SafeSetActive(enable);
+    }
+
+    public async UniTask<BubbleNode> LaunchCurrentRingSlot(List<Vector3> path)
     {
         var currentBubble = ringSlot.CurrentBubble;
 
         if (currentBubble == null)
-            return;
+            return null;
 
         await currentBubble.MoveAlongPath(path);
+
+        return currentBubble;
     }
 }
