@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class BattleScene : MonoBehaviour
 {
+    public BattleGrid Grid => grid;
+
     [SerializeField]
     private CinemachineCamera battleCamera;
 
@@ -17,6 +19,9 @@ public class BattleScene : MonoBehaviour
 
     [SerializeField]
     private BattleGrid grid;
+
+    [SerializeField]
+    private Transform objectContainer;
 
     private BattlePhase currentPhase;
     private Dictionary<BattlePhase, IBattlePhaseProcessor> processorDic = new();

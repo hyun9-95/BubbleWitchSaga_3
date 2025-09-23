@@ -1,8 +1,9 @@
 public enum BubbleType
 {
     Normal,
-    Magic,
     Fairy,
+    Magic,
+    Guide,
 }
 
 public enum  BubbleColor

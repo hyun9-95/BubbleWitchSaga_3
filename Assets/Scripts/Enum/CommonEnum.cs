@@ -20,6 +20,21 @@ public enum LayerFlag
     Character = 1 << 3,
     Water = 1 << 4,
     UI = 1 << 5,
+    Background = 1 << 6,
+    World = 1 << 7,
+}
+
+public enum LayerInt
+{
+    None,
+    Default,
+    TransparentFX,
+    IgnoreRaycast,
+    Character,
+    Water,
+    UI,
+    Background,
+    World,
 }
 
 public enum LoadDataType

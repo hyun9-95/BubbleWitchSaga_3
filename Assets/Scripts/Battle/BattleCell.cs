@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class BattleCell
 {
-    public CellPosition GridPos { get; private set; }
+    public CellPosition CellPos { get; private set; }
     public Vector3 Position { get; private set; }
     public BubbleNode Bubble { get; set; }
     public bool IsEmpty => Bubble == null;
@@ -10,7 +10,7 @@ public class BattleCell
 
     public BattleCell(CellPosition gridPos, Vector3 pos)
     {
-        GridPos = gridPos;
+        CellPos = gridPos;
         Position = pos;
         Bubble = null;
         Closed = false;
@@ -21,12 +21,11 @@ public class BattleCell
         Closed = value;
     }
 
-    public void AddBubble(BubbleNode bubble)
+    public void SetBubble(BubbleNode bubble)
     {
         if (bubble == null)
             return;
 
         Bubble = bubble;
-        Bubble.transform.position = Position;
     }
 }

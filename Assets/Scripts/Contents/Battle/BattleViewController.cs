@@ -17,6 +17,9 @@ public class BattleViewController : BaseController<BattleViewModel>, IBattlePhas
 
     public async UniTask OnStartPhase(BattleGrid grid)
     {
+        if (grid == null)
+            return;
+
         await View.ShowAsync();
     }
 

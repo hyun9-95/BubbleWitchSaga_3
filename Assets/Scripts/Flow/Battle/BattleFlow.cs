@@ -16,7 +16,6 @@ public class BattleFlow : BaseFlow<BattleFlowModel>
         
         await battleScene.Prepare();
         
-        // Phase ¡ÿ∫Ò
         await LoadBattleStage(Model.StageData, battleScene.transform);
         await LoadBattleView();
     }
@@ -44,10 +43,16 @@ public class BattleFlow : BaseFlow<BattleFlowModel>
     {
         BattleViewController battleController = new BattleViewController();
         BattleViewModel viewModel = new BattleViewModel();
+
         BattleRingSlotModel battleRingSlotModel = new BattleRingSlotModel();
         battleRingSlotModel.SetSlotCount(IntDefine.MAX_RINGSLOT_COUNT);
         battleRingSlotModel.SetRemainBubbleCount(Model.StageData.UserBubbleCount);
         viewModel.SetBattleRingSlotModel(battleRingSlotModel);
+
+        BattleBubbleLauncherModel battleLauncherModel = new BattleBubbleLauncherModel();
+        battleLauncherModel.SetWallBounds(battleScene.Grid.GridBounds);
+
+        viewModel.SetBattleBubbleLauncherModel(battleLauncherModel);
 
         battleController.SetModel(viewModel);
 

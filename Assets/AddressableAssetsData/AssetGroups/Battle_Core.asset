@@ -15,20 +15,32 @@ MonoBehaviour:
   m_GroupName: Battle_Core
   m_GUID: 359ad4bf458b66043ae7d99d1e44fb95
   m_SerializeEntries:
-  - m_GUID: 8f51d30a22d0a7a469ead13209eca057
-    m_Address: Battle_Core/BubbleNode
+  - m_GUID: 0b6107fc578b02a4e91ccf101bed4dd9
+    m_Address: Battle_Core/BattleRingSlot
     m_ReadOnly: 0
     m_SerializedLabels:
     - Main
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b36ee8603ebd34941b81a14d109c2d64
-    m_Address: Battle_Core/UIBubbleNode
+  - m_GUID: aa51f05a38f45e2488d8a1077b221348
+    m_Address: Battle_Core/BattleBubbleLine
     m_ReadOnly: 0
     m_SerializedLabels:
     - Main
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: bc86581beae45ee4ab50fc965f915f08
-    m_Address: Battle_Core/F_UI_Gems Tile Map 22x22
+  - m_GUID: bfe1325b6bce2bc42860e3fffa0c9bba
+    m_Address: Battle_Core/BattleBackground
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Main
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c8aa658a3b9d2824da4fa449fd535bf9
+    m_Address: Battle_Core/BattleBubbleLauncher
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Main
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cc24b33e25003b144b49b2e60cc49a7a
+    m_Address: Battle_Core/BattlePlayer
     m_ReadOnly: 0
     m_SerializedLabels:
     - Main

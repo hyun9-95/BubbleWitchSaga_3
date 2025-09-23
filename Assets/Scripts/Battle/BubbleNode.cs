@@ -1,11 +1,25 @@
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BubbleNode : PoolableBaseUnit<BubbleNodeModel>
 {
     [SerializeField]
-    private float moveTime = 0;
+    private Collider2D bubbleCol;
+
+    [SerializeField]
+    private SpriteRenderer bubbleSprite;
+
+    public override async UniTask ShowAsync()
+    {
+        await ResolveBubbleImage();
+    }
+
+    public void SetColliderEnable(bool enable)
+    {
+        bubbleCol.enabled = enable;
+    }
 
     public void SetPosition(Vector3 pos)
     {
@@ -38,5 +52,21 @@ public class BubbleNode : PoolableBaseUnit<BubbleNodeModel>
 
         for (int i = 0; i < posList.Count; i++)
             await SmoothMove(posList[i]);
+    }
+
+    private async UniTask ResolveBubbleImage()
+    {
+        string path = string.Empty;
+
+        if (Model.BubbleType == BubbleType.Normal)
+        {
+            path = string.Format(PathDefine.BUBBLE_ICON_NORMAL_FORMAT, BubbleType.Normal, Model.BubbleColor);
+        }
+        else
+        {
+            path = string.Format(PathDefine.BUBBLE_ICON_FORMAT, Model.BubbleType);
+        }
+
+        await bubbleSprite.SafeLoadAsync(path);
     }
 }

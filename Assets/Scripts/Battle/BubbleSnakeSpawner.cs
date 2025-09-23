@@ -97,14 +97,18 @@ public class BubbleSnakeSpawner : BubbleSpawner
         {
             List<UniTask> tasks = new List<UniTask>(bubbleList.Count + 1);
 
-            var newBubble = await ObjectPoolManager.Instance.SpawnPoolableMono<BubbleNode>(PathDefine.BUBBLE_NODE_PATH);
-            var model = new BubbleNodeModel();
+            var newBubble = await BubbleFactory.Instance.CreateNewBubble(true, true);
+            var model = newBubble.Model;
             model.SetMoveSpeed(FloatDefine.BATTLE_SNAKE_BUBBLE_MOVE_SPEED);
 
             newBubble.SetModel(model);
             newBubble.SetPosition(startPos);
 
-            tasks.Add(newBubble.SmoothMove(spawnPath[0].Position));
+            var newCell = spawnPath[0];
+            newCell.SetBubble(newBubble);
+            model.SetCellPosition(newCell.CellPos);
+
+            tasks.Add(newBubble.SmoothMove(newCell.Position));
             
             foreach (var bubble in bubbleList)
             {
@@ -118,7 +122,12 @@ public class BubbleSnakeSpawner : BubbleSpawner
                 }
 
                 bubble.Model.AddIndex();
-                tasks.Add(bubble.SmoothMove(spawnPath[bubble.Model.Index].Position));
+
+                var cell = spawnPath[bubble.Model.Index];
+                cell.SetBubble(bubble);
+                bubble.Model.SetCellPosition(cell.CellPos);
+
+                tasks.Add(bubble.SmoothMove(cell.Position));
             }
 
             await UniTask.WhenAll(tasks);

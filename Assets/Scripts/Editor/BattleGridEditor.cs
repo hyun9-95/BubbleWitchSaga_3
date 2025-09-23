@@ -70,9 +70,6 @@ public class BattleGridEditor : Editor
         EditorGUILayout.EndVertical();
 
         EditorGUILayout.Space();
-
-        if (GUILayout.Button("Generate Spawn Path", GUILayout.Height(25)))
-            GenerateSpawnPath();
     }
 
     private void MoveTestCell(BattleCellDirection direction)
@@ -84,14 +81,6 @@ public class BattleGridEditor : Editor
 
         EditorUtility.SetDirty(battleGrid);
 
-        SceneView.RepaintAll();
-    }
-
-    private void GenerateSpawnPath()
-    {
-        battleGrid.testSpawnPath = battleGrid.GetSpawnPath();
-
-        EditorUtility.SetDirty(battleGrid);
         SceneView.RepaintAll();
     }
 }

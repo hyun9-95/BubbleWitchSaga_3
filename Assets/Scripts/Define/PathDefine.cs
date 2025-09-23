@@ -29,7 +29,10 @@ public class PathDefine
 
     #region Resources
     public const string UI_VIEW_FORMAT = "UI/{0}/{0}";
-    public const string BUBBLE_NODE_PATH = "Battle_Core/BubbleNode";
+    public const string BUBBLE_NODE = "Bubble/BubbleNode";
+    public const string BUBBLE_LINE_RENDERER = "Battle_Core/BattleBubbleLine";
+    public const string BUBBLE_ICON_FORMAT = "Bubble/Bubble_{0}";
+    public const string BUBBLE_ICON_NORMAL_FORMAT = "Bubble/Bubble_{0}_{1}";
     #endregion
 }
 

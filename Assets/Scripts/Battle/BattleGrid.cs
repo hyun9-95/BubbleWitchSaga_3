@@ -9,6 +9,7 @@ public class BattleGrid : MonoBehaviour
     public float BubbleRadius => bubbleRadius;
     public Vector3 CenterWorld => centerWorld;
     public bool IsReady => cells.Count > 0;
+    public BoundsInt GridBounds => gridBounds;
     #endregion
 
     #region Value
@@ -31,11 +32,28 @@ public class BattleGrid : MonoBehaviour
     public List<CellPosition> testSpawnPath;
 
     [SerializeField]
+    private EdgeCollider2D leftWall;
+
+    [SerializeField]
+    private EdgeCollider2D rightWall;
+
+    [SerializeField]
     private bool showGizmos = true;
 
     private float totalWidth = 0;
     private float totalHeight = 0;
     private Vector3 centerWorld = Vector3.zero;
+    private BoundsInt gridBounds;
+
+    BattleCellDirection[] battleCellDirection = new BattleCellDirection[]
+    {
+                BattleCellDirection.Left,
+                BattleCellDirection.TopLeft,
+                BattleCellDirection.TopRight,
+                BattleCellDirection.Right,
+                BattleCellDirection.BottomLeft,
+                BattleCellDirection.BottomRight
+    };
     #endregion
 
     private Dictionary<CellPosition, BattleCell> cells = new();
@@ -71,7 +89,7 @@ public class BattleGrid : MonoBehaviour
                 if (closedCells != null && closedCells.Contains(gridPos))
                     cell.SetClosed(true);
 
-                cells[cell.GridPos] = cell;
+                cells[cell.CellPos] = cell;
             }
         }
     }
@@ -82,13 +100,29 @@ public class BattleGrid : MonoBehaviour
         totalWidth = width * (baseColumns + 1);
         totalHeight = rows * height;
 
-        float centerX = (totalWidth / 2f) - width; 
+        float centerX = (totalWidth / 2f) - width;
         float centerY = -(totalHeight) / 2f;
         centerY += bubbleRadius;
 
         centerWorld = new Vector3(centerX, centerY, 0f);
-    }
 
+        float left = centerWorld.x - totalWidth * 0.5f;
+        float right = centerWorld.x + totalWidth * 0.5f;
+        float bottom = centerWorld.y - totalHeight * 0.5f;
+        float top = centerWorld.y + totalHeight * 0.5f;
+
+        leftWall.points = new Vector2[]
+        {
+            new(left + bubbleRadius, bottom),
+            new(left + bubbleRadius, top)
+        };
+
+        rightWall.points = new Vector2[]
+        {
+            new(right - bubbleRadius, bottom),
+            new(right - bubbleRadius, top),
+        };
+    }
 
     public BattleCell GetCell(CellPosition cellPos)
     {
@@ -98,75 +132,57 @@ public class BattleGrid : MonoBehaviour
         return null;
     }
 
+    public Dictionary<CellPosition, BattleCell> GetAllCells()
+    {
+        return cells;
+    }
+
     public int GetColumnCountByRow(int row)
     {
         bool oddRow = (row % 2 == 1);
         return oddRow ? baseColumns + 1 : baseColumns;
     }
 
-    public List<CellPosition> GetSpawnPath()
+    public BattleCell GetClosestEmptyCell(CellPosition hitCellPos, Vector2 hitPoint)
     {
-        int spawnCount = 16;
-        int maxColumnCount = 10;
+        var neighborPosList = GetNeighborPositions(hitCellPos);
+        BattleCell closestCell = null;
+        float closestDistance = float.MaxValue;
 
-        var direction = BattleCellDirection.Right;
-        var spawnPath = new List<CellPosition>();
-        spawnPath.Clear();
-        int maxColumnSpawn = 4;
-
-        CellPosition currentCellPos = testCellPos;
-        bool movingRight = direction == BattleCellDirection.Right;
-
-        int currentAddColumnCount = 0;
-        int maxColumnIndex = maxColumnCount - 1;
-
-        while (spawnPath.Count < spawnCount)
+        foreach (var adjPos in neighborPosList)
         {
-            bool isOdd = (currentCellPos.row % 2 == 1);
-            int minColumn = isOdd ? 1 : 0;
-            int maxColumn = isOdd ? maxColumnIndex : maxColumnIndex - 1;
-
-            bool isOutOfRange = movingRight ? currentCellPos.column >= maxColumn
-                : currentCellPos.column <= minColumn;
-
-            bool isOverAddColumnCount = currentAddColumnCount >= maxColumnSpawn;
-
-            if (isOutOfRange || isOverAddColumnCount)
+            var adjCell = GetCell(adjPos);
+            if (adjCell != null && adjCell.IsEmpty && !adjCell.Closed)
             {
-                var nextDirection = movingRight ?
-                    BattleCellDirection.BottomRight :
-                    BattleCellDirection.BottomLeft;
-
-                currentCellPos.Move(nextDirection);
-                spawnPath.Add(currentCellPos);
-
-                nextDirection = nextDirection == BattleCellDirection.BottomLeft ?
-                    BattleCellDirection.BottomRight :
-                    BattleCellDirection.BottomLeft;
-
-                currentCellPos.Move(nextDirection);
-                spawnPath.Add(currentCellPos);
-
-                movingRight = !movingRight;
-                currentAddColumnCount = 1;
-            }
-            else
-            {
-                if (movingRight)
+                float distance = Vector2.Distance(hitPoint, adjCell.Position);
+                if (distance < closestDistance)
                 {
-                    currentCellPos.column++;
+                    closestDistance = distance;
+                    closestCell = adjCell;
                 }
-                else
-                {
-                    currentCellPos.column--;
-                }
-
-                spawnPath.Add(currentCellPos);
-                currentAddColumnCount++;
             }
         }
 
-        return spawnPath;
+        return closestCell;
+    }
+
+    public void AddToClosedCell(CellPosition cellPos)
+    {
+        closedCells.Add(cellPos);
+    }
+
+    private List<CellPosition> GetNeighborPositions(CellPosition cellPos)
+    {
+        var adjacentPositions = new List<CellPosition>();
+
+        foreach (var direction in battleCellDirection)
+        {
+            var adjPos = cellPos;
+            adjPos.Move(direction);
+            adjacentPositions.Add(adjPos);
+        }
+
+        return adjacentPositions;
     }
 
 #if UNITY_EDITOR
@@ -175,9 +191,9 @@ public class BattleGrid : MonoBehaviour
         foreach (var cell in cells.Values)
         {
             bool isInSpawnPath = testSpawnPath != null &&
-                                testSpawnPath.Exists(pos => pos.row == cell.GridPos.row && pos.column == cell.GridPos.column);
+                                testSpawnPath.Exists(pos => pos.row == cell.CellPos.row && pos.column == cell.CellPos.column);
 
-            if (cell.GridPos.row == testCellPos.row && cell.GridPos.column == testCellPos.column)
+            if (cell.CellPos.row == testCellPos.row && cell.CellPos.column == testCellPos.column)
             {
                 Gizmos.color = Color.magenta;
             }
@@ -185,9 +201,13 @@ public class BattleGrid : MonoBehaviour
             {
                 Gizmos.color = Color.magenta;
             }
+            else if (closedCells.Contains(cell.CellPos))
+            {
+                Gizmos.color = Color.red;
+            }
             else
             {
-                Gizmos.color = cell.Closed ? Color.red : Color.cyan;
+                Gizmos.color = !cell.IsEmpty ? Color.yellow : Color.cyan;
             }
 
             Gizmos.DrawWireSphere(cell.Position, bubbleRadius);
@@ -196,7 +216,9 @@ public class BattleGrid : MonoBehaviour
 
     private void GeneratePreviewCells()
     {
-        cells.Clear();
+        if (cells != null && Application.isPlaying)
+            return;
+
         GenerateCells();
     }
 

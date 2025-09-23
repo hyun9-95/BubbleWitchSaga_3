@@ -15,6 +15,12 @@ MonoBehaviour:
   m_GroupName: BubbleWitch
   m_GUID: 3d70ecd960db18343a4e498e89448841
   m_SerializeEntries:
+  - m_GUID: 016e80ca114cad647848b0b9a33fd1cf
+    m_Address: BubbleWitch/Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_12
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Main
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 08b89d601af1beb48b3d89ce5c9c8dca
     m_Address: BubbleWitch/Mobile - Bubble Witch 2 Saga - Miscellaneous - Events
     m_ReadOnly: 0
@@ -40,8 +46,50 @@ MonoBehaviour:
     m_SerializedLabels:
     - Main
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: bfe1325b6bce2bc42860e3fffa0c9bba
-    m_Address: BubbleWitch/BattleBackground
+  - m_GUID: 609a254f99b054d4d999de5739c3e653
+    m_Address: BubbleWitch/Unused_1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Main
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 816a65b3ee4b9cc4c9d4da1f8aca09d8
+    m_Address: BubbleWitch/Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_11
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Main
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 928aa13a03673b847819a0b3e748495a
+    m_Address: BubbleWitch/Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_8
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Main
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cb9e6e38d12d6454db76176d70e2047e
+    m_Address: BubbleWitch/Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_15
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Main
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d095a135bbb89684ab803d5c46e78f89
+    m_Address: BubbleWitch/Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Main
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d5ac382ea69988548aad77457db58b19
+    m_Address: BubbleWitch/Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_14
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Main
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ded888b0925ea4f45bb85a29c5203165
+    m_Address: BubbleWitch/Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_9
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Main
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f2a0a7fafd6c6704d9428226584d892f
+    m_Address: BubbleWitch/Mobile - Bubble Witch 2 Saga - Miscellaneous - Bubbles_13
     m_ReadOnly: 0
     m_SerializedLabels:
     - Main

@@ -4,6 +4,8 @@ public class BubbleNodeModel : IBaseUnitModel
     public BubbleType BubbleType { get; private set; }
     public BubbleColor BubbleColor { get; private set; }
     public float MoveSpeed { get; private set; }
+    public CellPosition CellPosition { get; private set; }
+
     public void AddIndex()
     {
         Index++;
@@ -21,5 +23,10 @@ public class BubbleNodeModel : IBaseUnitModel
     public void SetMoveSpeed(float speed)
     {
         MoveSpeed = speed;
+    }
+
+    public void SetCellPosition(CellPosition pos)
+    {
+        CellPosition = pos;
     }
 }
