@@ -96,66 +96,45 @@ public class BattleInteractionPhase : IBattlePhaseProcessor
         bubblesToRemove.Add(launchedBubbleNode);
         visitNodes.Add(launchedBubbleNode.Model.CellPos);
 
-
         while (matchingBubbles.Count > 0)
         {
             var currentBubble = matchingBubbles.Dequeue();
 
-            foreach (var direction in neighborDirections)
+            IterateValidNeighborCell(currentBubble.Model.CellPos, (neighborCell) =>
             {
-                var neighborCell = grid.GetDirectionCell(currentBubble.Model.CellPos, direction);
-
-                if (neighborCell == null)
-                    continue;
-
-                var neighborCellPos = neighborCell.CellPos;
-
-                if (neighborCell.IsEmpty || visitNodes.Contains(neighborCellPos))
-                    continue;
-
                 var bubble = neighborCell.Bubble;
 
                 if (bubble.Model.IsColorType && bubble.Model.BubbleColor == targetColor)
                 {
-                    visitNodes.Add(neighborCellPos);
+                    visitNodes.Add(neighborCell.CellPos);
                     bubblesToRemove.Add(bubble);
                     matchingBubbles.Enqueue(bubble);
                 }
                 else if (bubble.Model.BubbleType == BubbleType.Magic)
                 {
-                    visitNodes.Add(neighborCellPos);
+                    foundMagic = true;
+
+                    visitNodes.Add(neighborCell.CellPos);
                     bubblesToRemove.Add(bubble);
 
-                    FindRemoveBubblesByMagic(neighborCellPos, bubblesToRemove);
-
-                    foundMagic = true;
+                    CollectMagicTargetBubbles(neighborCell.CellPos, bubblesToRemove);
                 }
-            }
+            });
         }
 
+        // 3매치 OR 매직버블
         if (bubblesToRemove.Count >= 3 || foundMagic)
             RemoveBubbleBFS(bubblesToRemove);
     }
 
-    private void FindRemoveBubblesByMagic(CellPosition rootCellPos, HashSet<BubbleNode> bubblesToRemove)
+    private void CollectMagicTargetBubbles(CellPosition rootCellPos, HashSet<BubbleNode> bubblesToRemove)
     {
-        foreach (var direction in neighborDirections)
+        IterateValidNeighborCell(rootCellPos, (neighborCell) =>
         {
-            var neighborCell = grid.GetDirectionCell(rootCellPos, direction);
-
-            if (neighborCell == null)
-                continue;
-
-            var neighborCellPos = neighborCell.CellPos;
-
-            if (neighborCell.IsEmpty || visitNodes.Contains(neighborCellPos))
-                continue;
-
-            visitNodes.Add(neighborCellPos);
+            visitNodes.Add(neighborCell.CellPos);
             bubblesToRemove.Add(neighborCell.Bubble);
-        }
+        });
     }
-
 
     private void RemoveBubbleBFS(HashSet<BubbleNode> bubblesToRemove)
     {
@@ -177,7 +156,7 @@ public class BattleInteractionPhase : IBattlePhaseProcessor
                 bubble.FadeOff().Forget();
             }
 
-            FindChildBubbles(bubble.Model.CellPos, dropBubbles);
+            CollectDropBubbles(bubble.Model.CellPos, dropBubbles);
         }
 
         while (dropBubbles.Count > 0)
@@ -191,15 +170,29 @@ public class BattleInteractionPhase : IBattlePhaseProcessor
                 dropBubble.DropFadeOff(grid.DropPosY).Forget();
             }
 
-            FindChildBubbles(dropBubble.Model.CellPos, dropBubbles);
+            CollectDropBubbles(dropBubble.Model.CellPos, dropBubbles);
         }
     }
 
-    private void FindChildBubbles(CellPosition rootCellPos, Queue<BubbleNode> dropBubbles)
+    private void CollectDropBubbles(CellPosition rootCellPos, Queue<BubbleNode> dropBubbles)
+    {
+        IterateValidNeighborCell(rootCellPos, (neighborCell) =>
+        {
+            var neighborBubble = neighborCell.Bubble;
+
+            if (neighborBubble.Model.RootPos.Equals(rootCellPos))
+            {
+                visitNodes.Add(neighborCell.CellPos);
+                dropBubbles.Enqueue(neighborBubble);
+            }
+        });
+    }
+
+    private void IterateValidNeighborCell(CellPosition rootPos, System.Action<BattleCell> action)
     {
         foreach (var direction in neighborDirections)
         {
-            var neighborCell = grid.GetDirectionCell(rootCellPos, direction);
+            var neighborCell = grid.GetDirectionCell(rootPos, direction);
 
             if (neighborCell == null)
                 continue;
@@ -209,13 +202,7 @@ public class BattleInteractionPhase : IBattlePhaseProcessor
             if (neighborCell.IsEmpty || visitNodes.Contains(neighborCellPos))
                 continue;
 
-            var neighborBubble = neighborCell.Bubble;
-
-            if (neighborBubble.Model.RootPos.Equals(rootCellPos))
-            {
-                visitNodes.Add(neighborCellPos);
-                dropBubbles.Enqueue(neighborBubble);
-            }
+            action(neighborCell);
         }
     }
 

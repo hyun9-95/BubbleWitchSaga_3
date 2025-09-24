@@ -23,9 +23,6 @@ public class BattleRingSlot : BaseUnit<BattleRingSlotModel>, IPointerDownHandler
     [SerializeField]
     private float rotateTime = 0.5f;
 
-    [SerializeField]
-    private float launchSpeed = 10f;
-
     private float radius;
     private float angleStep;
     private bool isRotating = false;
@@ -124,7 +121,7 @@ public class BattleRingSlot : BaseUnit<BattleRingSlotModel>, IPointerDownHandler
     {
         var newBubble = await BubbleFactory.Instance.CreateNewBubble(BubbleType.Normal);
         newBubble.SetColliderEnable(false);
-        newBubble.Model.SetMoveSpeed(launchSpeed);
+        newBubble.Model.SetMoveSpeed(FloatDefine.BATTLE_BUBBLE_LAUNCH_SPEED);
 
         return newBubble;
     }
