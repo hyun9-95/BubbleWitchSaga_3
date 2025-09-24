@@ -15,6 +15,11 @@ public class LobbyViewController : BaseController<LobbyViewModel>
         Model.SetOnStartBattle(OnStartBattle);
     }
 
+    public void AllowClick(bool value)
+    {
+        View.AllowClick(value);
+    }
+
     private void OnStartBattle()
     {
         OnStartBattleAsync().Forget();

@@ -1,4 +1,4 @@
 ﻿아이디,이름,,
 int,string,float,string
 Id,NameId,HP,PrefabPath
-30000,BOSS_WILBUR,100,None
+30000,BOSS_WILBUR,100,BattleBoss/Wilbur/BattleBoss_Wilbur

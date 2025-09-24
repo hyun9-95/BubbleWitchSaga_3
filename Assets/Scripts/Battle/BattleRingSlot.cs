@@ -114,12 +114,15 @@ public class BattleRingSlot : BaseUnit<BattleRingSlotModel>, IPointerDownHandler
         if (firstBubble != null)
             bubbleNodes.Add(firstBubble);
 
+        if (CurrentBubble != null)
+            Model.OnChangeBubbleColor?.Invoke(CurrentBubble.Model.BubbleColor);
+
         isRotating = false;
     }
 
     private async UniTask<BubbleNode> SpawnNewBubble()
     {
-        var newBubble = await BubbleFactory.Instance.CreateNewBubble(randomColor:true);
+        var newBubble = await BubbleFactory.Instance.CreateNewBubble(BubbleType.Normal);
         newBubble.SetColliderEnable(false);
         newBubble.Model.SetMoveSpeed(launchSpeed);
 
@@ -129,7 +132,10 @@ public class BattleRingSlot : BaseUnit<BattleRingSlotModel>, IPointerDownHandler
     public async UniTask RefillBubble()
     {
         if (CurrentBubble != null)
+        {
+            Model.OnChangeBubbleColor?.Invoke(CurrentBubble.Model.BubbleColor);
             return;
+        }
 
         await RotateSlot();
 

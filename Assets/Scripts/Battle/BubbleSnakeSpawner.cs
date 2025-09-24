@@ -22,13 +22,19 @@ public class BubbleSnakeSpawner : BubbleSpawner
     [SerializeField]
     private float snakeMoveSpeed = 7f;
 
-    private List<BattleCell> spawnPath = new List<BattleCell>();
-    private HashSet<BubbleNode> bubbleList = new HashSet<BubbleNode>();
+    private List<BattleCell> spawnPath;
+    private HashSet<BubbleNode> bubbleSet;
+    private BubbleNode spawnBubble;
 
     public async override UniTask SpawnAsync(BattleGrid grid, int spawnCount)
     {
-        if (spawnPath.Count == 0)
+        if (spawnPath == null)
+        {
+            spawnPath = new(spawnCount);
+            bubbleSet = new(spawnCount);
+
             BuildSpawnPath(grid, spawnCount);
+        }
 
         await SpawnSnakeBubbleAsync(grid);
     }
@@ -93,55 +99,68 @@ public class BubbleSnakeSpawner : BubbleSpawner
 
     private async UniTask SpawnSnakeBubbleAsync(BattleGrid grid)
     {
-        int spawnCount = spawnPath.Count - bubbleList.Count;
+        int spawnCount = spawnPath.Count - bubbleSet.Count;
         var spawnCell = grid.GetCell(cellPos);
         var startPos = spawnCell.Position;
 
-        var spawnBubble = await BubbleFactory.Instance.CreateNewBubble(BubbleType.Spawn);
-        spawnBubble.SetPosition(startPos);
-        spawnBubble.SetColliderEnable(true);
-        spawnCell.SetBubble(spawnBubble);
+        if (spawnBubble == null)
+        {
+            spawnBubble = await BubbleFactory.Instance.CreateNewBubble(BubbleType.Spawn);
+            spawnBubble.SetPosition(startPos);
+            spawnBubble.SetColliderEnable(true);
+            spawnCell.SetBubble(spawnBubble);
+        }
 
         for (int i = 0; i < spawnCount; i++)
         {
-            List<UniTask> tasks = new List<UniTask>(bubbleList.Count + 1);
+            List<UniTask> tasks = new(bubbleSet.Count + 1);
 
             var newBubble = await BubbleFactory.Instance.CreateNewBubble(true, true);
-            var model = newBubble.Model;
-            model.SetMoveSpeed(snakeMoveSpeed);
+            var newBubbleModel = newBubble.Model;
+            newBubbleModel.SetMoveSpeed(snakeMoveSpeed);
 
-            newBubble.SetModel(model);
+            newBubble.SetModel(newBubbleModel);
             newBubble.SetPosition(startPos);
 
             var newCell = spawnPath[0];
             newCell.SetBubble(newBubble);
-            model.SetCellPosition(newCell.CellPos);
+            newBubbleModel.SetCellPos(newCell.CellPos);
 
             tasks.Add(newBubble.SmoothMove(newCell.Position));
             
-            foreach (var bubble in bubbleList)
+            foreach (var bubble in bubbleSet)
             {
-                if (bubble.Model.Index + 1 >= spawnPath.Count)
+                var bubbleModel = bubble.Model;
+                if (bubbleModel.Index + 1 >= spawnPath.Count)
                     continue;
 
-                if (spawnPath[bubble.Model.Index] == null)
+                if (spawnPath[bubbleModel.Index] == null)
                 {
-                    Logger.Error($"Path 에러 : {bubble.Model.Index}");
+                    Logger.Error($"Path 에러 : {bubbleModel.Index}");
                     continue;
                 }
 
-                bubble.Model.AddIndex();
+                bubbleModel.AddIndex();
 
-                var cell = spawnPath[bubble.Model.Index];
+                var cell = spawnPath[bubbleModel.Index];
                 cell.SetBubble(bubble);
-                bubble.Model.SetCellPosition(cell.CellPos);
+                bubbleModel.SetCellPos(cell.CellPos);
+
+                // 스네이크 경로 기준 뒤에 있는 것을 루트로
+                if (bubbleModel.Index - 1 > 0)
+                {
+                    int rootIndex = bubbleModel.Index - 1;
+                    var rootCell = spawnPath[rootIndex];
+                    bubbleModel.SetRootPos(rootCell.CellPos);
+                }
 
                 tasks.Add(bubble.SmoothMove(cell.Position));
             }
 
             await UniTask.WhenAll(tasks);
 
-            bubbleList.Add(newBubble);
+            newBubbleModel.SetOnRemoveFromCell(() => { bubbleSet.Remove(newBubble); });
+            bubbleSet.Add(newBubble);
         }
     }
 }

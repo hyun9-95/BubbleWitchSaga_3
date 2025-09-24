@@ -39,7 +39,7 @@ public class BubbleFactory : BaseManager<BubbleFactory>
             model.SetBubbleType(type);
         }
 
-        if (model.BubbleType == BubbleType.Normal && randomColor)
+        if (model.IsColorType && randomColor)
         {
             var color = GetRandomColor();
             model.SetBubbleColor(color);
@@ -48,7 +48,8 @@ public class BubbleFactory : BaseManager<BubbleFactory>
         newBubble.SetModel(model);
 
         await newBubble.ShowAsync();
-        
+        Naming(newBubble);
+
         return newBubble;
     }
 
@@ -61,7 +62,7 @@ public class BubbleFactory : BaseManager<BubbleFactory>
 
         model.SetBubbleType(type);
 
-        if (type == BubbleType.Normal)
+        if (model.IsColorType)
         {
             var color = GetRandomColor();
             model.SetBubbleColor(color);
@@ -70,14 +71,15 @@ public class BubbleFactory : BaseManager<BubbleFactory>
         newBubble.SetModel(model);
 
         await newBubble.ShowAsync();
+        Naming(newBubble);
 
         return newBubble;
     }
 
     private void InitializeProbs()
     {
-        int typeCount = System.Enum.GetValues(typeof(BubbleType)).Length;
-        typeCount -= 2; // Guide, Spawn 타입 제외함
+        // Empty 부터는 고정 버블이라 스폰 X
+        int typeCount = (int)BubbleType.Empty;
 
         bubbleTypeProbs = new float[typeCount];
 
@@ -100,7 +102,7 @@ public class BubbleFactory : BaseManager<BubbleFactory>
         float roll = Random.value;
         float currentRate = 0;
 
-        for (BubbleType type = BubbleType.Normal; type < BubbleType.Guide; type++)
+        for (BubbleType type = BubbleType.Normal; type < BubbleType.Empty; type++)
         {
             currentRate += bubbleTypeProbs[(int)type];
 
@@ -119,5 +121,15 @@ public class BubbleFactory : BaseManager<BubbleFactory>
         int random = Random.Range(0, colorCount);
 
         return (BubbleColor)random;
+    }
+
+    private void Naming(BubbleNode node)
+    {
+#if UNITY_EDITOR
+        if (node == null || node.Model == null)
+            return;
+
+        node.gameObject.name = node.Model.BubbleType.ToString();
+#endif
     }
 }

@@ -20,7 +20,7 @@ public class BattleFlow : BaseFlow<BattleFlowModel>
 
         await battleScene.Prepare();
 
-        await BubbleFactory.Instance.PrewarmBubbles(Model.StageData.SpawnCount * 2);
+        await BubbleFactory.Instance.PrewarmBubbles(Model.StageData.SpawnCount * 4);
 
         battleViewController = PrepareBattleView();
 

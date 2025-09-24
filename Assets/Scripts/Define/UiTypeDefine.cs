@@ -4,4 +4,5 @@ public enum UIType
 	IntroView,
 	BattleView,
 	LobbyView,
+	MessageBoxPopup,
 }

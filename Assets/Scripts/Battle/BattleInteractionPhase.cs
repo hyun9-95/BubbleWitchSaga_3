@@ -1,6 +1,8 @@
 #pragma warning disable CS1998
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using UnityEngine;
 
 public class BattleInteractionPhase : IBattlePhaseProcessor
 {
@@ -9,26 +11,48 @@ public class BattleInteractionPhase : IBattlePhaseProcessor
     private BattleGrid grid;
     private BubbleNode launchedBubbleNode;
     private BattleViewController battleViewController;
+    private BattleCellDirection[] neighborDirections;
+
+    #region Temp
+    private bool isThreeMatched = false;
+    private List<UniTask> fairyTasks = new();
+    private HashSet<CellPosition> visitNodes = new();
+    #endregion
 
     public async UniTask Initialize(BattleGrid grid, BattleViewController viewController)
     {
         this.grid = grid;
         battleViewController = viewController;
+        neighborDirections = grid.GetNeighborDirections();
     }
 
     public async UniTask OnStartPhase(IBattlePhaseParam param)
     {
         if (param is BattleInteractionPhaseParam interactionParam)
-        {
             launchedBubbleNode = interactionParam.LaunchedBubbleNode;
-        }
+
+        isThreeMatched = false;
+        fairyTasks.Clear();
     }
 
     public async UniTask OnProcess()
     {
         if (launchedBubbleNode != null)
-        {
             await ProcessBubbleInteraction();
+    }
+
+    private async UniTask ProcessBubbleInteraction()
+    {
+        PlaceBubble();
+        ThreeMatchBFS();
+
+        if (fairyTasks.Count > 0)
+        {
+            await UniTask.WhenAll(fairyTasks);
+        }
+        else if (isThreeMatched)
+        {
+            await UniTaskUtils.DelaySeconds(FloatDefine.INTERACTION_PHASE_DELAY);
         }
     }
 
@@ -39,24 +63,15 @@ public class BattleInteractionPhase : IBattlePhaseProcessor
 
     public BattleNextPhaseInfo OnNextPhase()
     {
-        // ∫∏Ω∫ HP 0¿œ∂ß¥¬ End∑Œ.. √ﬂ»ƒ ±∏«ˆ
-        return new BattleNextPhaseInfo(BattlePhase.Stage);
+        return new BattleNextPhaseInfo(GetNextPhase());
     }
 
-    private async UniTask ProcessBubbleInteraction()
-    {
-        PlaceBubbleOnGrid();
-        await CheckAndRemoveMatches();
-        await ApplyGravity();
-        await ProcessChainReactions();
-    }
-
-    private void PlaceBubbleOnGrid()
+    private void PlaceBubble()
     {
         if (launchedBubbleNode == null)
             return;
 
-        var cell = grid.GetCell(launchedBubbleNode.Model.CellPosition);
+        var cell = grid.GetCell(launchedBubbleNode.Model.CellPos);
 
         if (cell != null)
         {
@@ -65,70 +80,178 @@ public class BattleInteractionPhase : IBattlePhaseProcessor
         }
     }
 
-    private async UniTask CheckAndRemoveMatches()
+    private void ThreeMatchBFS()
     {
         if (launchedBubbleNode == null)
             return;
 
-        var removeBubbles = new List<BubbleNode>();
+        var bubblesToRemove = new HashSet<BubbleNode>();
         var matchingBubbles = new Queue<BubbleNode>();
-        HashSet<CellPosition> visitNodes = new HashSet<CellPosition>();
+        bool foundMagic = false;
+
+        visitNodes.Clear();
 
         BubbleColor targetColor = launchedBubbleNode.Model.BubbleColor;
         matchingBubbles.Enqueue(launchedBubbleNode);
-        removeBubbles.Add(launchedBubbleNode);
-        visitNodes.Add(launchedBubbleNode.Model.CellPosition);
+        bubblesToRemove.Add(launchedBubbleNode);
+        visitNodes.Add(launchedBubbleNode.Model.CellPos);
+
 
         while (matchingBubbles.Count > 0)
         {
             var currentBubble = matchingBubbles.Dequeue();
-            var neighborPositions = grid.GetNeighborPositions(currentBubble.Model.CellPosition);
 
-            foreach (var neighborPos in neighborPositions)
+            foreach (var direction in neighborDirections)
             {
-                var cell = grid.GetCell(neighborPos);
+                var neighborCell = grid.GetDirectionCell(currentBubble.Model.CellPos, direction);
 
-                if (cell == null || cell.IsEmpty || visitNodes.Contains(neighborPos))
+                if (neighborCell == null)
                     continue;
 
-                var bubble = cell.Bubble;
+                var neighborCellPos = neighborCell.CellPos;
+
+                if (neighborCell.IsEmpty || visitNodes.Contains(neighborCellPos))
+                    continue;
+
+                var bubble = neighborCell.Bubble;
 
                 if (bubble.Model.IsColorType && bubble.Model.BubbleColor == targetColor)
                 {
-                    visitNodes.Add(neighborPos);
-                    removeBubbles.Add(bubble);
+                    visitNodes.Add(neighborCellPos);
+                    bubblesToRemove.Add(bubble);
                     matchingBubbles.Enqueue(bubble);
+                }
+                else if (bubble.Model.BubbleType == BubbleType.Magic)
+                {
+                    visitNodes.Add(neighborCellPos);
+                    bubblesToRemove.Add(bubble);
+
+                    FindRemoveBubblesByMagic(neighborCellPos, bubblesToRemove);
+
+                    foundMagic = true;
                 }
             }
         }
 
-        if (removeBubbles.Count >= 3)
+        if (bubblesToRemove.Count >= 3 || foundMagic)
+            RemoveBubbleBFS(bubblesToRemove);
+    }
+
+    private void FindRemoveBubblesByMagic(CellPosition rootCellPos, HashSet<BubbleNode> bubblesToRemove)
+    {
+        foreach (var direction in neighborDirections)
         {
-            await RemoveBubbles(removeBubbles);
+            var neighborCell = grid.GetDirectionCell(rootCellPos, direction);
+
+            if (neighborCell == null)
+                continue;
+
+            var neighborCellPos = neighborCell.CellPos;
+
+            if (neighborCell.IsEmpty || visitNodes.Contains(neighborCellPos))
+                continue;
+
+            visitNodes.Add(neighborCellPos);
+            bubblesToRemove.Add(neighborCell.Bubble);
         }
     }
 
-    private async UniTask RemoveBubbles(List<BubbleNode> bubblesToRemove)
+
+    private void RemoveBubbleBFS(HashSet<BubbleNode> bubblesToRemove)
     {
+        isThreeMatched = true;
+
+        var dropBubbles = new Queue<BubbleNode>();
+        visitNodes.Clear();
+
         foreach (var bubble in bubblesToRemove)
         {
-            var cell = grid.GetCell(bubble.Model.CellPosition);
+            var cell = grid.GetCell(bubble.Model.CellPos);
+
+            if (bubble.Model.BubbleType == BubbleType.Fairy)
+                fairyTasks.Add(OnFairyDamage(cell.Position));
 
             if (cell != null)
             {
-                cell.RemoveBubbe();
+                cell.RemoveBubble();
                 bubble.FadeOff().Forget();
+            }
+
+            FindChildBubbles(bubble.Model.CellPos, dropBubbles);
+        }
+
+        while (dropBubbles.Count > 0)
+        {
+            var dropBubble = dropBubbles.Dequeue();
+            var dropCell = grid.GetCell(dropBubble.Model.CellPos);
+
+            if (dropCell != null)
+            {
+                dropCell.RemoveBubble();
+                dropBubble.DropFadeOff(grid.DropPosY).Forget();
+            }
+
+            FindChildBubbles(dropBubble.Model.CellPos, dropBubbles);
+        }
+    }
+
+    private void FindChildBubbles(CellPosition rootCellPos, Queue<BubbleNode> dropBubbles)
+    {
+        foreach (var direction in neighborDirections)
+        {
+            var neighborCell = grid.GetDirectionCell(rootCellPos, direction);
+
+            if (neighborCell == null)
+                continue;
+
+            var neighborCellPos = neighborCell.CellPos;
+
+            if (neighborCell.IsEmpty || visitNodes.Contains(neighborCellPos))
+                continue;
+
+            var neighborBubble = neighborCell.Bubble;
+
+            if (neighborBubble.Model.RootPos.Equals(rootCellPos))
+            {
+                visitNodes.Add(neighborCellPos);
+                dropBubbles.Enqueue(neighborBubble);
             }
         }
     }
 
-    private async UniTask ApplyGravity()
+    private async UniTask OnFairyDamage(Vector2 startPos)
     {
+        var bossPos = grid.GetBossCell().Position;
 
+        var damageBubble = await BubbleFactory.Instance.CreateNewBubble(BubbleType.Empty);
+        damageBubble.Model.SetMoveSpeed(FloatDefine.BATTLE_FAIRY_BUBBLE_SPEED);
+        damageBubble.SetPosition(startPos);
+        damageBubble.SetColliderEnable(false);
+
+        await damageBubble.SmoothMove(bossPos, () => DealsFairyDamage(damageBubble));
     }
 
-    private async UniTask ProcessChainReactions()
+    // ÎåÄÎØ∏ÏßÄ + ÌéòÏù¥ÎìúÏïÑÏõÉ
+    private void DealsFairyDamage(BubbleNode bubble)
     {
+        battleViewController.DealsFairyDamage();
+        bubble.FadeOff().Forget();
+    }
 
+    // ÏäπÌå®Ï°∞Í±¥ ÌåêÎ≥Ñ
+    private BattlePhase GetNextPhase()
+    {
+        var viewModel = battleViewController.GetModel<BattleViewModel>();
+
+        if (viewModel.HpBarModel.Value == 0)
+        {
+            return BattlePhase.Win;
+        }
+        else if (viewModel.BattleRingSlotModel.RemainBubbleCount == 0)
+        {
+            return BattlePhase.Defeat;
+        }
+
+        return BattlePhase.Stage;
     }
 }

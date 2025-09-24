@@ -22,7 +22,7 @@ public class BattleSystem
     {
         IBattlePhaseParam battlePhaseParam = null;
 
-        while (currentPhase != BattlePhase.End)
+        while (!CheckEnd())
         {
             var battlePhaseProcessor = processorDic[currentPhase];
 
@@ -39,5 +39,34 @@ public class BattleSystem
 
             currentPhase = battleNextPhaseInfo.BattlePhase;
         }
+
+        ShowResult();
+    }
+
+    private void ShowResult()
+    {
+        var msg = currentPhase == BattlePhase.Win ? "Win!" : "Defeat";
+
+        var messageBoxModel = new MessageBoxPopupModel();
+        messageBoxModel.SetMessageType(MessageBoxType.TwoButton);
+        messageBoxModel.SetOnConfirm(BackToLobby);
+        messageBoxModel.SetMessageText(msg);
+
+        var msgBoxController = new MessageBoxPopupController();
+        msgBoxController.SetModel(messageBoxModel);
+
+        UIManager.Instance.OpenPopup(msgBoxController).Forget();
+    }
+
+    private void BackToLobby()
+    {
+        LobbyFlowModel lobbyFlowModel = new LobbyFlowModel();
+
+        FlowManager.Instance.ChangeFlow(FlowType.LobbyFlow, lobbyFlowModel).Forget();
+    }
+
+    private bool CheckEnd()
+    {
+        return currentPhase is BattlePhase.Win or BattlePhase.Defeat;
     }
 }

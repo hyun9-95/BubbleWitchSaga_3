@@ -1,5 +1,4 @@
 using System;
-using UnityEngine;
 
 [Serializable]
 public struct CellPosition
@@ -12,9 +11,16 @@ public struct CellPosition
         this.column = column;
     }
 
+    public bool IsEmpty => row == 0 && column == 0;
+
     public bool IsOdd()
     {
         return (row % 2 == 1);
+    }
+
+    public bool Equals(CellPosition other)
+    {
+        return other.row == row && other.column == column;
     }
     
     public void Move(BattleCellDirection direction)

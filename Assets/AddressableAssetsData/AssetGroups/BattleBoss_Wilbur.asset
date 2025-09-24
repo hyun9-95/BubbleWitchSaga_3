@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: BattleBoss_Wilbur
+  m_EditorClassIdentifier: 
+  m_GroupName: BattleBoss_Wilbur
+  m_GUID: f0b62c704f09f67458c7fa8e5740730c
+  m_SerializeEntries:
+  - m_GUID: 1bdd956ee7d1d2d45ad43083450f533b
+    m_Address: BattleBoss/Wilbur/BattleBoss_Wilbur
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Main
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9c1d9ad62b0018345a034e44440235b5
+    m_Address: BattleBoss/Wilbur/Wilbur_sprite
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Main
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: bc1783b9fa7e2624399a7228fc80ec31, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: a732c678545216a4bbfa8bc4b5a68029, type: 2}
+    - {fileID: 11400000, guid: be8f3628ccec56146b7cd72350a76c8c, type: 2}

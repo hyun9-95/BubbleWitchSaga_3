@@ -10,6 +10,7 @@ public class BattleGrid : MonoBehaviour
     public Vector3 CenterWorld => centerWorld;
     public bool IsReady => cells.Count > 0;
     public BoundsInt GridBounds => gridBounds;
+    public float DropPosY => bottomY + bubbleRadius;
     #endregion
 
     #region Value
@@ -42,10 +43,12 @@ public class BattleGrid : MonoBehaviour
 
     private float totalWidth = 0;
     private float totalHeight = 0;
+    private float bottomY = 0;
+
     private Vector3 centerWorld = Vector3.zero;
     private BoundsInt gridBounds;
 
-    BattleCellDirection[] battleCellDirection = new BattleCellDirection[]
+    BattleCellDirection[] neighborDirections = new BattleCellDirection[]
     {
                 BattleCellDirection.Left,
                 BattleCellDirection.TopLeft,
@@ -131,6 +134,8 @@ public class BattleGrid : MonoBehaviour
             new(right, bottom),
             new(right, top),
         };
+
+        bottomY = bottom;
     }
 
     public BattleCell GetCell(CellPosition cellPos)
@@ -139,6 +144,19 @@ public class BattleGrid : MonoBehaviour
             return cell;
 
         return null;
+    }
+
+    public BattleCell GetDirectionCell(CellPosition rootPos, BattleCellDirection direction)
+    {
+        var neighborCellPos = GetCell(rootPos).CellPos;
+        neighborCellPos.Move(direction);
+
+        return GetCell(neighborCellPos);
+    }
+
+    public BattleCell GetBossCell()
+    {
+        return GetCell(new CellPosition(1, 5));
     }
 
     public Dictionary<CellPosition, BattleCell> GetAllCells()
@@ -187,23 +205,9 @@ public class BattleGrid : MonoBehaviour
         closedCells.Add(cellPos);
     }
 
-    public List<CellPosition> GetNeighborPositions(CellPosition cellPos)
+    public BattleCellDirection[] GetNeighborDirections()
     {
-        var neighborPositions = new List<CellPosition>();
-
-        foreach (var direction in battleCellDirection)
-        {
-            var cell = GetCell(cellPos);
-
-            if (cell.IsEmpty)
-                continue;
-
-            var neighborCellPos = cellPos;
-            neighborCellPos.Move(direction);
-            neighborPositions.Add(neighborCellPos);
-        }
-
-        return neighborPositions;
+        return neighborDirections;
     }
 
 #if UNITY_EDITOR
@@ -250,6 +254,7 @@ public class BattleGrid : MonoBehaviour
             GeneratePreviewCells();
             DrawCellGizmos();
             DrawGridBounds();
+            DrawRootConnectionGizmos();
         }
     }
 
@@ -257,6 +262,43 @@ public class BattleGrid : MonoBehaviour
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireCube(centerWorld, new Vector3(totalWidth, totalHeight, 0f));
+    }
+
+    private void DrawRootConnectionGizmos()
+    {
+        if (!Application.isPlaying || !IsReady)
+            return;
+
+        foreach (var cellPair in cells)
+        {
+            var cell = cellPair.Value;
+
+            // 버블이 있고 RootPos를 가진 경우
+            if (!cell.IsEmpty && cell.Bubble != null && !cell.Bubble.Model.RootPos.IsEmpty)
+            {
+                var childPos = cell.Position;
+                var rootCell = GetCell(cell.Bubble.Model.RootPos);
+
+                if (rootCell != null)
+                {
+                    var rootPos = rootCell.Position;
+
+                    // 루트에서 자식으로 파란색 선 그리기
+                    Gizmos.color = Color.blue;
+                    Gizmos.DrawLine(rootPos, childPos);
+
+                    // 화살표 표시 (자식 쪽에)
+                    Vector3 direction = (childPos - rootPos).normalized;
+                    float arrowSize = bubbleRadius * 0.3f;
+
+                    Vector3 arrowHead = childPos - direction * arrowSize;
+                    Vector3 right = Vector3.Cross(direction, Vector3.forward) * arrowSize * 0.5f;
+
+                    Gizmos.DrawLine(childPos, arrowHead + right);
+                    Gizmos.DrawLine(childPos, arrowHead - right);
+                }
+            }
+        }
     }
 #endif
 }

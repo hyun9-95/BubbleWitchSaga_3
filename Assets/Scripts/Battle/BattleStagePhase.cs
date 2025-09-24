@@ -2,7 +2,6 @@
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Profiling.HierarchyFrameDataView;
 
 public class BattleStagePhase : BaseUnit<BattleStageModel>, IBattlePhaseProcessor
 {
@@ -13,20 +12,53 @@ public class BattleStagePhase : BaseUnit<BattleStageModel>, IBattlePhaseProcesso
 
     private BattleGrid grid;
     private BattleViewController battleViewController;
+    private BattleBoss boss;
+
     public async UniTask Initialize(BattleGrid grid, BattleViewController viewController)
     {
         this.grid = grid;
 
         if (Model.BossData != null)
         {
+            var maxHp = Mathf.FloorToInt(Model.BossData.HP);
             var viewModel = viewController.GetModel<BattleViewModel>();
             SimpleBarModel simpleBarModel = new SimpleBarModel();
-            simpleBarModel.SetMaxGauge(Model.BossData.HP);
-            simpleBarModel.SetGauge(Model.BossData.HP);
+            simpleBarModel.SetMaxValue(maxHp);
+            simpleBarModel.SetValue(maxHp);
             viewModel.SetHpBarModel(simpleBarModel);
+
+            boss = await AddressableManager.Instance.
+                InstantiateAddressableMonoAsync<BattleBoss>(Model.BossData.PrefabPath);
+
+            var bossCell = grid.GetBossCell();
+            boss.SetPosition(bossCell.Position);
+            boss.DrawOutline();
+
+            await FillBossArea(bossCell);
         }
 
         battleViewController = viewController;
+    }
+
+    private async UniTask FillBossArea(BattleCell bossCell)
+    {
+        var noneBubble = await BubbleFactory.Instance.CreateNewBubble(BubbleType.None);
+        bossCell.SetBubble(noneBubble);
+        noneBubble.SetPosition(bossCell.Position);
+
+        var directions = grid.GetNeighborDirections();
+
+        foreach (var direction in directions)
+        {
+            var neighborCell = grid.GetDirectionCell(bossCell.CellPos, direction);
+
+            if (neighborCell != null)
+            {
+                var neighborNoneBubbe = await BubbleFactory.Instance.CreateNewBubble(BubbleType.None);
+                neighborCell.SetBubble(neighborNoneBubbe);
+                neighborNoneBubbe.SetPosition(neighborCell.Position);
+            }
+        }
     }
 
     private async UniTask SpawnBubbles(BattleGrid grid)

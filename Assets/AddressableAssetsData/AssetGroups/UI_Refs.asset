@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: UI_Refs
+  m_EditorClassIdentifier: 
+  m_GroupName: UI_Refs
+  m_GUID: bb6a3f7d5eb633b42b8f891b2cdd2576
+  m_SerializeEntries:
+  - m_GUID: 1d2d756e7ecd41f4586ca69fd6e098df
+    m_Address: UI/Common/Refs/T_gray_button_s
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Main
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 22999937811e4ae4fafce2ffe3e6c8c9
+    m_Address: UI/Common/Refs/1_orange_button_s_pick
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Main
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 42e24f113466554418a43f25f336a033
+    m_Address: UI/Common/Refs/T_gray_button_s_pick
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Main
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b063d4c680543a644b230a944c99c314
+    m_Address: UI/Common/Refs/1_exit
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Main
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c6b53521998bc91489d6783d1f7e8a56
+    m_Address: UI/Common/Refs/1_orange_button_s
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Main
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f4c9834e8e886c446b81a8150f46fe5e
+    m_Address: UI/Common/Refs/F_UI_Panel_I
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Main
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: bc1783b9fa7e2624399a7228fc80ec31, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: dd20c376a0363d6418b47e2e0f5d8446, type: 2}
+    - {fileID: 11400000, guid: 1dc38c40fb5d7814980c2e46ff5074cc, type: 2}

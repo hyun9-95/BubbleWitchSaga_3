@@ -58,3 +58,9 @@ public enum ButtonSoundType
     Cancel,
     None = 99,
 }
+
+public enum MessageBoxType
+{
+    OneButton,
+    TwoButton,
+}

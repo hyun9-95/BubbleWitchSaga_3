@@ -2,4 +2,4 @@
 int,string,float[],int
 Id,NameId,Values,ValueCount
 10000,BALANCE_TEST,1,1
-10001,BUBBLE_SPAWN_PROB,700; 200; 100;,3
+10001,BUBBLE_SPAWN_PROB,600; 350; 50;,3

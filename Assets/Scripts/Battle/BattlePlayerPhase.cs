@@ -48,7 +48,9 @@ public class BattlePlayerPhase : IBattlePhaseProcessor
     public async UniTask OnProcess()
     {
         while (launchedBubbleNode == null)
-            await UniTask.NextFrame(TokenPool.Get(GetHashCode()));
+            await UniTaskUtils.NextFrame(TokenPool.Get(GetHashCode()));
+
+        await UniTaskUtils.NextFrame(TokenPool.Get(GetHashCode()));
     }
 
     public async UniTask OnEndPhase()
@@ -70,12 +72,12 @@ public class BattlePlayerPhase : IBattlePhaseProcessor
         return grid.GetClosestEmptyCell(hitInfo);
     }
 
-    private void OnLaunch(List<Vector3> movePath, CellPosition targetCellPos)
+    private void OnLaunch(List<Vector3> movePath, CellPosition hitCell, CellPosition targetCellPos)
     {
-        OnLaunchAsync(movePath, targetCellPos).Forget();
+        OnLaunchAsync(movePath, hitCell, targetCellPos).Forget();
     }
 
-    private async UniTask OnLaunchAsync(List<Vector3> movePath, CellPosition targetCellPos)
+    private async UniTask OnLaunchAsync(List<Vector3> movePath, CellPosition hitCellPos, CellPosition targetCellPos)
     {
         if (launched)
             return;
@@ -84,5 +86,8 @@ public class BattlePlayerPhase : IBattlePhaseProcessor
 
         launchedBubbleNode = await battleViewController.
             LaunchCurrentBubble(movePath, targetCellPos);
+
+        // Ray 히트한 셀을 부모 루트로
+        launchedBubbleNode.Model.SetRootPos(hitCellPos);
     }
 }

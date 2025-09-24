@@ -20,7 +20,6 @@ public class SimpleBar : BaseUnit<SimpleBarModel>
     
     private void UpdateBar()
     {
-        var amount = Mathf.Clamp01(Model.MaxGauge / Model.Gauge);
-        bar.fillAmount = amount;
+        bar.fillAmount = Model.GetGauge();
     }
 }

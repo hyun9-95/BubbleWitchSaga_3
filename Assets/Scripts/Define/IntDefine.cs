@@ -6,4 +6,6 @@ public class IntDefine
     public const int BUBBLE_LINE_SORTING_ORDER = -1;
     public const int BUBBLE_SORTING_ORDER_NORMAL = 0;
     public const int BUBBLE_SORTING_ORDER_SPAWN = 1;
+
+    public const int BUBBLE_FAIRY_DAMAGE = 10;
 }

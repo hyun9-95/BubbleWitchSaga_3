@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: UI_MessageBoxPopup
+  m_EditorClassIdentifier: 
+  m_GroupName: UI_MessageBoxPopup
+  m_GUID: 7853fdcfc0ff73a4d88c2abfd6d6ec50
+  m_SerializeEntries:
+  - m_GUID: cf79fa71dd3ee634b856354ca60f122c
+    m_Address: UI/MessageBoxPopup/MessageBoxPopup
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Main
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: bc1783b9fa7e2624399a7228fc80ec31, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 9395ad4c1ccea68408d6481db171ad8d, type: 2}
+    - {fileID: 11400000, guid: 15d80d20499d4b24095ec1d29ad17510, type: 2}

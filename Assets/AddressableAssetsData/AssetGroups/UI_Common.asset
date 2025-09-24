@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: UI_Common
+  m_EditorClassIdentifier: 
+  m_GroupName: UI_Common
+  m_GUID: 7580569f9643e404bafb70c6d2a88515
+  m_SerializeEntries:
+  - m_GUID: 06176af1c972bd447962e0faedce1c25
+    m_Address: UI/Common/GreyButton_Small
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Main
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 44f1aca11bc9e8840804fd9f57559ef8
+    m_Address: UI/Common/BasicPopup
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Main
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ad99d7c84643d9149aacaa48d6b2a543
+    m_Address: UI/Common/RedButton_Small
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Main
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: bc1783b9fa7e2624399a7228fc80ec31, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: b44b231687c44064d921a55afecce4c1, type: 2}
+    - {fileID: 11400000, guid: 8828174b94bb6f84786d87e14c143bc3, type: 2}

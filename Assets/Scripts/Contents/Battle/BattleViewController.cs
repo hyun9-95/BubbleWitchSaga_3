@@ -15,6 +15,7 @@ public class BattleViewController : BaseController<BattleViewModel>
 
     public override void Enter()
     {
+        Model.BattleRingSlotModel.SetOnChangeBubbleColor(OnChangeBubbleColor);
     }
 
     public override async UniTask Process()
@@ -43,8 +44,32 @@ public class BattleViewController : BaseController<BattleViewModel>
             return null;
 
         await currentBubble.MoveAlongPath(path);
-        currentBubble.Model.SetCellPosition(targetCellPos);
+        currentBubble.Model.SetCellPos(targetCellPos);
 
         return currentBubble;
+    }
+
+    public void DealsFairyDamage()
+    {
+        int damage = IntDefine.BUBBLE_FAIRY_DAMAGE;
+        Model.HpBarModel.ReduceValue(damage);
+        View.RefreshHpBar();
+    }
+
+    private void OnChangeBubbleColor(BubbleColor color)
+    {
+        var lineColor = GetLineColor(color);
+        Model.BattleBubbleLauncherModel.SetLineColor(lineColor);
+    }
+
+    private Color GetLineColor(BubbleColor bubbleColor)
+    {
+        return bubbleColor switch
+        {
+            BubbleColor.Red => Color.red,
+            BubbleColor.Yellow => Color.yellow,
+            BubbleColor.Blue => Color.blue,
+            _ => Color.white,
+        };
     }
 }

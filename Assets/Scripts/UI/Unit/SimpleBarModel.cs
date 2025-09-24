@@ -2,17 +2,27 @@ using UnityEngine;
 
 public class SimpleBarModel : IBaseUnitModel
 {
-    public float MaxGauge { get; private set; }
+    public int MaxValue { get; private set; }
 
-    public float Gauge {  get; private set; }
+    public int Value {  get; private set; }
 
-    public void SetMaxGauge(float value)
+    public void SetMaxValue(int value)
     {
-        MaxGauge = value;
+        MaxValue = value;
     }
 
-    public void SetGauge(float value)
+    public void SetValue(int value)
     {
-        Gauge = value;
+        Value = value;
+    }
+
+    public void ReduceValue(int value)
+    {
+        Value -= value;
+    }
+
+    public float GetGauge()
+    {
+        return  Mathf.Clamp01((float)Value / MaxValue);
     }
 }

@@ -1,10 +1,14 @@
 public enum BubbleType
 {
+    // 상호작용
     Normal,
     Fairy,
     Magic,
-    Guide,
+
+    // 상호작용 X
+    Empty,
     Spawn,
+    None,
 }
 
 public enum  BubbleColor
@@ -42,5 +46,6 @@ public enum BattlePhase
     Stage,
     Player,
     Interaction,
-    End,
+    Win,
+    Defeat,
 }

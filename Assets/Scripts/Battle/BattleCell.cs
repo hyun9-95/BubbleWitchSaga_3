@@ -7,7 +7,6 @@ public class BattleCell
     public BubbleNode Bubble { get; set; }
     public bool IsEmpty => Bubble == null;
     public bool Closed {  get; private set; }
-
     public BattleCell(CellPosition gridPos, Vector3 pos)
     {
         CellPos = gridPos;
@@ -29,8 +28,20 @@ public class BattleCell
         Bubble = bubble;
     }
 
-    public void RemoveBubbe()
+    public void RemoveBubble()
     {
+        if (Bubble == null)
+            return;
+
+        Bubble.OnRemoveFromCell();
         Bubble = null;
+    }
+
+    public void SetRootPos(CellPosition cellPos)
+    {
+        if (Bubble == null)
+            return;
+
+        Bubble.Model.SetRootPos(cellPos);
     }
 }

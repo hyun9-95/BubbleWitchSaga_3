@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Rendering;
 
 public class BattleBubbleLauncher : BaseUnit<BattleBubbleLauncherModel>, IPointerDownHandler, IDragHandler, IPointerUpHandler
 {
@@ -26,9 +27,13 @@ public class BattleBubbleLauncher : BaseUnit<BattleBubbleLauncherModel>, IPointe
 
     private BubbleNode guideBubbleNode;
     private BattleCell selectedCell;
+    private CellPosition hitCellPos;
     private float bubbleRadius;
 
+
+    private Vector2 disablePos = new Vector2(0, -500);
     private bool aiming = false;
+    private Color lineColor = Color.white;
 
     public async UniTask Initialize()
     {
@@ -42,8 +47,8 @@ public class BattleBubbleLauncher : BaseUnit<BattleBubbleLauncherModel>, IPointe
 
         if (guideBubbleNode == null)
         {
-            guideBubbleNode = await BubbleFactory.Instance.CreateNewBubble(BubbleType.Guide);
-            guideBubbleNode.gameObject.SetActive(false);
+            guideBubbleNode = await BubbleFactory.Instance.CreateNewBubble(BubbleType.Empty);
+            guideBubbleNode.SetPosition(disablePos);
             guideBubbleNode.SetColliderEnable(false);
 
             bubbleRadius = guideBubbleNode.Radius * 0.5f;
@@ -63,6 +68,13 @@ public class BattleBubbleLauncher : BaseUnit<BattleBubbleLauncherModel>, IPointe
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        if (lineColor != Model.LineColor)
+        {
+            lineColor = Model.LineColor;
+            lineRenderer.startColor = Color.white;
+            lineRenderer.endColor = lineColor;
+        }
+
         UpdateAimDirection(eventData.position);
     }
 
@@ -77,7 +89,7 @@ public class BattleBubbleLauncher : BaseUnit<BattleBubbleLauncherModel>, IPointe
             return;
 
         lineRenderer.positionCount = 0;
-        guideBubbleNode.gameObject.SafeSetActive(false);
+        guideBubbleNode.SetPosition(disablePos);
 
         movePath.Clear();
 
@@ -86,13 +98,13 @@ public class BattleBubbleLauncher : BaseUnit<BattleBubbleLauncherModel>, IPointe
 
         movePath.Add(endPos);
 
-        Model.OnLaunch(movePath, selectedCell.CellPos);
+        Model.OnLaunch(movePath, hitCellPos, selectedCell.CellPos);
     }
 
     private void Cancel()
     {
         lineRenderer.positionCount = 0;
-        guideBubbleNode.gameObject.SafeSetActive(false);
+        guideBubbleNode.SetPosition(disablePos);
     }
 
     private void UpdateAimDirection(Vector2 screenPosition)
@@ -116,6 +128,7 @@ public class BattleBubbleLauncher : BaseUnit<BattleBubbleLauncherModel>, IPointe
         int mask = (int)LayerFlag.World;
         bool foundCell = false;
         selectedCell = null;
+        hitCellPos = default;
 
         aimPoints.Clear();
         aimPoints.Add(startPos);
@@ -139,7 +152,8 @@ public class BattleBubbleLauncher : BaseUnit<BattleBubbleLauncherModel>, IPointe
             {
                 if (hit.collider.TryGetComponent<BubbleNode>(out var bubble))
                 {
-                    var hitInfo = new BubbleHitInfo(bubble.Model.CellPosition, centerHitPoint, startPos);
+                    hitCellPos = bubble.Model.CellPos;
+                    var hitInfo = new BubbleHitInfo(hitCellPos, centerHitPoint, startPos);
                     selectedCell = Model.OnFindClosestEmptyCell(hitInfo);
             
                     if (selectedCell != null)

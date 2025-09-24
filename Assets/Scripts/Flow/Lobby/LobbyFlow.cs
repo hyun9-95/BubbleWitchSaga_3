@@ -7,14 +7,22 @@ public class LobbyFlow : BaseFlow<LobbyFlowModel>
 
     public override FlowType FlowType => FlowType.LobbyFlow;
 
-    public override async UniTask Process()
+    private LobbyViewController lobbyViewController;
+
+    public override async UniTask LoadingProcess()
     {
         await ShowLobbyView();
     }
 
+    public override async UniTask Process()
+    {
+        await UniTask.WaitUntil(() => !TransitionManager.Instance.IsPlaying);
+        lobbyViewController.AllowClick(true);
+    }
+
     private async UniTask ShowLobbyView()
     {
-        LobbyViewController lobbyViewController = new LobbyViewController();
+        lobbyViewController = new LobbyViewController();
         LobbyViewModel lobbyViewModel = new LobbyViewModel();
         lobbyViewController.SetModel(lobbyViewModel);
 

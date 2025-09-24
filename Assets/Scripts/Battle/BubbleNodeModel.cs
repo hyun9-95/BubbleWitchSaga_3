@@ -1,3 +1,5 @@
+using System;
+
 public class BubbleNodeModel : IBaseUnitModel
 {
     public int Index { get; private set; }
@@ -5,7 +7,9 @@ public class BubbleNodeModel : IBaseUnitModel
     public BubbleType BubbleType { get; private set; }
     public BubbleColor BubbleColor { get; private set; }
     public float MoveSpeed { get; private set; }
-    public CellPosition CellPosition { get; private set; }
+    public CellPosition CellPos { get; private set; }
+    public CellPosition RootPos { get; private set; }
+    public Action OnRemoveFromCell { get; private set; }
 
     public void AddIndex()
     {
@@ -26,8 +30,18 @@ public class BubbleNodeModel : IBaseUnitModel
         MoveSpeed = speed;
     }
 
-    public void SetCellPosition(CellPosition pos)
+    public void SetCellPos(CellPosition pos)
     {
-        CellPosition = pos;
+        CellPos = pos;
+    }
+
+    public void SetRootPos(CellPosition pos)
+    {
+        RootPos = pos;
+    }
+
+    public void SetOnRemoveFromCell(Action onRemove)
+    {
+        OnRemoveFromCell = onRemove;
     }
 }
