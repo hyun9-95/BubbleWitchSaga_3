@@ -4,7 +4,7 @@ public interface IBattlePhaseProcessor
 {
     public BattlePhase Phase { get; }
 
-    public UniTask Initialize(BattleGrid grid);
+    public UniTask Initialize(BattleGrid grid, BattleViewController viewController);
 
     public UniTask OnStartPhase(IBattlePhaseParam param);
 

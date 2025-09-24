@@ -1,4 +1,4 @@
 ﻿아이디,이름,,
-int,string,int,float
-Id,NameId,MaxSpawnCount,HP
-30000,BOSS_WILBUR,32,100
+int,string,float,string
+Id,NameId,HP,PrefabPath
+30000,BOSS_WILBUR,100,None

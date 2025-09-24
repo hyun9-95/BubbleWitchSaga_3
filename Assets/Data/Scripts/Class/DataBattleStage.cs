@@ -13,6 +13,8 @@ public class DataBattleStage : IBaseData
     public readonly int SpawnCount;
     [JsonProperty(PropertyName = "UserBubbleCount")]
     public readonly int UserBubbleCount;
+    [JsonProperty(PropertyName = "Boss")]
+    public readonly BattleBossDefine Boss;
 	
 	public int Id => id;
     public bool IsEmpty => id == 0;

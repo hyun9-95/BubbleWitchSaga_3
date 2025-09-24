@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class BattleBubbleLauncherModel : IBaseUnitModel
 {
-    public Func<CellPosition, Vector2, BattleCell> OnFindClosestEmptyCell {  get; private set; }
-    public Action<List<Vector3>> OnLaunch { get; private set; }
+    public Func<BubbleHitInfo, BattleCell> OnFindClosestEmptyCell {  get; private set; }
+    public Action<List<Vector3>, CellPosition> OnLaunch { get; private set; }
 
-    public void SetOnFindClosestEmptyCell(Func<CellPosition, Vector2, BattleCell> func)
+    public void SetOnFindClosestEmptyCell(Func<BubbleHitInfo, BattleCell> func)
     {
         OnFindClosestEmptyCell = func;
     }
 
-    public void SetOnLaunch(Action<List<Vector3>> action)
+    public void SetOnLaunch(Action<List<Vector3>, CellPosition> action)
     {
         OnLaunch = action;
     }

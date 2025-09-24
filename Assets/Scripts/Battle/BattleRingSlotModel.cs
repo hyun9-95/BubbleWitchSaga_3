@@ -18,6 +18,6 @@ public class BattleRingSlotModel : IBaseUnitModel
 
     public void ReduceSpawnCount()
     {
-        RemainBubbleCount = 0;
+        RemainBubbleCount--;
     }
 }

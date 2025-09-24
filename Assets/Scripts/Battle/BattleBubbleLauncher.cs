@@ -73,7 +73,7 @@ public class BattleBubbleLauncher : BaseUnit<BattleBubbleLauncherModel>, IPointe
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        if (!aiming)
+        if (!aiming || selectedCell == null)
             return;
 
         lineRenderer.positionCount = 0;
@@ -86,7 +86,7 @@ public class BattleBubbleLauncher : BaseUnit<BattleBubbleLauncherModel>, IPointe
 
         movePath.Add(endPos);
 
-        Model.OnLaunch(movePath);
+        Model.OnLaunch(movePath, selectedCell.CellPos);
     }
 
     private void Cancel()
@@ -139,7 +139,8 @@ public class BattleBubbleLauncher : BaseUnit<BattleBubbleLauncherModel>, IPointe
             {
                 if (hit.collider.TryGetComponent<BubbleNode>(out var bubble))
                 {
-                    selectedCell = Model.OnFindClosestEmptyCell(bubble.Model.CellPosition, centerHitPoint);
+                    var hitInfo = new BubbleHitInfo(bubble.Model.CellPosition, centerHitPoint, startPos);
+                    selectedCell = Model.OnFindClosestEmptyCell(hitInfo);
             
                     if (selectedCell != null)
                     {

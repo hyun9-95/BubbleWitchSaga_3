@@ -2,6 +2,7 @@
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Profiling.HierarchyFrameDataView;
 
 public class BattleStagePhase : BaseUnit<BattleStageModel>, IBattlePhaseProcessor
 {
@@ -11,10 +12,21 @@ public class BattleStagePhase : BaseUnit<BattleStageModel>, IBattlePhaseProcesso
     private List<BubbleSpawner> spawners;
 
     private BattleGrid grid;
-
-    public async UniTask Initialize(BattleGrid grid)
+    private BattleViewController battleViewController;
+    public async UniTask Initialize(BattleGrid grid, BattleViewController viewController)
     {
         this.grid = grid;
+
+        if (Model.BossData != null)
+        {
+            var viewModel = viewController.GetModel<BattleViewModel>();
+            SimpleBarModel simpleBarModel = new SimpleBarModel();
+            simpleBarModel.SetMaxGauge(Model.BossData.HP);
+            simpleBarModel.SetGauge(Model.BossData.HP);
+            viewModel.SetHpBarModel(simpleBarModel);
+        }
+
+        battleViewController = viewController;
     }
 
     private async UniTask SpawnBubbles(BattleGrid grid)
@@ -44,7 +56,6 @@ public class BattleStagePhase : BaseUnit<BattleStageModel>, IBattlePhaseProcesso
 
     public BattleNextPhaseInfo OnNextPhase()
     {
-        // 추후 여기서 End 페이즈 처리
         return new BattleNextPhaseInfo(BattlePhase.Player);
     }
 }

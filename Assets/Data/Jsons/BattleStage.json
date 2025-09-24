@@ -3,6 +3,7 @@
     "id": 20000,
     "StagePath": "BattleStage/Stage_Wilbur",
     "SpawnCount": 32,
-    "UserBubbleCount": 22
+    "UserBubbleCount": 22,
+    "Boss": "BOSS_WILBUR"
   }
 ]

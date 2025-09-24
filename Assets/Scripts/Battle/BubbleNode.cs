@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -74,22 +75,35 @@ public class BubbleNode : PoolableBaseUnit<BubbleNodeModel>
             await SmoothMove(posList[i]);
     }
 
-    public async UniTask FadeAsync(float targetAlpha)
+    public async UniTask FadeOff()
     {
+        if (bubbleSprite == null)
+            return;
+
+        fairyCover.gameObject.SafeSetActive(false);
+
+        Color startColor = bubbleSprite.color;
+        float startAlpha = startColor.a;
+        float targetAlpha = 0;
         float elapsedTime = 0;
-        canvasGroup.alpha = 1;
 
         while (elapsedTime < fadeTime)
         {
             elapsedTime += Time.unscaledDeltaTime;
             float progress = elapsedTime / fadeTime;
-            float alpha = Mathf.Lerp(1, targetAlpha, progress);
-            canvasGroup.alpha = alpha;
+            float alpha = Mathf.Lerp(startAlpha, targetAlpha, progress);
+
+            Color newColor = startColor;
+            newColor.a = alpha;
+            bubbleSprite.color = newColor;  // Color.a °ª º¯°æ
 
             await UniTaskUtils.NextFrame();
         }
 
-        canvasGroup.alpha = targetAlpha;
+        Color finalColor = startColor;
+        finalColor.a = targetAlpha;
+        bubbleSprite.color = finalColor;
+        gameObject.SafeSetActive(false);
     }
 
     private async UniTask ResolveBubbleImage()

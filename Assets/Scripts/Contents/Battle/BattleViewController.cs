@@ -11,22 +11,40 @@ public class BattleViewController : BaseController<BattleViewModel>
 
 	public BattleView View => GetView<BattleView>();
 
+    private bool firstShow = true;
+
     public override void Enter()
     {
     }
 
     public override async UniTask Process()
     {
+        View.EnableClickBlocker(true);
         await View.ShowAsync();
+
+        if (!firstShow)
+            View.EnableClickBlocker(false);
+
+        firstShow = false;
     }
 
-    public async UniTask<BubbleNode> LaunchCurrentBubble(List<Vector3> path)
+    public async UniTask<BubbleNode> LaunchCurrentBubble(List<Vector3> path, CellPosition targetCellPos)
     {
-        return await View.LaunchCurrentRingSlot(path);
-    }
+        View.EnableClickBlocker(true);
 
-    public void EnableClickBlocker(bool value)
-    {
-        View.EnableClickBlocker(value);
+        var ringSlot = View.GetRingSlot();
+
+        if (ringSlot == null)
+            return null;
+
+        var currentBubble = ringSlot.ConsumeCurrentBubble();
+
+        if (currentBubble == null)
+            return null;
+
+        await currentBubble.MoveAlongPath(path);
+        currentBubble.Model.SetCellPosition(targetCellPos);
+
+        return currentBubble;
     }
 }

@@ -54,6 +54,15 @@ public class BattleGrid : MonoBehaviour
                 BattleCellDirection.BottomLeft,
                 BattleCellDirection.BottomRight
     };
+
+    // 윗방향 제외
+    BattleCellDirection[] launchDirection = new BattleCellDirection[]
+    {
+                BattleCellDirection.Left,
+                BattleCellDirection.Right,
+                BattleCellDirection.BottomLeft,
+                BattleCellDirection.BottomRight
+    };
     #endregion
 
     private Dictionary<CellPosition, BattleCell> cells = new();
@@ -143,14 +152,17 @@ public class BattleGrid : MonoBehaviour
         return oddRow ? baseColumns + 1 : baseColumns;
     }
 
-    public BattleCell GetClosestEmptyCell(CellPosition hitCellPos, Vector2 hitPoint)
+    public BattleCell GetClosestEmptyCell(BubbleHitInfo hitInfo)
     {
+        BattleCell hitCell = GetCell(hitInfo.HitCellPos);
+        Vector2 hitCellWorldPos = hitCell.Position;
+
         BattleCell closestCell = null;
         float closestDistance = float.MaxValue;
 
-        foreach (var direction in battleCellDirection)
+        foreach (var direction in launchDirection)
         {
-            var neighborCellPos = hitCellPos;
+            var neighborCellPos = hitInfo.HitCellPos;
             neighborCellPos.Move(direction);
 
             var neighborCell = GetCell(neighborCellPos);
@@ -158,7 +170,7 @@ public class BattleGrid : MonoBehaviour
             if (neighborCell == null || !neighborCell.IsEmpty || neighborCell.Closed)
                 continue;
 
-            float distance = Vector2.Distance(hitPoint, neighborCell.Position);
+            float distance = Vector2.Distance(hitInfo.HitPoint, neighborCell.Position);
 
             if (distance < closestDistance)
             {

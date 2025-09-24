@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: UI_HpBar
+  m_EditorClassIdentifier: 
+  m_GroupName: UI_HpBar
+  m_GUID: 5dc49d438b3659c43b29bfbbee72a1fb
+  m_SerializeEntries:
+  - m_GUID: 271e2a22daf7da94da43dfde4c6f8aea
+    m_Address: UI/BattleView/HpBar/HpBar
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Main
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 70009c5ee372ee042bbae71496f13d12
+    m_Address: UI/BattleView/HpBar/F_UI_RedBar
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Main
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a2d402464fab42141baa4d7f96ab8afb
+    m_Address: UI/BattleView/HpBar/F_UI_SilverBar
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Main
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: bc1783b9fa7e2624399a7228fc80ec31, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: b9938af5829a3cd43bc3960aaeff7c20, type: 2}
+    - {fileID: 11400000, guid: 7bf2ba7f962b7f74c9e9fd3fb38e99ef, type: 2}

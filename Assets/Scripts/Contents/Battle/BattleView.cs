@@ -1,5 +1,4 @@
 using Cysharp.Threading.Tasks;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BattleView : BaseView
@@ -13,12 +12,15 @@ public class BattleView : BaseView
     private BattleBubbleLauncher bubbleLauncher;
 
     [SerializeField]
+    private AddressableLoader hpBarLoader;
+
+    [SerializeField]
     private ClickBlocker clickBlocker;
+
+    private SimpleBar hpBar;
 
     public override async UniTask ShowAsync()
     {
-        EnableClickBlocker(true);
-
         if (ringSlot.Model == null)
         {
             ringSlot.SetModel(Model.BattleRingSlotModel);
@@ -31,8 +33,23 @@ public class BattleView : BaseView
             await bubbleLauncher.Initialize();
         }
 
+        if (Model.HpBarModel != null && hpBar == null)
+        {
+            hpBar = await hpBarLoader.InstantiateAsyc<SimpleBar>();
+            hpBar.SetModel(Model.HpBarModel);
+            await hpBar.ShowAsync();
+        }
+
+        if (hpBar != null)
+            hpBar.RefreshBar();
+
         await RefillRingSlot();
-        EnableClickBlocker(false);
+    }
+
+    public void RefreshHpBar()
+    {
+        if (hpBar != null)
+            hpBar.RefreshBar();
     }
 
     private async UniTask RefillRingSlot()
@@ -45,15 +62,8 @@ public class BattleView : BaseView
         clickBlocker.SafeSetActive(enable);
     }
 
-    public async UniTask<BubbleNode> LaunchCurrentRingSlot(List<Vector3> path)
+    public BattleRingSlot GetRingSlot()
     {
-        var currentBubble = ringSlot.CurrentBubble;
-
-        if (currentBubble == null)
-            return null;
-
-        await currentBubble.MoveAlongPath(path);
-
-        return currentBubble;
+        return ringSlot;
     }
 }

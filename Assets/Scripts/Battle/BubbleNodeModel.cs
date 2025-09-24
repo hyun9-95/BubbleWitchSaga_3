@@ -1,6 +1,7 @@
 public class BubbleNodeModel : IBaseUnitModel
 {
     public int Index { get; private set; }
+    public bool IsColorType => BubbleType is BubbleType.Normal or BubbleType.Fairy;
     public BubbleType BubbleType { get; private set; }
     public BubbleColor BubbleColor { get; private set; }
     public float MoveSpeed { get; private set; }

@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 public class BattleRingSlot : BaseUnit<BattleRingSlotModel>, IPointerDownHandler
 {
     #region Property
-    public BubbleNode CurrentBubble => bubbleNodes != null && bubbleNodes.Count > 0 ?
+    private BubbleNode CurrentBubble => bubbleNodes != null && bubbleNodes.Count > 0 ?
         bubbleNodes[0] : null;
 
     #endregion
@@ -49,11 +49,6 @@ public class BattleRingSlot : BaseUnit<BattleRingSlotModel>, IPointerDownHandler
         }
 
         remainBubbleText.SafeSetText(Model.RemainBubbleCount.ToString());
-    }
-
-    public void Refresh()
-    {
-
     }
 
     private Vector3 GetPositionFromAngle(float angle)
@@ -108,7 +103,9 @@ public class BattleRingSlot : BaseUnit<BattleRingSlotModel>, IPointerDownHandler
         for (int i = 0; i < bubbleNodes.Count; i++)
         {
             float finalAngle = startAngles[i] + targetRotation;
-            bubbleNodes[i].SetPosition(GetPositionFromAngle(finalAngle));
+
+            if (bubbleNodes[i] != null)
+                bubbleNodes[i].SetPosition(GetPositionFromAngle(finalAngle));
         }
 
         BubbleNode firstBubble = bubbleNodes[0];
@@ -139,9 +136,20 @@ public class BattleRingSlot : BaseUnit<BattleRingSlotModel>, IPointerDownHandler
         float angle = (Model.SlotCount - 1) * angleStep;
         BubbleNode newBubble = await SpawnNewBubble();
         newBubble.SetPosition(GetPositionFromAngle(angle));
-        bubbleNodes[Model.SlotCount - 1] = newBubble;
+        bubbleNodes.Add(newBubble);
 
         Model.ReduceSpawnCount();
+
+        remainBubbleText.SafeSetText(Model.RemainBubbleCount.ToString());
+    }
+
+    public BubbleNode ConsumeCurrentBubble()
+    {
+        BubbleNode currentBubble = bubbleNodes[0];
+
+        bubbleNodes[0] = null;
+
+        return currentBubble;
     }
 
     public void OnPointerDown(PointerEventData eventData)

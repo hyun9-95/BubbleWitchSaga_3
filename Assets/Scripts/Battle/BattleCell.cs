@@ -28,4 +28,9 @@ public class BattleCell
 
         Bubble = bubble;
     }
+
+    public void RemoveBubbe()
+    {
+        Bubble = null;
+    }
 }

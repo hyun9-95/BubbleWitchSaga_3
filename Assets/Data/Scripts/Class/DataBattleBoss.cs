@@ -7,10 +7,10 @@ public class DataBattleBoss : IBaseData
 {
     [JsonProperty(PropertyName = "id")]
     private readonly int id;
-    [JsonProperty(PropertyName = "MaxSpawnCount")]
-    public readonly int MaxSpawnCount;
     [JsonProperty(PropertyName = "HP")]
     public readonly float HP;
+    [JsonProperty(PropertyName = "PrefabPath")]
+    public readonly string PrefabPath;
 	
 	public int Id => id;
     public bool IsEmpty => id == 0;
