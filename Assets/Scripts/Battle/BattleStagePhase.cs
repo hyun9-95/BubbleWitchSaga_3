@@ -31,7 +31,7 @@ public class BattleStagePhase : BaseUnit<BattleStageModel>, IBattlePhaseProcesso
                 InstantiateAddressableMonoAsync<BattleBoss>(Model.BossData.PrefabPath);
 
             var bossCell = grid.GetBossCell();
-            boss.SetPosition(bossCell.Position);
+            boss.SetPosition(bossCell.WorldPos);
             boss.DrawOutline();
 
             await FillBossArea(bossCell);
@@ -44,7 +44,7 @@ public class BattleStagePhase : BaseUnit<BattleStageModel>, IBattlePhaseProcesso
     {
         var noneBubble = await BubbleFactory.Instance.CreateNewBubble(BubbleType.None);
         bossCell.SetBubble(noneBubble);
-        noneBubble.SetPosition(bossCell.Position);
+        noneBubble.SetPosition(bossCell.WorldPos);
 
         var directions = grid.GetNeighborDirections();
 
@@ -56,7 +56,7 @@ public class BattleStagePhase : BaseUnit<BattleStageModel>, IBattlePhaseProcesso
             {
                 var neighborNoneBubbe = await BubbleFactory.Instance.CreateNewBubble(BubbleType.None);
                 neighborCell.SetBubble(neighborNoneBubbe);
-                neighborNoneBubbe.SetPosition(neighborCell.Position);
+                neighborNoneBubbe.SetPosition(neighborCell.WorldPos);
             }
         }
     }

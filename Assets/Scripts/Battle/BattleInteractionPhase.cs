@@ -1,7 +1,6 @@
 #pragma warning disable CS1998
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 
 public class BattleInteractionPhase : IBattlePhaseProcessor
@@ -148,7 +147,7 @@ public class BattleInteractionPhase : IBattlePhaseProcessor
             var cell = grid.GetCell(bubble.Model.CellPos);
 
             if (bubble.Model.BubbleType == BubbleType.Fairy)
-                fairyTasks.Add(OnFairyDamage(cell.Position));
+                fairyTasks.Add(OnFairyDamage(cell.WorldPos));
 
             if (cell != null)
             {
@@ -208,7 +207,7 @@ public class BattleInteractionPhase : IBattlePhaseProcessor
 
     private async UniTask OnFairyDamage(Vector2 startPos)
     {
-        var bossPos = grid.GetBossCell().Position;
+        var bossPos = grid.GetBossCell().WorldPos;
 
         var damageBubble = await BubbleFactory.Instance.CreateNewBubble(BubbleType.Empty);
         damageBubble.Model.SetMoveSpeed(FloatDefine.BATTLE_FAIRY_BUBBLE_SPEED);

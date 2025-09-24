@@ -101,7 +101,7 @@ public class BubbleSnakeSpawner : BubbleSpawner
     {
         int spawnCount = spawnPath.Count - bubbleSet.Count;
         var spawnCell = grid.GetCell(cellPos);
-        var startPos = spawnCell.Position;
+        var startPos = spawnCell.WorldPos;
 
         if (spawnBubble == null)
         {
@@ -126,7 +126,7 @@ public class BubbleSnakeSpawner : BubbleSpawner
             newCell.SetBubble(newBubble);
             newBubbleModel.SetCellPos(newCell.CellPos);
 
-            tasks.Add(newBubble.SmoothMove(newCell.Position));
+            tasks.Add(newBubble.SmoothMove(newCell.WorldPos));
             
             foreach (var bubble in bubbleSet)
             {
@@ -154,7 +154,7 @@ public class BubbleSnakeSpawner : BubbleSpawner
                     bubbleModel.SetRootPos(rootCell.CellPos);
                 }
 
-                tasks.Add(bubble.SmoothMove(cell.Position));
+                tasks.Add(bubble.SmoothMove(cell.WorldPos));
             }
 
             await UniTask.WhenAll(tasks);

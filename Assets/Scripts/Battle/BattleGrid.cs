@@ -24,13 +24,7 @@ public class BattleGrid : MonoBehaviour
     private float bubbleRadius = 0.5f;
 
     [SerializeField]
-    private List<CellPosition> closedCells;
-
-    [SerializeField]
     public CellPosition testCellPos;
-
-    [SerializeField]
-    public List<CellPosition> testSpawnPath;
 
     [SerializeField]
     private EdgeCollider2D leftWall;
@@ -97,9 +91,6 @@ public class BattleGrid : MonoBehaviour
                 CellPosition gridPos = new CellPosition(row, column);
 
                 var cell = new BattleCell(gridPos, worldPos);
-
-                if (closedCells != null && closedCells.Contains(gridPos))
-                    cell.SetClosed(true);
 
                 cells[cell.CellPos] = cell;
             }
@@ -173,7 +164,7 @@ public class BattleGrid : MonoBehaviour
     public BattleCell GetClosestEmptyCell(BubbleHitInfo hitInfo)
     {
         BattleCell hitCell = GetCell(hitInfo.HitCellPos);
-        Vector2 hitCellWorldPos = hitCell.Position;
+        Vector2 hitCellWorldPos = hitCell.WorldPos;
 
         BattleCell closestCell = null;
         float closestDistance = float.MaxValue;
@@ -185,10 +176,10 @@ public class BattleGrid : MonoBehaviour
 
             var neighborCell = GetCell(neighborCellPos);
 
-            if (neighborCell == null || !neighborCell.IsEmpty || neighborCell.Closed)
+            if (neighborCell == null || !neighborCell.IsEmpty)
                 continue;
 
-            float distance = Vector2.Distance(hitInfo.HitPoint, neighborCell.Position);
+            float distance = Vector2.Distance(hitInfo.HitPoint, neighborCell.WorldPos);
 
             if (distance < closestDistance)
             {
@@ -198,11 +189,6 @@ public class BattleGrid : MonoBehaviour
         }
 
         return closestCell;
-    }
-
-    public void AddToClosedCell(CellPosition cellPos)
-    {
-        closedCells.Add(cellPos);
     }
 
     public BattleCellDirection[] GetNeighborDirections()
@@ -215,27 +201,17 @@ public class BattleGrid : MonoBehaviour
     {
         foreach (var cell in cells.Values)
         {
-            bool isInSpawnPath = testSpawnPath != null &&
-                                testSpawnPath.Exists(pos => pos.row == cell.CellPos.row && pos.column == cell.CellPos.column);
-
-            if (cell.CellPos.row == testCellPos.row && cell.CellPos.column == testCellPos.column)
+            if (cell.CellPos.row == testCellPos.row &&
+                cell.CellPos.column == testCellPos.column)
             {
                 Gizmos.color = Color.magenta;
-            }
-            else if (isInSpawnPath)
-            {
-                Gizmos.color = Color.magenta;
-            }
-            else if (closedCells.Contains(cell.CellPos))
-            {
-                Gizmos.color = Color.red;
             }
             else
             {
                 Gizmos.color = !cell.IsEmpty ? Color.yellow : Color.cyan;
             }
 
-            Gizmos.DrawWireSphere(cell.Position, bubbleRadius);
+            Gizmos.DrawWireSphere(cell.WorldPos, bubbleRadius);
         }
     }
 
@@ -276,12 +252,12 @@ public class BattleGrid : MonoBehaviour
             // 버블이 있고 RootPos를 가진 경우
             if (!cell.IsEmpty && cell.Bubble != null && !cell.Bubble.Model.RootPos.IsEmpty)
             {
-                var childPos = cell.Position;
+                var childPos = cell.WorldPos;
                 var rootCell = GetCell(cell.Bubble.Model.RootPos);
 
                 if (rootCell != null)
                 {
-                    var rootPos = rootCell.Position;
+                    var rootPos = rootCell.WorldPos;
 
                     // 루트에서 자식으로 파란색 선 그리기
                     Gizmos.color = Color.blue;

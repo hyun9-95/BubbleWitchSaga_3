@@ -158,9 +158,9 @@ public class BattleBubbleLauncher : BaseUnit<BattleBubbleLauncherModel>, IPointe
             
                     if (selectedCell != null)
                     {
-                        guideBubbleNode.SetPosition(selectedCell.Position);
+                        guideBubbleNode.SetPosition(selectedCell.WorldPos);
                         aimPoints.Add(hit.point);
-                        endPos = selectedCell.Position;
+                        endPos = selectedCell.WorldPos;
                         foundCell = true;
                     }
                 }
