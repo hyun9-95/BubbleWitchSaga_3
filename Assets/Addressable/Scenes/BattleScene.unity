@@ -187,12 +187,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 267187898}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1624375372}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &311565919
 GameObject:
@@ -218,12 +218,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 311565919}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1624375372}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &318970300
 GameObject:
@@ -252,10 +252,10 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.6458369, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1624375372}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &318970302
 SpriteRenderer:
@@ -419,14 +419,14 @@ MonoBehaviour:
   rows: 20
   baseColumns: 10
   bubbleRadius: 0.55
-  closedCells: []
   testCellPos:
     row: 1
     column: 7
-  testSpawnPath: []
   leftWall: {fileID: 1472840740}
   rightWall: {fileID: 1707441585}
   showGizmos: 1
+  startTriggerRow: 10
+  triggerRow: 0
 --- !u!4 &1511852150
 Transform:
   m_ObjectHideFlags: 0
@@ -442,7 +442,7 @@ Transform:
   m_Children:
   - {fileID: 1472840741}
   - {fileID: 1707441586}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1624375372}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1624375371
 GameObject:
@@ -473,7 +473,11 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 318970301}
+  - {fileID: 1511852150}
+  - {fileID: 311565920}
+  - {fileID: 267187900}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1624375373
@@ -491,8 +495,8 @@ MonoBehaviour:
   battleCamera: {fileID: 267187899}
   background: {fileID: 318970300}
   cameraYOffset: 2
+  scrollDuration: 0.3
   grid: {fileID: 1511852149}
-  objectContainer: {fileID: 0}
 --- !u!1 &1707441584
 GameObject:
   m_ObjectHideFlags: 0
@@ -573,7 +577,3 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1624375372}
-  - {fileID: 318970301}
-  - {fileID: 267187900}
-  - {fileID: 1511852150}
-  - {fileID: 311565920}

@@ -1,7 +1,6 @@
 #pragma warning disable CS1998
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using static UnityEditor.Profiling.HierarchyFrameDataView;
 
 public class BattleFlow : BaseFlow<BattleFlowModel>
 {
