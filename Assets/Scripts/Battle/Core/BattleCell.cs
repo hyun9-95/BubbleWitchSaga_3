@@ -3,12 +3,6 @@ using UnityEngine;
 
 public class BattleCell
 {
-    public bool IsEmpty => Bubble == null;
-    public CellPosition CellPos { get; private set; }
-    public Vector3 WorldPos { get; private set; }
-    public BubbleNode Bubble { get; private set; }
-    public Action<int> OnSetBubble { get; private set; }
-    public Action<int> OnRemoveBubble { get; private set; }
     public BattleCell(CellPosition cellPos, Vector3 pos, Action<int> onSetBubble, Action<int> onRemoveBubble)
     {
         CellPos = cellPos;
@@ -18,6 +12,16 @@ public class BattleCell
         Bubble = null;
     }
 
+    #region Property
+    public bool IsEmpty => Bubble == null;
+    public CellPosition CellPos { get; private set; }
+    public Vector3 WorldPos { get; private set; }
+    public BubbleNode Bubble { get; private set; }
+    public Action<int> OnSetBubble { get; private set; }
+    public Action<int> OnRemoveBubble { get; private set; }
+    #endregion
+
+    #region Function
     public void SetBubble(BubbleNode bubble)
     {
         if (bubble == null)
@@ -36,4 +40,5 @@ public class BattleCell
         Bubble = null;
         OnRemoveBubble(CellPos.row);
     }
+    #endregion
 }

@@ -22,6 +22,7 @@ public enum LayerFlag
     UI = 1 << 5,
     Background = 1 << 6,
     World = 1 << 7,
+    Bubble = 1 << 8,
 }
 
 public enum LayerInt
@@ -35,6 +36,7 @@ public enum LayerInt
     UI,
     Background,
     World,
+    Bubble,
 }
 
 public enum LoadDataType

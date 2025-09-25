@@ -27,9 +27,6 @@ public class BattleGrid : MonoBehaviour
     private float bubbleRadius = 0.5f;
 
     [SerializeField]
-    private CellPosition testCellPos;
-
-    [SerializeField]
     private EdgeCollider2D leftWall;
 
     [SerializeField]
@@ -37,9 +34,6 @@ public class BattleGrid : MonoBehaviour
 
     [SerializeField]
     private int startTriggerRow = 10;
-
-    [SerializeField]
-    private int triggerRow;
 
     [SerializeField]
     private int bossRow = 1;
@@ -50,6 +44,7 @@ public class BattleGrid : MonoBehaviour
     private float totalWidth = 0;
     private float totalHeight = 0;
     private float bottomY = 0;
+    private int triggerRow;
 
     private Vector3 centerWorld = Vector3.zero;
     private BoundsInt gridBounds;
@@ -85,6 +80,7 @@ public class BattleGrid : MonoBehaviour
     #endregion
 
 
+    #region Create Cell
     private void Awake()
     {
         triggerRow = startTriggerRow;
@@ -105,6 +101,52 @@ public class BattleGrid : MonoBehaviour
 
         for (int row = 0; row < rows; row++)
             AddRow(row, cellWidth, cellHeight);
+    }
+
+    public void OnSetBubble(int cellRow)
+    {
+        rowCounts[cellRow]++;
+
+        currentMaxRow = Mathf.Max(cellRow, currentMaxRow);
+    }
+
+    public void OnRemoveBubble(int cellRow)
+    {
+        rowCounts[cellRow]--;
+
+        if (cellRow == currentMaxRow && rowCounts[cellRow] == 0)
+        {
+            while (currentMaxRow >= 0 && rowCounts[currentMaxRow] == 0)
+                currentMaxRow--;
+        }
+    }
+
+    private void AddRow()
+    {
+        AddRow(rows, cellWidth, cellHeight);
+
+        rows++;
+        CalculateGridDimensions(cellWidth, cellHeight);
+    }
+
+    private void AddRow(int newRow, float width, float height)
+    {
+        bool oddRow = (newRow % 2 == 1);
+        int columnCount = oddRow ? baseColumns + 1 : baseColumns;
+
+        for (int column = 0; column < columnCount; column++)
+        {
+            float x = column * width - (oddRow ? bubbleRadius : 0f);
+            float y = -newRow * height;
+
+            Vector3 worldPos = new(x, y, 0f);
+            CellPosition gridPos = new(newRow, column);
+
+            var cell = new BattleCell(gridPos, worldPos, OnSetBubble, OnRemoveBubble);
+            cells[cell.CellPos] = cell;
+        }
+
+        rowCounts.Add(0);
     }
 
 
@@ -139,6 +181,7 @@ public class BattleGrid : MonoBehaviour
 
         bottomY = bottom;
     }
+    #endregion
 
     public BattleCell GetCell(CellPosition cellPos)
     {
@@ -164,17 +207,6 @@ public class BattleGrid : MonoBehaviour
     public BattleCell GetBossCell()
     {
         return GetCell(new CellPosition(bossRow, bossColumn));
-    }
-
-    public Dictionary<CellPosition, BattleCell> GetAllCells()
-    {
-        return cells;
-    }
-
-    public int GetColumnCountByRow(int row)
-    {
-        bool oddRow = (row % 2 == 1);
-        return oddRow ? baseColumns + 1 : baseColumns;
     }
 
     public BattleCell GetClosestEmptyCell(BubbleHitInfo hitInfo)
@@ -216,35 +248,12 @@ public class BattleGrid : MonoBehaviour
         return cellHeight * row;
     }
 
-    public int GetMaxBubbleRow()
-    {
-        return currentMaxRow;
-    }
-
-    public void OnSetBubble(int cellRow)
-    {
-        rowCounts[cellRow]++;
-
-        currentMaxRow = Mathf.Max(cellRow, currentMaxRow);
-    }
-
-    public void OnRemoveBubble(int cellRow)
-    {
-        rowCounts[cellRow]--;
-
-        if (cellRow == currentMaxRow && rowCounts[cellRow] == 0)
-        {
-            while (currentMaxRow >= 0 && rowCounts[currentMaxRow] == 0)
-                currentMaxRow--;
-        }
-    }
-
-    public bool ShouldScrollDown()
+    public bool CheckScrollDown()
     {
         return currentMaxRow > triggerRow;
     }
 
-    public bool ShouldScrollUp()
+    public bool CheckScrollUp()
     {
         if (triggerRow <= startTriggerRow)
             return false;
@@ -253,7 +262,7 @@ public class BattleGrid : MonoBehaviour
     }
 
     // 한줄 스크롤
-    public float ScrollDown()
+    public float GetScrollDownHeight()
     {
         AddRow();
         triggerRow++;
@@ -261,7 +270,7 @@ public class BattleGrid : MonoBehaviour
     }
 
     // 줄어든 만큼 다시 스크롤
-    public float ScrollUp()
+    public float GetScrollUpHeight()
     {
         int prevTriggerRow = triggerRow;
 
@@ -271,57 +280,10 @@ public class BattleGrid : MonoBehaviour
         return GetHeight(scrollRows);
     }
 
-    [ContextMenu("Add Row")]
-    public void AddRow()
-    {
-        AddRow(rows, cellWidth, cellHeight);
-
-        rows++;
-        CalculateGridDimensions(cellWidth, cellHeight);
-    }
-
-    private void AddRow(int newRow, float width, float height)
-    {
-        bool oddRow = (newRow % 2 == 1);
-        int columnCount = oddRow ? baseColumns + 1 : baseColumns;
-
-        for (int column = 0; column < columnCount; column++)
-        {
-            float x = column * width - (oddRow ? bubbleRadius : 0f);
-            float y = -newRow * height;
-
-            Vector3 worldPos = new (x, y, 0f);
-            CellPosition gridPos = new (newRow, column);
-
-            var cell = new BattleCell(gridPos, worldPos, OnSetBubble, OnRemoveBubble);
-            cells[cell.CellPos] = cell;
-        }
-
-        rowCounts.Add(0);
-    }
-
 #if UNITY_EDITOR
-    private void DrawCellGizmos()
-    {
-        foreach (var cell in cells.Values)
-        {
-            if (cell.CellPos.row == testCellPos.row &&
-                cell.CellPos.column == testCellPos.column)
-            {
-                Gizmos.color = Color.magenta;
-            }
-            else
-            {
-                Gizmos.color = !cell.IsEmpty ? Color.yellow : Color.cyan;
-            }
-
-            Gizmos.DrawWireSphere(cell.WorldPos, bubbleRadius);
-        }
-    }
-
     private void GeneratePreviewCells()
     {
-        if (cells != null && Application.isPlaying)
+        if (Application.isPlaying)
             return;
 
         GenerateCells();
@@ -331,10 +293,20 @@ public class BattleGrid : MonoBehaviour
     {
         if (showGizmos)
         {
-            GeneratePreviewCells();
+            if (cells == null)
+                GeneratePreviewCells();
+
             DrawCellGizmos();
             DrawGridBounds();
             DrawRootConnectionGizmos();
+        }
+    }
+    private void DrawCellGizmos()
+    {
+        foreach (var cell in cells.Values)
+        {
+            Gizmos.color = !cell.IsEmpty ? Color.yellow : Color.cyan;
+            Gizmos.DrawWireSphere(cell.WorldPos, bubbleRadius);
         }
     }
 

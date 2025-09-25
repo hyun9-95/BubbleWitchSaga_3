@@ -1,3 +1,4 @@
+#pragma warning disable CS0414
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 

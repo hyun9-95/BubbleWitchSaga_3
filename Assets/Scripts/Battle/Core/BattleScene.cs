@@ -1,7 +1,5 @@
 #pragma warning disable CS1998
 using Cysharp.Threading.Tasks;
-using System.Collections.Generic;
-using System.Threading;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -23,8 +21,6 @@ public class BattleScene : MonoBehaviour
 
     [SerializeField]
     private BattleGrid grid;
-
-    private CancellationToken ct;
 
     public async UniTask Prepare()
     {

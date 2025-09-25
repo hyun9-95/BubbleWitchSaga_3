@@ -33,15 +33,13 @@ public class BattleViewController : BaseController<BattleViewModel>
     {
         View.EnableClickBlocker(true);
 
-        var ringSlot = View.GetRingSlot();
-
-        if (ringSlot == null)
-            return null;
-
-        var currentBubble = ringSlot.ConsumeCurrentBubble();
+        var currentBubble = Model.BattleRingSlotModel.ConsumeCurrentBubble();
 
         if (currentBubble == null)
             return null;
+
+        Model.BattleRingSlotModel.ReduceBubbleCount();
+        View.RefreshBubbleCount();
 
         await currentBubble.MoveAlongPath(path);
         currentBubble.Model.SetCellPos(targetCellPos);

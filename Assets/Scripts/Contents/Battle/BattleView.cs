@@ -3,8 +3,12 @@ using UnityEngine;
 
 public class BattleView : BaseView
 {
+    #region Property
     public BattleViewModel Model => GetModel<BattleViewModel>();
 
+    #endregion
+
+    #region Value
     [SerializeField]
     private BattleRingSlot ringSlot;
 
@@ -18,7 +22,9 @@ public class BattleView : BaseView
     private ClickBlocker clickBlocker;
 
     private SimpleBar hpBar;
+    #endregion
 
+    #region Function
     public override async UniTask ShowAsync()
     {
         if (ringSlot.Model == null)
@@ -52,6 +58,11 @@ public class BattleView : BaseView
             hpBar.RefreshBar();
     }
 
+    public void RefreshBubbleCount()
+    {
+        ringSlot.RefreshBubbleCount();
+    }
+
     private async UniTask RefillRingSlot()
     {
         await ringSlot.RefillBubble();
@@ -61,9 +72,5 @@ public class BattleView : BaseView
     {
         clickBlocker.SafeSetActive(enable);
     }
-
-    public BattleRingSlot GetRingSlot()
-    {
-        return ringSlot;
-    }
+    #endregion
 }

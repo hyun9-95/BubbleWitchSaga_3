@@ -322,7 +322,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1472840741}
   - component: {fileID: 1472840740}
-  m_Layer: 7
+  m_Layer: 8
   m_Name: LeftWall
   m_TagString: WALL
   m_Icon: {fileID: 0}
@@ -416,6 +416,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: beeb74e19adffcd4d93d0f2213c0c93c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showGizmos: 0
   rows: 20
   baseColumns: 10
   bubbleRadius: 0.55
@@ -424,7 +425,6 @@ MonoBehaviour:
     column: 7
   leftWall: {fileID: 1472840740}
   rightWall: {fileID: 1707441585}
-  showGizmos: 0
   startTriggerRow: 10
   triggerRow: 0
   bossRow: 1
@@ -509,7 +509,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1707441586}
   - component: {fileID: 1707441585}
-  m_Layer: 7
+  m_Layer: 8
   m_Name: RightWall
   m_TagString: WALL
   m_Icon: {fileID: 0}

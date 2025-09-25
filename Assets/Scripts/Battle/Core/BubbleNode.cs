@@ -49,6 +49,7 @@ public class BubbleNode : PoolableBaseUnit<BubbleNodeModel>
     private int startBounceCount = 2;
 
     private string bubblePath = string.Empty;
+    private bool moveFlag = false;
     private Color originColor;
 
     private void Awake()
@@ -62,6 +63,7 @@ public class BubbleNode : PoolableBaseUnit<BubbleNodeModel>
 
         fairyCover.gameObject.SafeSetActive(Model.BubbleType == BubbleType.Fairy);
         bubbleSprite.color = originColor;
+        moveFlag = false;
     }
 
     public void SetColliderEnable(bool enable)
@@ -74,8 +76,14 @@ public class BubbleNode : PoolableBaseUnit<BubbleNodeModel>
         transform.position = pos;
     }
 
+    #region Move (중복 불가 이동 로직)
     public async UniTask SmoothMove(Vector3 pos, Action onEnd = null)
     {
+        if (moveFlag)
+            return;
+
+        moveFlag = true;
+
         Vector3 startPos = transform.position;
         float distance = Vector3.Distance(startPos, pos);
         float duration = distance / Model.MoveSpeed;
@@ -97,6 +105,17 @@ public class BubbleNode : PoolableBaseUnit<BubbleNodeModel>
         transform.position = pos;
 
         onEnd?.Invoke();
+
+        moveFlag = false;
+    }
+
+    public async UniTask MoveAlongPath(List<Vector3> posList)
+    {
+        if (posList == null || posList.Count == 0)
+            return;
+
+        for (int i = 0; i < posList.Count; i++)
+            await SmoothMove(posList[i]);
     }
 
     /// <summary>
@@ -104,11 +123,85 @@ public class BubbleNode : PoolableBaseUnit<BubbleNodeModel>
     /// </summary>
     public async UniTask FairyMove(Vector3 targetPos, Action onArrive)
     {
+        if (moveFlag)
+            return;
+
+        moveFlag = true;
+
         await FloatingAsync();
         await BounceMoveTargetAsync(targetPos);
 
         onArrive?.Invoke();
+
+        moveFlag = false;
     }
+
+    /// <summary>
+    /// 페이드아웃 + 중력 + 완료 후 비활성화
+    /// </summary>
+    /// <param name="dropPosY"></param>
+    /// <returns></returns>
+    public async UniTask DropFadeOff(float dropPosY)
+    {
+        if (moveFlag)
+            return;
+
+        moveFlag = true;
+
+        // 위 + 좌우 랜덤 속도
+        Vector2 velocity = new Vector2(
+            UnityEngine.Random.Range(-2f, 2f),
+            UnityEngine.Random.Range(2f, 4f)
+        );
+
+        float gravity = startGravity * UnityEngine.Random.Range(0.5f, 1f);
+        float bounceCount = startBounceCount;
+        float bounceStrength = bounceMultiplier;
+
+        var ct = TokenPool.Get(GetHashCode());
+        while (!ct.IsCancellationRequested && gameObject.SafeActiveSelf())
+        {
+            float deltaTime = Time.deltaTime;
+
+            // Y축 가속
+            velocity.y -= gravity * deltaTime;
+
+            // X축 감속
+            velocity.x *= 0.995f; // 프레임마다 0.5%
+
+            Vector3 currentPos = transform.position;
+            currentPos.x += velocity.x * deltaTime;
+            currentPos.y += velocity.y * deltaTime;
+
+            if (currentPos.y - bubbleCol.radius <= dropPosY && bounceCount > 0 && velocity.y < 0)
+            {
+                // 위로 바운스
+                float bouncePosY = -velocity.y * bounceStrength;
+                velocity.y = bouncePosY;
+
+                // 다음 바운스는 파워 감소
+                bounceStrength *= bounceMultiplier;
+                velocity.x *= bounceMultiplier;
+
+                bounceCount--;
+
+                // 바닥 위치
+                currentPos.y = dropPosY + bubbleCol.radius;
+            }
+
+            transform.position = currentPos;
+
+            // 일정 횟수 이상 튕기면 페이드 시작
+            if (!this.CheckSafeNull() && bounceCount == 0)
+                FadeOff().Forget();
+
+            await UniTask.NextFrame(ct);
+        }
+
+        moveFlag = false;
+    }
+
+    #endregion
 
     /// <summary>
     /// 체공
@@ -185,21 +278,6 @@ public class BubbleNode : PoolableBaseUnit<BubbleNodeModel>
         }
     }
 
-    public async UniTask MoveAlongPath(List<Vector3> posList)
-    {
-        if (Model.MoveSpeed == 0)
-        {
-            Logger.Error("MoveSpeed == 0");
-            return;
-        }
-
-        if (posList == null || posList.Count == 0)
-            return;
-
-        for (int i = 0; i < posList.Count; i++)
-            await SmoothMove(posList[i]);
-    }
-
     /// <summary>
     /// 페이드아웃 + 완료 후 비활성화
     /// </summary>
@@ -236,64 +314,6 @@ public class BubbleNode : PoolableBaseUnit<BubbleNodeModel>
         finalColor.a = targetAlpha;
         bubbleSprite.color = finalColor;
         gameObject.SafeSetActive(false);
-    }
-
-    /// <summary>
-    /// 페이드아웃 + 중력 + 완료 후 비활성화
-    /// </summary>
-    /// <param name="dropPosY"></param>
-    /// <returns></returns>
-    public async UniTask DropFadeOff(float dropPosY)
-    {
-        // 위 + 좌우 랜덤 속도
-        Vector2 velocity = new Vector2(
-            UnityEngine.Random.Range(-2f, 2f), 
-            UnityEngine.Random.Range(2f, 4f)   
-        );
-
-        float gravity = startGravity * UnityEngine.Random.Range(0.5f, 1f);
-        float bounceCount = startBounceCount;
-        float bounceStrength = bounceMultiplier;
-
-        var ct = TokenPool.Get(GetHashCode());
-        while (!ct.IsCancellationRequested && gameObject.SafeActiveSelf())
-        {
-            float deltaTime = Time.deltaTime;
-
-            // Y축 가속
-            velocity.y -= gravity * deltaTime;
-
-            // X축 감속
-            velocity.x *= 0.995f; // 프레임마다 0.5%
-
-            Vector3 currentPos = transform.position;
-            currentPos.x += velocity.x * deltaTime;
-            currentPos.y += velocity.y * deltaTime;
-
-            if (currentPos.y - bubbleCol.radius <= dropPosY && bounceCount > 0 && velocity.y < 0)
-            {
-                // 위로 바운스
-                float bouncePosY = -velocity.y * bounceStrength;
-                velocity.y = bouncePosY;
-
-                // 다음 바운스는 파워 감소
-                bounceStrength *= bounceMultiplier; 
-                velocity.x *= bounceMultiplier;
-
-                bounceCount--;
-
-                // 바닥 위치
-                currentPos.y = dropPosY + bubbleCol.radius;
-            }
-
-            transform.position = currentPos;
-
-            // 일정 횟수 이상 튕기면 페이드 시작
-            if (!this.CheckSafeNull() && bounceCount == 0)
-                FadeOff().Forget();
-
-            await UniTask.NextFrame(ct);
-        }
     }
 
     private async UniTask ResolveBubbleSprite()

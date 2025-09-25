@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 7790762558075110819}
   - component: {fileID: 3986017473056318547}
   - component: {fileID: 5375651855457031842}
-  m_Layer: 7
+  m_Layer: 8
   m_Name: BubbleNode
-  m_TagString: BUBBLE
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -160,7 +160,7 @@ GameObject:
   m_Component:
   - component: {fileID: 439477178015944237}
   - component: {fileID: 4558062307810384382}
-  m_Layer: 7
+  m_Layer: 8
   m_Name: Fairy
   m_TagString: Untagged
   m_Icon: {fileID: 0}

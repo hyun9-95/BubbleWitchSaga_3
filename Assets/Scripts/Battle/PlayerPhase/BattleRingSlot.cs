@@ -1,16 +1,16 @@
 using Cysharp.Threading.Tasks;
-using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class BattleRingSlot : BaseUnit<BattleRingSlotModel>, IPointerDownHandler
 {
     #region Property
-    private BubbleNode CurrentBubble => bubbleNodes != null && bubbleNodes.Count > 0 ?
-        bubbleNodes[0] : null;
-
+    private BubbleNode CurrentBubble => Model.BubbleNodes != null && Model.BubbleNodes.Count > 0 ?
+        Model.BubbleNodes[0] : null;
     #endregion
+
+    #region Value
     [SerializeField]
     private RectTransform launchTr;
 
@@ -27,11 +27,11 @@ public class BattleRingSlot : BaseUnit<BattleRingSlotModel>, IPointerDownHandler
     private float angleStep;
     private bool isRotating = false;
 
-    private List<BubbleNode> bubbleNodes;
+    #endregion
 
+    #region Function
     public async UniTask InitializeSlot()
     {
-        bubbleNodes = new List<BubbleNode>(Model.SlotCount);
         angleStep = 360f / Model.SlotCount;
 
         radius = Vector3.Distance(slotRectTransform.position, launchTr.position);
@@ -42,7 +42,7 @@ public class BattleRingSlot : BaseUnit<BattleRingSlotModel>, IPointerDownHandler
 
             BubbleNode newBubble = await SpawnNewBubble();
             newBubble.SetPosition(GetPositionFromAngle(angle));
-            bubbleNodes.Add(newBubble);
+            Model.BubbleNodes.Add(newBubble);
         }
 
         remainBubbleText.SafeSetText(Model.RemainBubbleCount.ToString());
@@ -63,6 +63,8 @@ public class BattleRingSlot : BaseUnit<BattleRingSlotModel>, IPointerDownHandler
 
     public async UniTask RotateSlot()
     {
+        var bubbleNodes = Model.BubbleNodes;
+
         if (isRotating || bubbleNodes == null || bubbleNodes.Count == 0)
             return;
 
@@ -136,23 +138,18 @@ public class BattleRingSlot : BaseUnit<BattleRingSlotModel>, IPointerDownHandler
 
         await RotateSlot();
 
-        float angle = (Model.SlotCount - 1) * angleStep;
-        BubbleNode newBubble = await SpawnNewBubble();
-        newBubble.SetPosition(GetPositionFromAngle(angle));
-        bubbleNodes.Add(newBubble);
-
-        Model.ReduceSpawnCount();
-
-        remainBubbleText.SafeSetText(Model.RemainBubbleCount.ToString());
+        if (Model.RemainBubbleCount > 1)
+        {
+            float angle = (Model.SlotCount - 1) * angleStep;
+            BubbleNode newBubble = await SpawnNewBubble();
+            newBubble.SetPosition(GetPositionFromAngle(angle));
+            Model.BubbleNodes.Add(newBubble);
+        }
     }
 
-    public BubbleNode ConsumeCurrentBubble()
+    public void RefreshBubbleCount()
     {
-        BubbleNode currentBubble = bubbleNodes[0];
-
-        bubbleNodes[0] = null;
-
-        return currentBubble;
+        remainBubbleText.SafeSetText(Model.RemainBubbleCount.ToString());
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -162,4 +159,5 @@ public class BattleRingSlot : BaseUnit<BattleRingSlotModel>, IPointerDownHandler
 
         RotateSlot().Forget();
     }
+    #endregion
 }

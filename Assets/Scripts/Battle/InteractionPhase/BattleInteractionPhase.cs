@@ -100,7 +100,7 @@ public class BattleInteractionPhase : IBattlePhaseProcessor
             return;
 
         bool foundMagic = false;
-
+       
         visitNodes.Clear();
 
         BubbleColor targetColor = launchedBubbleNode.Model.BubbleColor;
@@ -111,8 +111,9 @@ public class BattleInteractionPhase : IBattlePhaseProcessor
         while (matchingBubbles.Count > 0)
         {
             var currentBubble = matchingBubbles.Dequeue();
+            var rootPos = currentBubble.Model.CellPos;
 
-            IterateValidNeighborCell(currentBubble.Model.CellPos, (neighborCell) =>
+            IterateValidNeighborCell(rootPos, (neighborCell) =>
             {
                 var bubble = neighborCell.Bubble;
 
@@ -122,14 +123,18 @@ public class BattleInteractionPhase : IBattlePhaseProcessor
                     bubblesToRemove.Add(bubble);
                     matchingBubbles.Enqueue(bubble);
                 }
-                else if (bubble.Model.BubbleType == BubbleType.Magic)
+                // 매직 버블은 최초 발사한 버블 주변만 검사함
+                else if (rootPos.Equals(launchedBubbleNode.Model.CellPos))
                 {
-                    foundMagic = true;
+                    if (bubble.Model.BubbleType == BubbleType.Magic)
+                    {
+                        foundMagic = true;
 
-                    visitNodes.Add(neighborCell.CellPos);
-                    bubblesToRemove.Add(bubble);
+                        visitNodes.Add(neighborCell.CellPos);
+                        bubblesToRemove.Add(bubble);
 
-                    CollectMagicTargetBubbles(neighborCell.CellPos, bubblesToRemove);
+                        CollectMagicTargetBubbles(neighborCell.CellPos, bubblesToRemove);
+                    }
                 }
             });
         }
@@ -239,15 +244,15 @@ public class BattleInteractionPhase : IBattlePhaseProcessor
     // 현재 최대 row에 따라 스크롤링
     private async UniTask GridScrollAsync()
     {
-        if (grid.ShouldScrollDown())
+        if (grid.CheckScrollDown())
         {
-            float scrollHeight = grid.ScrollDown();
+            float scrollHeight = grid.GetScrollDownHeight();
             await scrollAction(-scrollHeight);
             Logger.Log("Scroll Down");
         }
-        else if (grid.ShouldScrollUp())
+        else if (grid.CheckScrollUp())
         {
-            float scrollHeight = grid.ScrollUp();
+            float scrollHeight = grid.GetScrollUpHeight();
             await scrollAction(scrollHeight);
             Logger.Log("Scroll Up");
         }
