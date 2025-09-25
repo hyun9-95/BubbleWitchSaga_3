@@ -32,6 +32,7 @@ public class GameManager : BaseMonoManager<GameManager>
 
     private void SetResolution()
     {
+#if !UNITY_EDITOR
         int deviceWidth = Screen.width;
         int deviceHeight = Screen.height;
 
@@ -50,5 +51,6 @@ public class GameManager : BaseMonoManager<GameManager>
             float newHeight = deviceAspect / targetAspect;
             Camera.main.rect = new Rect(0f, (1f - newHeight) / 2f, 1f, newHeight);
         }
+#endif
     }
 }
