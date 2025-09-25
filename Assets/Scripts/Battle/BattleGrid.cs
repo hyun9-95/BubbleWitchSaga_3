@@ -15,6 +15,9 @@ public class BattleGrid : MonoBehaviour
 
     #region Value
     [SerializeField]
+    private bool showGizmos = true;
+
+    [SerializeField]
     private int rows = 10;
 
     [SerializeField]
@@ -24,7 +27,7 @@ public class BattleGrid : MonoBehaviour
     private float bubbleRadius = 0.5f;
 
     [SerializeField]
-    public CellPosition testCellPos;
+    private CellPosition testCellPos;
 
     [SerializeField]
     private EdgeCollider2D leftWall;
@@ -33,14 +36,16 @@ public class BattleGrid : MonoBehaviour
     private EdgeCollider2D rightWall;
 
     [SerializeField]
-    private bool showGizmos = true;
-
-    [Header("Scroll Settings")]
-    [SerializeField]
     private int startTriggerRow = 10;
 
     [SerializeField]
     private int triggerRow;
+
+    [SerializeField]
+    private int bossRow = 1;
+
+    [SerializeField]
+    private int bossColumn = 5;
 
     private float totalWidth = 0;
     private float totalHeight = 0;
@@ -49,7 +54,16 @@ public class BattleGrid : MonoBehaviour
     private Vector3 centerWorld = Vector3.zero;
     private BoundsInt gridBounds;
 
-    BattleCellDirection[] neighborDirections = new BattleCellDirection[]
+    private Dictionary<CellPosition, BattleCell> cells = new();
+
+    private List<int> rowCounts;
+    private int currentMaxRow = -1;
+
+    private float cellWidth;
+    private float cellHeight;
+
+    #region Directions
+    private BattleCellDirection[] neighborDirections = new BattleCellDirection[]
     {
                 BattleCellDirection.Left,
                 BattleCellDirection.TopLeft,
@@ -60,7 +74,7 @@ public class BattleGrid : MonoBehaviour
     };
 
     // 윗방향 제외
-    BattleCellDirection[] launchDirection = new BattleCellDirection[]
+    private BattleCellDirection[] launchDirection = new BattleCellDirection[]
     {
                 BattleCellDirection.Left,
                 BattleCellDirection.Right,
@@ -68,30 +82,29 @@ public class BattleGrid : MonoBehaviour
                 BattleCellDirection.BottomRight
     };
     #endregion
+    #endregion
 
-    private Dictionary<CellPosition, BattleCell> cells = new();
-
-    private List<int> rowCounts;
-    private int currentMaxRow = -1;
 
     private void Awake()
     {
         triggerRow = startTriggerRow;
+
+        cellWidth = bubbleRadius * 2f;
+        cellHeight = bubbleRadius * Mathf.Sqrt(3f);
+
         GenerateCells();
     }
 
     private void GenerateCells()
     {
         cells.Clear();
-        float width = bubbleRadius * 2f;
-        float height = bubbleRadius * Mathf.Sqrt(3f);
 
-        CalculateGridDimensions(width, height);
+        CalculateGridDimensions(cellWidth, cellHeight);
 
         rowCounts = new List<int>(rows);
 
         for (int row = 0; row < rows; row++)
-            AddRow(row, width, height);
+            AddRow(row, cellWidth, cellHeight);
     }
 
 
@@ -137,7 +150,12 @@ public class BattleGrid : MonoBehaviour
 
     public BattleCell GetDirectionCell(CellPosition rootPos, BattleCellDirection direction)
     {
-        var neighborCellPos = GetCell(rootPos).CellPos;
+        var neighborCell = GetCell(rootPos);
+
+        if (neighborCell == null)
+            return null;
+
+        var neighborCellPos = neighborCell.CellPos;
         neighborCellPos.Move(direction);
 
         return GetCell(neighborCellPos);
@@ -145,7 +163,7 @@ public class BattleGrid : MonoBehaviour
 
     public BattleCell GetBossCell()
     {
-        return GetCell(new CellPosition(1, 5));
+        return GetCell(new CellPosition(bossRow, bossColumn));
     }
 
     public Dictionary<CellPosition, BattleCell> GetAllCells()
@@ -162,7 +180,6 @@ public class BattleGrid : MonoBehaviour
     public BattleCell GetClosestEmptyCell(BubbleHitInfo hitInfo)
     {
         BattleCell hitCell = GetCell(hitInfo.HitCellPos);
-        Vector2 hitCellWorldPos = hitCell.WorldPos;
 
         BattleCell closestCell = null;
         float closestDistance = float.MaxValue;
@@ -196,7 +213,7 @@ public class BattleGrid : MonoBehaviour
 
     public float GetHeight(int row)
     {
-        return bubbleRadius * Mathf.Sqrt(3f) * row;
+        return cellHeight * row;
     }
 
     public int GetMaxBubbleRow()
@@ -257,27 +274,24 @@ public class BattleGrid : MonoBehaviour
     [ContextMenu("Add Row")]
     public void AddRow()
     {
-        float width = bubbleRadius * 2f;
-        float height = bubbleRadius * Mathf.Sqrt(3f);
-
-        AddRow(rows, width, height);
+        AddRow(rows, cellWidth, cellHeight);
 
         rows++;
-        CalculateGridDimensions(width, height);
+        CalculateGridDimensions(cellWidth, cellHeight);
     }
 
     private void AddRow(int newRow, float width, float height)
     {
         bool oddRow = (newRow % 2 == 1);
-        int cols = oddRow ? baseColumns + 1 : baseColumns;
+        int columnCount = oddRow ? baseColumns + 1 : baseColumns;
 
-        for (int column = 0; column < cols; column++)
+        for (int column = 0; column < columnCount; column++)
         {
             float x = column * width - (oddRow ? bubbleRadius : 0f);
             float y = -newRow * height;
 
-            Vector3 worldPos = new Vector3(x, y, 0f);
-            CellPosition gridPos = new CellPosition(newRow, column);
+            Vector3 worldPos = new (x, y, 0f);
+            CellPosition gridPos = new (newRow, column);
 
             var cell = new BattleCell(gridPos, worldPos, OnSetBubble, OnRemoveBubble);
             cells[cell.CellPos] = cell;

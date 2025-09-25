@@ -16,6 +16,7 @@ public class BattlePlayerPhase : IBattlePhaseProcessor
 
     private BattleGrid grid;
     private BattleViewController battleViewController;
+
     private BubbleNode launchedBubbleNode;
     private BattleNextPhaseInfo nextPhaseInfo;
     private bool launched = false;

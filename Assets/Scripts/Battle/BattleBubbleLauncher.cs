@@ -18,6 +18,9 @@ public class BattleBubbleLauncher : BaseUnit<BattleBubbleLauncherModel>, IPointe
     [SerializeField]
     private float launchAngle = 0.2f;
 
+    [SerializeField]
+    private float maxRange = 100f;
+
     private LineRenderer lineRenderer;
     private Vector2 startPos;
     private Vector3 endPos;
@@ -34,6 +37,7 @@ public class BattleBubbleLauncher : BaseUnit<BattleBubbleLauncherModel>, IPointe
     private Vector2 disablePos = new Vector2(0, -500);
     private bool aiming = false;
     private Color lineColor = Color.white;
+    private int worldMask;
 
     public async UniTask Initialize()
     {
@@ -41,6 +45,7 @@ public class BattleBubbleLauncher : BaseUnit<BattleBubbleLauncherModel>, IPointe
 
         aimPoints = new List<Vector3>(maxHit * 2);
         movePath = new List<Vector3>(maxHit * 2);
+        worldMask = (int)LayerFlag.World;
 
         if (lineRenderer == null)
             await InstantiateLineRenderer();
@@ -123,9 +128,7 @@ public class BattleBubbleLauncher : BaseUnit<BattleBubbleLauncherModel>, IPointe
 
         aiming = true;
 
-        float maxRange = 100f;                         
         float remainDistance = maxRange;
-        int mask = (int)LayerFlag.World;
         bool foundCell = false;
         selectedCell = null;
         hitCellPos = default;
@@ -137,7 +140,7 @@ public class BattleBubbleLauncher : BaseUnit<BattleBubbleLauncherModel>, IPointe
 
         for (int i = 0; i < maxHit && remainDistance > 1e-3f; i++)
         {
-            RaycastHit2D hit = Physics2D.CircleCast(origin, bubbleRadius, dir, remainDistance, mask);
+            RaycastHit2D hit = Physics2D.CircleCast(origin, bubbleRadius, dir, remainDistance, worldMask);
 
             if (hit.collider == null)
             {

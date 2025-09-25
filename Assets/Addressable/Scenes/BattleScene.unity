@@ -366,8 +366,8 @@ EdgeCollider2D:
   m_Offset: {x: 0, y: 0}
   m_EdgeRadius: 0.1
   m_Points:
-  - {x: -1.0999999, y: -18.50256}
-  - {x: -1.0999999, y: 0.5500002}
+  - {x: 0, y: 0.55}
+  - {x: 0, y: 0.55}
   m_AdjacentStartPoint: {x: 0, y: 0}
   m_AdjacentEndPoint: {x: 0, y: 0}
   m_UseAdjacentStartPoint: 0
@@ -424,9 +424,11 @@ MonoBehaviour:
     column: 7
   leftWall: {fileID: 1472840740}
   rightWall: {fileID: 1707441585}
-  showGizmos: 1
+  showGizmos: 0
   startTriggerRow: 10
   triggerRow: 0
+  bossRow: 1
+  bossColumn: 5
 --- !u!4 &1511852150
 Transform:
   m_ObjectHideFlags: 0
@@ -551,8 +553,8 @@ EdgeCollider2D:
   m_Offset: {x: 0, y: 0}
   m_EdgeRadius: 0.1
   m_Points:
-  - {x: 11, y: -18.50256}
-  - {x: 11, y: 0.5500002}
+  - {x: 0, y: 0.55}
+  - {x: 0, y: 0.55}
   m_AdjacentStartPoint: {x: 0, y: 0}
   m_AdjacentEndPoint: {x: 0, y: 0}
   m_UseAdjacentStartPoint: 0

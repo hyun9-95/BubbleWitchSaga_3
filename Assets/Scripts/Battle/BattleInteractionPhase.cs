@@ -18,6 +18,9 @@ public class BattleInteractionPhase : IBattlePhaseProcessor
     private bool isThreeMatched = false;
     private List<UniTask> fairyTasks = new();
     private HashSet<CellPosition> visitNodes = new();
+    private HashSet<BubbleNode> bubblesToRemove = new();
+    private Queue<BubbleNode> matchingBubbles = new();
+    private Queue<BubbleNode> dropBubbles = new();
     #endregion
 
     public async UniTask Initialize(BattleGrid grid, BattleViewController viewController)
@@ -36,10 +39,6 @@ public class BattleInteractionPhase : IBattlePhaseProcessor
     {
         if (param is BattleInteractionPhaseParam interactionParam)
             launchedBubbleNode = interactionParam.LaunchedBubbleNode;
-
-        isThreeMatched = false;
-        fairyTasks.Clear();
-        visitNodes.Clear();
     }
 
     public async UniTask OnProcess()
@@ -66,6 +65,12 @@ public class BattleInteractionPhase : IBattlePhaseProcessor
     public async UniTask OnEndPhase()
     {
         launchedBubbleNode = null;
+        isThreeMatched = false;
+        fairyTasks.Clear();
+        visitNodes.Clear();
+        bubblesToRemove.Clear();
+        matchingBubbles.Clear();
+        dropBubbles.Clear();
 
         await GridScrollAsync();
     }
@@ -94,8 +99,6 @@ public class BattleInteractionPhase : IBattlePhaseProcessor
         if (launchedBubbleNode == null)
             return;
 
-        var bubblesToRemove = new HashSet<BubbleNode>();
-        var matchingBubbles = new Queue<BubbleNode>();
         bool foundMagic = false;
 
         visitNodes.Clear();
@@ -149,7 +152,6 @@ public class BattleInteractionPhase : IBattlePhaseProcessor
     {
         isThreeMatched = true;
 
-        var dropBubbles = new Queue<BubbleNode>();
         visitNodes.Clear();
 
         foreach (var bubble in bubblesToRemove)

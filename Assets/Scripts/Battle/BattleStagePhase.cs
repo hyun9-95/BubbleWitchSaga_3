@@ -11,8 +11,8 @@ public class BattleStagePhase : BaseUnit<BattleStageModel>, IBattlePhaseProcesso
     private List<BubbleSpawner> spawners;
 
     private BattleGrid grid;
-    private BattleViewController battleViewController;
     private BattleBoss boss;
+    private BattleViewController battleViewController;
 
     public async UniTask Initialize(BattleGrid grid, BattleViewController viewController)
     {
@@ -63,12 +63,12 @@ public class BattleStagePhase : BaseUnit<BattleStageModel>, IBattlePhaseProcesso
 
     private async UniTask SpawnBubbles(BattleGrid grid)
     {
-        List<UniTask> task = new List<UniTask>(spawners.Count);
+        List<UniTask> tasks = new List<UniTask>(spawners.Count);
 
         foreach (var spawner in spawners)
-            task.Add(spawner.SpawnAsync(grid, Model.SpawnCount / spawners.Count));
+            tasks.Add(spawner.SpawnAsync(grid, Model.SpawnCount / spawners.Count));
 
-        await UniTask.WhenAll(task);
+        await UniTask.WhenAll(tasks);
     }
 
     public async UniTask OnStartPhase(IBattlePhaseParam param)
