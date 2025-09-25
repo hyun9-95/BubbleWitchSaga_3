@@ -63,7 +63,6 @@ public class BattleBubbleLauncher : BaseUnit<BattleBubbleLauncherModel>, IPointe
             return;
 
         lineRenderer = lineRendererGo.GetComponent<LineRenderer>();
-        startPos = CameraManager.Instance.GetUIWorldPos(launchTr.position);
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -75,6 +74,7 @@ public class BattleBubbleLauncher : BaseUnit<BattleBubbleLauncherModel>, IPointe
             lineRenderer.endColor = lineColor;
         }
 
+        startPos = CameraManager.Instance.GetUIWorldPos(launchTr.position);
         UpdateAimDirection(eventData.position);
     }
 

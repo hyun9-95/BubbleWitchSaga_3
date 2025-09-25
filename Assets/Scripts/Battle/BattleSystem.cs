@@ -48,7 +48,7 @@ public class BattleSystem
         var msg = currentPhase == BattlePhase.Win ? "Win!" : "Defeat";
 
         var messageBoxModel = new MessageBoxPopupModel();
-        messageBoxModel.SetMessageType(MessageBoxType.TwoButton);
+        messageBoxModel.SetMessageType(MessageBoxType.OneButton);
         messageBoxModel.SetOnConfirm(BackToLobby);
         messageBoxModel.SetMessageText(msg);
 

@@ -51,10 +51,14 @@ MonoBehaviour:
   bubbleSprite: {fileID: 3986017473056318547}
   fairyCover: {fileID: 4558062307810384382}
   fadeTime: 0.5
-  gravity: 16
-  startBounceHeight: 0.7
-  dropDuration: 2
-  bounceCount: 2
+  floatingTime: 0.5
+  floatingScale: 0.25
+  floatingWave: 2
+  bounceMoveTime: 0.3
+  maxSpeedMultiplier: 4
+  startGravity: 30
+  bounceMultiplier: 0.7
+  startBounceCount: 1
 --- !u!212 &3986017473056318547
 SpriteRenderer:
   m_ObjectHideFlags: 0

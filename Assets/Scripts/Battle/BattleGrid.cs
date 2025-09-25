@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class BattleGrid : MonoBehaviour
@@ -35,6 +36,13 @@ public class BattleGrid : MonoBehaviour
     [SerializeField]
     private bool showGizmos = true;
 
+    [Header("Scroll Settings")]
+    [SerializeField]
+    private int startTriggerRow = 10;
+
+    [SerializeField]
+    private int triggerRow;
+
     private float totalWidth = 0;
     private float totalHeight = 0;
     private float bottomY = 0;
@@ -64,8 +72,12 @@ public class BattleGrid : MonoBehaviour
 
     private Dictionary<CellPosition, BattleCell> cells = new();
 
+    private int[] rowCounts;
+    private int currentMaxRow = -1;
+
     private void Awake()
     {
+        triggerRow = startTriggerRow;
         GenerateCells();
     }
 
@@ -194,6 +206,104 @@ public class BattleGrid : MonoBehaviour
     public BattleCellDirection[] GetNeighborDirections()
     {
         return neighborDirections;
+    }
+
+    public float GetHeight(int row)
+    {
+        return bubbleRadius * Mathf.Sqrt(3f) * row;
+    }
+
+    public int GetMaxBubbleRow()
+    {
+        return currentMaxRow;
+    }
+
+    public void SetBubble(BattleCell cell, BubbleNode bubble)
+    {
+        if (cell == null || bubble == null)
+            return;
+
+        cell.SetBubble(bubble);
+
+        int cellRow = cell.CellPos.row;
+        rowCounts[cellRow]++;
+
+        currentMaxRow = Mathf.Max(cellRow, currentMaxRow);
+    }
+
+    public void RemoveBubble(BattleCell cell)
+    {
+        if (cell == null)
+            return;
+
+        cell.RemoveBubble();
+
+        int cellRow = cell.CellPos.row;
+        cell.RemoveBubble();
+
+        rowCounts[cellRow]--;
+
+        if (cellRow == currentMaxRow && rowCounts[cellRow] == 0)
+        {
+            while (currentMaxRow >= 0 && rowCounts[currentMaxRow] == 0)
+                currentMaxRow--;
+        }
+    }
+
+    public bool ShouldScrollDown(int row)
+    {
+        return row > triggerRow;
+    }
+
+    public bool ShouldScrollUp(int row)
+    {
+        return row < triggerRow;
+    }
+
+    // 한줄 스크롤
+    public float ScrollDown()
+    {
+        AddRow();
+        triggerRow++;
+        return GetHeight(1);
+    }
+
+    // 줄어든 만큼 다시 스크롤
+    public float ScrollUp()
+    {
+        int maxBubbleRow = GetMaxBubbleRow();
+        int prevTriggerRow = triggerRow;
+
+        triggerRow = Mathf.Max(maxBubbleRow, startTriggerRow);
+
+        int scrollRows = prevTriggerRow - triggerRow;
+        return GetHeight(scrollRows);
+    }
+
+    [ContextMenu("Add Row")]
+    public void AddRow()
+    {
+        float width = bubbleRadius * 2f;
+        float height = bubbleRadius * Mathf.Sqrt(3f);
+
+        int newRow = rows;
+        bool oddRow = (newRow % 2 == 1);
+        int cols = oddRow ? baseColumns + 1 : baseColumns;
+
+        for (int column = 0; column < cols; column++)
+        {
+            float x = column * width - (oddRow ? bubbleRadius : 0f);
+            float y = -newRow * height;
+
+            Vector3 worldPos = new Vector3(x, y, 0f);
+            CellPosition gridPos = new CellPosition(newRow, column);
+
+            var cell = new BattleCell(gridPos, worldPos);
+            cells[cell.CellPos] = cell;
+        }
+
+        rows++;
+        CalculateGridDimensions(width, height);
     }
 
 #if UNITY_EDITOR

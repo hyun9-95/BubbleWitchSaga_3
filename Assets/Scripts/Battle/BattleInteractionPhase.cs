@@ -1,5 +1,6 @@
 #pragma warning disable CS1998
 using Cysharp.Threading.Tasks;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,11 +12,13 @@ public class BattleInteractionPhase : IBattlePhaseProcessor
     private BubbleNode launchedBubbleNode;
     private BattleViewController battleViewController;
     private BattleCellDirection[] neighborDirections;
+    private Func<float, UniTask> scrollAction;
 
     #region Temp
     private bool isThreeMatched = false;
     private List<UniTask> fairyTasks = new();
     private HashSet<CellPosition> visitNodes = new();
+    private int maxRow;
     #endregion
 
     public async UniTask Initialize(BattleGrid grid, BattleViewController viewController)
@@ -25,6 +28,11 @@ public class BattleInteractionPhase : IBattlePhaseProcessor
         neighborDirections = grid.GetNeighborDirections();
     }
 
+    public void SetScrollTask(Func<float, UniTask> scrollTask)
+    {
+        scrollAction = scrollTask;
+    }
+
     public async UniTask OnStartPhase(IBattlePhaseParam param)
     {
         if (param is BattleInteractionPhaseParam interactionParam)
@@ -32,6 +40,8 @@ public class BattleInteractionPhase : IBattlePhaseProcessor
 
         isThreeMatched = false;
         fairyTasks.Clear();
+        visitNodes.Clear();
+        maxRow = 0;
     }
 
     public async UniTask OnProcess()
@@ -58,6 +68,8 @@ public class BattleInteractionPhase : IBattlePhaseProcessor
     public async UniTask OnEndPhase()
     {
         launchedBubbleNode = null;
+
+        await GridScrollAsync();
     }
 
     public BattleNextPhaseInfo OnNextPhase()
@@ -146,14 +158,14 @@ public class BattleInteractionPhase : IBattlePhaseProcessor
         {
             var cell = grid.GetCell(bubble.Model.CellPos);
 
+            if (cell == null)
+                continue;
+
             if (bubble.Model.BubbleType == BubbleType.Fairy)
                 fairyTasks.Add(OnFairyDamage(cell.WorldPos));
 
-            if (cell != null)
-            {
-                cell.RemoveBubble();
-                bubble.FadeOff().Forget();
-            }
+            cell.RemoveBubble();
+            bubble.FadeOff().Forget();
 
             CollectDropBubbles(bubble.Model.CellPos, dropBubbles);
         }
@@ -163,12 +175,12 @@ public class BattleInteractionPhase : IBattlePhaseProcessor
             var dropBubble = dropBubbles.Dequeue();
             var dropCell = grid.GetCell(dropBubble.Model.CellPos);
 
-            if (dropCell != null)
-            {
-                dropCell.RemoveBubble();
-                dropBubble.DropFadeOff(grid.DropPosY).Forget();
-            }
+            if (dropCell == null)
+                continue;
 
+            dropCell.RemoveBubble();
+            dropBubble.DropFadeOff(grid.DropPosY).Forget();
+ 
             CollectDropBubbles(dropBubble.Model.CellPos, dropBubbles);
         }
     }
@@ -214,7 +226,7 @@ public class BattleInteractionPhase : IBattlePhaseProcessor
         damageBubble.SetPosition(startPos);
         damageBubble.SetColliderEnable(false);
 
-        await damageBubble.SmoothMove(bossPos, () => DealsFairyDamage(damageBubble));
+        await damageBubble.FairyMove(bossPos, () => DealsFairyDamage(damageBubble));
     }
 
     // 대미지 + 페이드아웃
@@ -222,6 +234,23 @@ public class BattleInteractionPhase : IBattlePhaseProcessor
     {
         battleViewController.DealsFairyDamage();
         bubble.FadeOff().Forget();
+    }
+
+    // 현재 최대 row에 따라 스크롤링
+    private async UniTask GridScrollAsync()
+    {
+        var maxRow = grid.GetMaxBubbleRow();
+        
+        if (grid.ShouldScrollDown(maxRow))
+        {
+            float scrollHeight = grid.ScrollDown();
+            await scrollAction(-scrollHeight);
+        }
+        else if (grid.ShouldScrollUp(maxRow))
+        {
+            float scrollHeight = grid.ScrollUp();
+            await scrollAction(scrollHeight);
+        }
     }
 
     // 승패조건 판별

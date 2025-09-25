@@ -137,6 +137,16 @@ public static class ExtensionUtils
         return Vector2.Distance(source.position, target.position);
     }
 
+    public static bool IsOverDistance(this Transform source, Transform target, float checkValue)
+    {
+        return (target.position - source.position).sqrMagnitude > checkValue * checkValue;
+    }
+
+    public static bool IsOverDistance(this Transform source, Vector3 targetPos, float checkValue)
+    {
+        return (targetPos - source.position).sqrMagnitude > checkValue * checkValue;
+    }
+
     public static GameObject GetRootObject(this UnityEngine.SceneManagement.Scene scene)
     {
         var rootGameObjects = scene.GetRootGameObjects();

@@ -54,11 +54,12 @@ public class FlowManager : BaseManager<FlowManager>
         await ProcessStateEvent(FlowState.Process, baseFlowModel);
 
         if (SoundManager.Instance.IsPlayingSoloSound(SoundType.Bgm))
-        {
             await UniTask.WaitWhile(() => SoundManager.Instance.IsPlayingSoloSound(SoundType.Bgm));
-        }
 
         await PlayBgmAsync(baseFlowModel.FlowBGMPath);
+
+
+        await UniTask.WaitWhile(() => TransitionManager.Instance.IsPlaying);
 
         // Transition Out
         if (baseFlowModel.IsExistStateEvent(FlowState.TransitionOut))

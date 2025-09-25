@@ -18,31 +18,45 @@ public class BubbleNode : PoolableBaseUnit<BubbleNodeModel>
     [SerializeField]
     private SpriteRenderer fairyCover;
 
+    [Header("Fade")]
     [SerializeField]
     private float fadeTime = 0.2f;
 
+    [Header("Floating")]
+    [SerializeField]
+    private float floatingTime = 0.7f;
+
+    [SerializeField]
+    private float floatingScale = 0.25f;
+
+    [SerializeField]
+    private float floatingWave = 2f;
+
+    [Header("BounceMove")]
+    [SerializeField]
+    private float bounceMoveTime = 0.5f;
+
+    [SerializeField]
+    private float maxSpeedMultiplier = 4f;
+
+    [Header("Drop")]
     [SerializeField]
     private float startGravity = 10f;
 
     [SerializeField]
-    private float startBounceHeight = 0.7f;
+    private float bounceMultiplier = 0.7f;
 
     [SerializeField]
     private int startBounceCount = 2;
 
     private string bubblePath = string.Empty;
     private Color originColor;
-    private CancellationToken ct;
 
     private void Awake()
     {
         originColor = bubbleSprite.color;
     }
 
-    private void OnEnable()
-    {
-        ct = TokenPool.Get(GetHashCode());
-    }
 
     public override async UniTask ShowAsync()
     {
@@ -69,6 +83,7 @@ public class BubbleNode : PoolableBaseUnit<BubbleNodeModel>
         float duration = distance / Model.MoveSpeed;
         float elapsedTime = 0;
 
+        var ct = TokenPool.Get(GetHashCode());
         while (!ct.IsCancellationRequested && elapsedTime < duration)
         {
             elapsedTime += Time.deltaTime;
@@ -84,6 +99,92 @@ public class BubbleNode : PoolableBaseUnit<BubbleNodeModel>
         transform.position = pos;
 
         onEnd?.Invoke();
+    }
+
+    /// <summary>
+    /// 체공 => 타겟과 반대 방향으로 1회 바운스 => 점차 타겟 방향 이동
+    /// </summary>
+    public async UniTask FairyMove(Vector3 targetPos, Action onArrive)
+    {
+        await FloatingAsync();
+        await BounceMoveTargetAsync(targetPos);
+
+        onArrive?.Invoke();
+    }
+
+    /// <summary>
+    /// 체공
+    /// </summary>
+    /// <returns></returns>
+    private async UniTask FloatingAsync()
+    {
+        Vector2 baseAirPos = transform.position;
+        float elapsedTime = 0;
+
+        var ct = TokenPool.Get(GetHashCode());
+
+        while (!ct.IsCancellationRequested && elapsedTime < floatingTime)
+        {
+            elapsedTime += Time.deltaTime;
+
+            // 다른 주기를 줘서 다른 움직임 구현
+            float xPos = Mathf.Sin(elapsedTime * floatingWave + 1) * floatingScale; 
+            float yPos = Mathf.Cos(elapsedTime * floatingWave) * floatingScale; 
+
+            var airPos = new Vector3(
+                baseAirPos.x + xPos,
+                baseAirPos.y + yPos,
+                transform.position.z
+            );
+
+            transform.position = airPos;
+            await UniTask.NextFrame(ct);
+        }
+    }
+
+    /// <summary>
+    /// 타겟과 반대 방향으로 1회 바운스 => 점차 타겟 방향 이동
+    /// </summary>
+    private async UniTask BounceMoveTargetAsync(Vector3 targetPos)
+    {
+        float elapsedTime = 0f;
+        float elapsedBounceTime = 0f;
+        float startMoveSpeed = 1f;
+        float maxMoveSpeed = Model.MoveSpeed * maxSpeedMultiplier;
+
+        Vector3 initialDir = (targetPos - transform.position).normalized;
+        Vector3 bounceDir = -initialDir;
+
+        var ct = TokenPool.Get(GetHashCode());
+        while (!ct.IsCancellationRequested && transform.IsOverDistance(targetPos, 0.1f))
+        {
+            // 지정한 시간에 최고속도 도달
+            elapsedTime += Time.deltaTime;
+            float speedProgress = Mathf.Clamp01(elapsedBounceTime / bounceMoveTime);
+            float speed = Mathf.Lerp(startMoveSpeed,
+                                     maxMoveSpeed,
+                                     speedProgress);
+
+            Vector3 dir;
+
+            if (elapsedTime < bounceMoveTime)
+            {
+                elapsedBounceTime += Time.deltaTime;
+
+                // 뒤로 이동하다가 점차 타겟 방향으로 전환
+                float bounceProgress = elapsedTime / bounceMoveTime;
+                Vector3 targetDir = (targetPos - transform.position).normalized;
+                dir = Vector3.Lerp(bounceDir, targetDir, bounceProgress);
+                transform.position += speed * Time.deltaTime * dir;
+            }
+            else
+            {
+                // 타겟 방향으로 이동
+                dir = (targetPos - transform.position).normalized;
+                transform.position += speed * Time.deltaTime * dir;
+            }
+            await UniTask.NextFrame(ct);
+        }
     }
 
     public async UniTask MoveAlongPath(List<Vector3> posList)
@@ -116,6 +217,7 @@ public class BubbleNode : PoolableBaseUnit<BubbleNodeModel>
         float targetAlpha = 0;
         float elapsedTime = 0;
 
+        var ct = TokenPool.Get(GetHashCode());
         while (!ct.IsCancellationRequested && elapsedTime < fadeTime)
         {
             elapsedTime += Time.unscaledDeltaTime;
@@ -145,33 +247,45 @@ public class BubbleNode : PoolableBaseUnit<BubbleNodeModel>
     /// <returns></returns>
     public async UniTask DropFadeOff(float dropPosY)
     {
-        float elapsedTime = 0;
-        float velocity = 0;
-        float gravityRatio = UnityEngine.Random.Range(0.5f, 1);
+        // 위 + 좌우 랜덤 속도
+        Vector2 velocity = new Vector2(
+            UnityEngine.Random.Range(-2f, 2f), 
+            UnityEngine.Random.Range(2f, 4f)   
+        );
 
-        float bounceHeight = startBounceHeight;
-        float gravity = startGravity * gravityRatio;
+        float gravity = startGravity * UnityEngine.Random.Range(0.5f, 1f);
         float bounceCount = startBounceCount;
+        float bounceStrength = bounceMultiplier;
 
+        var ct = TokenPool.Get(GetHashCode());
         while (!ct.IsCancellationRequested && gameObject.SafeActiveSelf())
         {
-            elapsedTime += Time.deltaTime;
             float deltaTime = Time.deltaTime;
 
-            velocity += gravity * deltaTime;
+            // Y축 가속
+            velocity.y -= gravity * deltaTime;
 
-            // 위치 업데이트
+            // X축 감속
+            velocity.x *= 0.995f; // 프레임마다 0.5%
+
             Vector3 currentPos = transform.position;
-            currentPos.y -= velocity * deltaTime;
+            currentPos.x += velocity.x * deltaTime;
+            currentPos.y += velocity.y * deltaTime;
 
-            if (currentPos.y <= dropPosY && bounceCount > 0)
+            if (currentPos.y - bubbleCol.radius <= dropPosY && bounceCount > 0 && velocity.y < 0)
             {
-                float bounceVelocity = Mathf.Sqrt(2 * gravity * bounceHeight);
-                velocity = -bounceVelocity;
+                // 위로 바운스
+                float bouncePosY = -velocity.y * bounceStrength;
+                velocity.y = bouncePosY;
+
+                // 다음 바운스는 파워 감소
+                bounceStrength *= bounceMultiplier; 
+                velocity.x *= bounceMultiplier;
+
                 bounceCount--;
 
-                // 바운스 높이 점점 감소
-                bounceHeight *= 0.7f; 
+                // 바닥 위치
+                currentPos.y = dropPosY + bubbleCol.radius;
             }
 
             transform.position = currentPos;

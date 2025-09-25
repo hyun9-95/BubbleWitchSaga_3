@@ -12,6 +12,7 @@ public class BaseFlowModel
 
     #region Value
     private Dictionary<FlowState, List<Func<UniTask>>> stateEventDic = new();
+    private Dictionary<FlowState, List<Action>> stateActionDic = new();
     #endregion
 
     #region Function
@@ -32,6 +33,18 @@ public class BaseFlowModel
             list = new List<Func<UniTask>>();
             stateEventDic[state] = list;
         }
+
+        list.Add(stateEvent);
+    }
+
+    public void AddStateEvent(FlowState state, Action stateEvent)
+    {
+        if (!stateActionDic.TryGetValue(state, out var list))
+        {
+            list = new List<Action>();
+            stateActionDic[state] = list;
+        }
+
         list.Add(stateEvent);
     }
 
@@ -42,16 +55,22 @@ public class BaseFlowModel
 
     public bool IsExistStateEvent(FlowState state)
     {
-        return stateEventDic.ContainsKey(state);
+        return stateEventDic.ContainsKey(state) || stateActionDic.ContainsKey(state);   
     }
 
     public async UniTask ProcessStateEvent(FlowState state)
     {
-        if (!stateEventDic.TryGetValue(state, out var handlers))
-            return;
-
-        foreach (var handler in handlers)
-            await handler();
+        if (stateEventDic.TryGetValue(state, out var handlers))
+        {
+            foreach (var handler in handlers)
+                await handler();
+        }
+        
+        if (stateActionDic.TryGetValue(state, out var actionHandlers))
+        {
+            foreach (var actionHandler in actionHandlers)
+                actionHandler.Invoke();
+        }
     }
     #endregion
 }

@@ -91,6 +91,8 @@ public class BattleFlow : BaseFlow<BattleFlowModel>
         var battleInteractionPhase = new BattleInteractionPhase();
         await battleInteractionPhase.Initialize(grid, viewController);
 
+        battleInteractionPhase.SetScrollTask(battleScene.ScrollAsync);
+
         return battleInteractionPhase;
     }
 }

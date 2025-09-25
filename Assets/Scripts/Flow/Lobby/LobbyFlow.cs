@@ -1,5 +1,5 @@
+#pragma warning disable CS1998
 using Cysharp.Threading.Tasks;
-using System.Threading.Tasks;
 
 public class LobbyFlow : BaseFlow<LobbyFlowModel>
 {
@@ -16,8 +16,7 @@ public class LobbyFlow : BaseFlow<LobbyFlowModel>
 
     public override async UniTask Process()
     {
-        await UniTask.WaitUntil(() => !TransitionManager.Instance.IsPlaying);
-        lobbyViewController.AllowClick(true);
+        Model.AddStateEvent(FlowState.TransitionOut, () => lobbyViewController.AllowClick(true));
     }
 
     private async UniTask ShowLobbyView()
