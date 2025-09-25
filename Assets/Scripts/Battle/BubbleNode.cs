@@ -1,7 +1,6 @@
 using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
 
 public class BubbleNode : PoolableBaseUnit<BubbleNodeModel>
@@ -56,7 +55,6 @@ public class BubbleNode : PoolableBaseUnit<BubbleNodeModel>
     {
         originColor = bubbleSprite.color;
     }
-
 
     public override async UniTask ShowAsync()
     {

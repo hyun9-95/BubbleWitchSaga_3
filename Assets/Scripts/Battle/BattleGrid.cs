@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine;
 
 public class BattleGrid : MonoBehaviour
@@ -72,7 +71,7 @@ public class BattleGrid : MonoBehaviour
 
     private Dictionary<CellPosition, BattleCell> cells = new();
 
-    private int[] rowCounts;
+    private List<int> rowCounts;
     private int currentMaxRow = -1;
 
     private void Awake()
@@ -89,25 +88,12 @@ public class BattleGrid : MonoBehaviour
 
         CalculateGridDimensions(width, height);
 
+        rowCounts = new List<int>(rows);
+
         for (int row = 0; row < rows; row++)
-        {
-            bool oddRow = (row % 2 == 1);
-            int cols = oddRow ? baseColumns + 1 : baseColumns;
-
-            for (int column = 0; column < cols; column++)
-            {
-                float x = column * width - (oddRow ? bubbleRadius : 0f);
-                float y = -row * height;
-
-                Vector3 worldPos = new Vector3(x, y, 0f);
-                CellPosition gridPos = new CellPosition(row, column);
-
-                var cell = new BattleCell(gridPos, worldPos);
-
-                cells[cell.CellPos] = cell;
-            }
-        }
+            AddRow(row, width, height);
     }
+
 
     private void CalculateGridDimensions(float width, float height)
     {
@@ -218,29 +204,15 @@ public class BattleGrid : MonoBehaviour
         return currentMaxRow;
     }
 
-    public void SetBubble(BattleCell cell, BubbleNode bubble)
+    public void OnSetBubble(int cellRow)
     {
-        if (cell == null || bubble == null)
-            return;
-
-        cell.SetBubble(bubble);
-
-        int cellRow = cell.CellPos.row;
         rowCounts[cellRow]++;
 
         currentMaxRow = Mathf.Max(cellRow, currentMaxRow);
     }
 
-    public void RemoveBubble(BattleCell cell)
+    public void OnRemoveBubble(int cellRow)
     {
-        if (cell == null)
-            return;
-
-        cell.RemoveBubble();
-
-        int cellRow = cell.CellPos.row;
-        cell.RemoveBubble();
-
         rowCounts[cellRow]--;
 
         if (cellRow == currentMaxRow && rowCounts[cellRow] == 0)
@@ -250,14 +222,17 @@ public class BattleGrid : MonoBehaviour
         }
     }
 
-    public bool ShouldScrollDown(int row)
+    public bool ShouldScrollDown()
     {
-        return row > triggerRow;
+        return currentMaxRow > triggerRow;
     }
 
-    public bool ShouldScrollUp(int row)
+    public bool ShouldScrollUp()
     {
-        return row < triggerRow;
+        if (triggerRow <= startTriggerRow)
+            return false;
+
+        return currentMaxRow < triggerRow;
     }
 
     // 한줄 스크롤
@@ -271,10 +246,9 @@ public class BattleGrid : MonoBehaviour
     // 줄어든 만큼 다시 스크롤
     public float ScrollUp()
     {
-        int maxBubbleRow = GetMaxBubbleRow();
         int prevTriggerRow = triggerRow;
 
-        triggerRow = Mathf.Max(maxBubbleRow, startTriggerRow);
+        triggerRow = Mathf.Max(currentMaxRow, startTriggerRow);
 
         int scrollRows = prevTriggerRow - triggerRow;
         return GetHeight(scrollRows);
@@ -286,7 +260,14 @@ public class BattleGrid : MonoBehaviour
         float width = bubbleRadius * 2f;
         float height = bubbleRadius * Mathf.Sqrt(3f);
 
-        int newRow = rows;
+        AddRow(rows, width, height);
+
+        rows++;
+        CalculateGridDimensions(width, height);
+    }
+
+    private void AddRow(int newRow, float width, float height)
+    {
         bool oddRow = (newRow % 2 == 1);
         int cols = oddRow ? baseColumns + 1 : baseColumns;
 
@@ -298,12 +279,11 @@ public class BattleGrid : MonoBehaviour
             Vector3 worldPos = new Vector3(x, y, 0f);
             CellPosition gridPos = new CellPosition(newRow, column);
 
-            var cell = new BattleCell(gridPos, worldPos);
+            var cell = new BattleCell(gridPos, worldPos, OnSetBubble, OnRemoveBubble);
             cells[cell.CellPos] = cell;
         }
 
-        rows++;
-        CalculateGridDimensions(width, height);
+        rowCounts.Add(0);
     }
 
 #if UNITY_EDITOR

@@ -18,7 +18,6 @@ public class BattleInteractionPhase : IBattlePhaseProcessor
     private bool isThreeMatched = false;
     private List<UniTask> fairyTasks = new();
     private HashSet<CellPosition> visitNodes = new();
-    private int maxRow;
     #endregion
 
     public async UniTask Initialize(BattleGrid grid, BattleViewController viewController)
@@ -41,7 +40,6 @@ public class BattleInteractionPhase : IBattlePhaseProcessor
         isThreeMatched = false;
         fairyTasks.Clear();
         visitNodes.Clear();
-        maxRow = 0;
     }
 
     public async UniTask OnProcess()
@@ -239,17 +237,17 @@ public class BattleInteractionPhase : IBattlePhaseProcessor
     // 현재 최대 row에 따라 스크롤링
     private async UniTask GridScrollAsync()
     {
-        var maxRow = grid.GetMaxBubbleRow();
-        
-        if (grid.ShouldScrollDown(maxRow))
+        if (grid.ShouldScrollDown())
         {
             float scrollHeight = grid.ScrollDown();
             await scrollAction(-scrollHeight);
+            Logger.Log("Scroll Down");
         }
-        else if (grid.ShouldScrollUp(maxRow))
+        else if (grid.ShouldScrollUp())
         {
             float scrollHeight = grid.ScrollUp();
             await scrollAction(scrollHeight);
+            Logger.Log("Scroll Up");
         }
     }
 
@@ -258,11 +256,11 @@ public class BattleInteractionPhase : IBattlePhaseProcessor
     {
         var viewModel = battleViewController.GetModel<BattleViewModel>();
 
-        if (viewModel.HpBarModel.Value == 0)
+        if (viewModel.HpBarModel.Value <= 0)
         {
             return BattlePhase.Win;
         }
-        else if (viewModel.BattleRingSlotModel.RemainBubbleCount == 0)
+        else if (viewModel.BattleRingSlotModel.RemainBubbleCount <= 0)
         {
             return BattlePhase.Defeat;
         }
